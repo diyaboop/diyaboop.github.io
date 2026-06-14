@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flux Payments — GTM & Product Strategy Case Study · Diya Manna</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d1117;
+      --card: #161b22;
+      --border: #21262d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --orange: #D85A30;
+      --green: #1D9E75;
+      --purple: #534AB7;
+      --purple-light: #7c73d1;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 14px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 60px 40px 80px;
+    }
+
+    @media print {
+      body { background: #fff; color: #111; max-width: 100%; padding: 20px 32px; }
+      :root { --bg: #fff; --card: #f6f8fa; --border: #e1e4e8; --text: #111; --muted: #555; }
+      .no-print { display: none; }
+      section { page-break-inside: avoid; }
+      .phase-grid, .stats-grid, .two-col { break-inside: avoid; }
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 48px;
+      transition: color 0.15s;
+    }
+    .back-link:hover { color: var(--text); }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--orange);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 17px;
+      color: var(--muted);
+      font-weight: 400;
+      margin-bottom: 28px;
+    }
+
+    .meta-row {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+      padding: 20px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 48px;
+    }
+
+    .meta-item { display: flex; flex-direction: column; }
+    .meta-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 2px;
+    }
+    .meta-value { font-size: 13.5px; font-weight: 600; color: var(--text); }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 48px; }
+    .tag {
+      background: rgba(83,74,183,0.15);
+      color: var(--purple-light);
+      border: 1px solid rgba(83,74,183,0.3);
+      border-radius: 4px;
+      padding: 3px 9px;
+      font-size: 11.5px;
+      font-weight: 500;
+    }
+
+    section { margin-bottom: 52px; }
+
+    h2 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h3 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--orange);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+      margin-top: 24px;
+    }
+
+    p { color: #adbac7; margin-bottom: 14px; }
+    p:last-child { margin-bottom: 0; }
+    strong { color: var(--text); font-weight: 600; }
+    em { color: var(--muted); font-style: normal; }
+
+    ul { padding-left: 18px; color: #adbac7; margin-bottom: 14px; }
+    ul li { margin-bottom: 6px; }
+    ul li::marker { color: var(--orange); }
+
+    /* STATS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 24px 0;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 14px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--orange);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 10.5px;
+      color: var(--muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* WORKSTREAM DIVIDER */
+    .workstream-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 48px 0 24px;
+    }
+
+    .workstream-badge {
+      background: rgba(216,90,48,0.1);
+      border: 1px solid rgba(216,90,48,0.3);
+      color: var(--orange);
+      border-radius: 6px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .workstream-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .workstream-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    /* PIPELINE STEPS */
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin: 20px 0;
+    }
+
+    .pipeline-step {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 10px;
+      text-align: center;
+      position: relative;
+    }
+
+    .pipeline-step::after {
+      content: '→';
+      position: absolute;
+      right: -14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--orange);
+      font-size: 12px;
+      z-index: 1;
+    }
+
+    .pipeline-step:last-child::after { display: none; }
+
+    .step-icon {
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    .step-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .step-tool {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    /* SOLUTION CARDS */
+    .solution-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .solution-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .solution-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .solution-desc {
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* PHASE CARDS */
+    .phase-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .phase-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .phase-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--purple-light);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 5px;
+    }
+
+    .phase-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .phase-items {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      color: var(--muted);
+      font-size: 11.5px;
+    }
+
+    .phase-items li {
+      margin-bottom: 4px;
+      padding-left: 10px;
+      position: relative;
+    }
+
+    .phase-items li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--orange);
+      font-size: 9px;
+    }
+
+    /* CHANNEL CARDS */
+    .channel-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .channel-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+    }
+
+    .channel-type {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 5px;
+    }
+
+    .channel-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .channel-desc {
+      font-size: 11.5px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* INSIGHT BOX */
+    .insight-box {
+      background: rgba(216,90,48,0.06);
+      border: 1px solid rgba(216,90,48,0.2);
+      border-left: 3px solid var(--orange);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 20px 0;
+      color: #adbac7;
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+
+    .green-box {
+      background: rgba(29,158,117,0.06);
+      border: 1px solid rgba(29,158,117,0.2);
+      border-left: 3px solid var(--green);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 20px 0;
+      color: #adbac7;
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+
+    /* FOOTER */
+    .footer {
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .footer a { color: var(--orange); text-decoration: none; }
+
+    @media (max-width: 640px) {
+      body { padding: 40px 20px; }
+      h1 { font-size: 28px; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .pipeline { grid-template-columns: 1fr 1fr; }
+      .pipeline-step::after { display: none; }
+      .solution-grid, .channel-grid { grid-template-columns: 1fr; }
+      .phase-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="back-link no-print">← Back to portfolio</a>
+
+  <div class="eyebrow">Case Study · Product & GTM Strategy</div>
+  <h1>Flux Payments</h1>
+  <p class="subtitle">Full-Cycle GTM Strategy for a Crypto Payment Plugin in the WooCommerce Ecosystem</p>
+
+  <div class="meta-row">
+    <div class="meta-item">
+      <span class="meta-label">Role</span>
+      <span class="meta-value">Product & Marketing Strategy Student Consultant</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Duration</span>
+      <span class="meta-value">Jan – Dec 2025</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Workstreams</span>
+      <span class="meta-value">2 (Poseidon + Grasshopper)</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Stack</span>
+      <span class="meta-value">Clay · HubSpot · WooCommerce · Claude Code</span>
+    </div>
+  </div>
+
+  <div class="tags">
+    <span class="tag">GTM Strategy</span>
+    <span class="tag">Sales Automation</span>
+    <span class="tag">CRM Build</span>
+    <span class="tag">Influencer Marketing</span>
+    <span class="tag">Developer Acquisition</span>
+    <span class="tag">Partnership Programs</span>
+    <span class="tag">Fintech</span>
+    <span class="tag">WooCommerce</span>
+  </div>
+
+  <!-- BACKGROUND -->
+  <section>
+    <h2>Background & Challenge</h2>
+    <p>Flux Payments is a crypto payment plugin for WooCommerce merchants — targeting a market where high-ticket sellers in retail, hospitality, luxury, and sports face steep traditional payment fees, chargeback risk, and friction in cross-border transactions. The plugin enables stablecoin-based checkout with instant settlement and no chargeback exposure.</p>
+    <p>The challenge: <strong>how do you build distribution and trust for a crypto payment product in a market that still thinks "crypto" means volatility and complexity?</strong> The answer required two parallel GTM tracks — a developer acquisition pipeline targeting WooCommerce builders, and a content marketing strategy targeting merchants through trusted voices.</p>
+
+    <div class="insight-box">
+      <strong>Core strategic tension:</strong> The plugin's best advocates aren't the end merchants — they're the WooCommerce developers and agencies who build and maintain their stores. Winning developers means winning merchants at scale. But developers won't recommend what merchants won't trust. Both had to move together.
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num">40%</div>
+        <div class="stat-label">Increase in outbound sales</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">50+</div>
+        <div class="stat-label">Clients in acquisition pipeline</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Target verticals mapped</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">2</div>
+        <div class="stat-label">Full GTM workstreams delivered</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORKSTREAM 1: POSEIDON -->
+  <section>
+    <div class="workstream-header">
+      <span class="workstream-badge">Workstream 1 · Project Poseidon</span>
+      <div class="workstream-line"></div>
+    </div>
+    <div class="workstream-title">Automated Developer Acquisition Pipeline</div>
+    <p>WooCommerce developers — freelancers and agencies on platforms like Codeable, Upwork, and Toptal — are the highest-leverage acquisition channel. A single developer who recommends the plugin can onboard multiple merchant clients. The goal was to build a fully automated, AI-enriched outreach pipeline that could scale without proportional headcount growth.</p>
+
+    <h3>The Pipeline Architecture</h3>
+
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-icon">🔍</div>
+        <div class="step-name">Scrape Profiles</div>
+        <div class="step-tool">Codeable / Upwork / Toptal</div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-icon">⚡</div>
+        <div class="step-name">Auto-Enrich</div>
+        <div class="step-tool">Clay + LinkedIn</div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-icon">✉️</div>
+        <div class="step-name">Verify Emails</div>
+        <div class="step-tool">Hunter / ZeroBounce</div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-icon">🤖</div>
+        <div class="step-name">AI Outreach</div>
+        <div class="step-tool">Prospecting Agent</div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-icon">📊</div>
+        <div class="step-name">CRM Sync</div>
+        <div class="step-tool">HubSpot</div>
+      </div>
+    </div>
+
+    <p>Developer profiles were scraped from specialist platforms, auto-enriched with LinkedIn data (title, skills, experience, GitHub), email-verified, and passed to an AI prospecting agent that drafted personalized outreach — one click to approve and send. Contacts synced automatically to HubSpot with source tags, no manual data entry required.</p>
+
+    <h3>CRM & Sales Pipeline Build</h3>
+    <p>Built a structured HubSpot pipeline from scratch with five stages and workflow automation to reduce manual follow-up effort. AI enrichment via Breeze Agents handled lead intake, data standardization, and deep-research personalization — <strong>reducing manual CRM effort by an estimated 70–80%.</strong></p>
+
+    <h3>Agency Pain Point Analysis</h3>
+    <p>Through structured stakeholder research, we identified the core friction points preventing WooCommerce agencies from recommending or integrating a new payment plugin:</p>
+
+    <div class="solution-grid">
+      <div class="solution-card">
+        <div class="solution-title">Stability & Reliability</div>
+        <p class="solution-desc">Agencies needed assurance the plugin wouldn't break on WooCommerce version updates. Recommended automated compatibility testing flows covering the full checkout-to-webhook sequence across recent WooCommerce releases.</p>
+      </div>
+      <div class="solution-card">
+        <div class="solution-title">AI Troubleshooting</div>
+        <p class="solution-desc">Proposed an AI support layer trained on anonymized error logs and historical fixes to auto-diagnose webhook failures and misconfigs — reducing the support burden on agency developers.</p>
+      </div>
+      <div class="solution-card">
+        <div class="solution-title">Developer Tooling</div>
+        <p class="solution-desc">Recommended dedicated developer support channels, clear troubleshooting playbooks, and transparent release notes — the trust infrastructure agencies need before recommending any payment solution.</p>
+      </div>
+      <div class="solution-card">
+        <div class="solution-title">Revenue Incentives</div>
+        <p class="solution-desc">Designed a tiered partnership program offering recurring commissions and preferential rates for agencies that onboard merchant clients — aligning agency incentives with plugin adoption.</p>
+      </div>
+    </div>
+
+    <h3>Platform Landscape Mapping</h3>
+    <p>Mapped the full ecosystem of WooCommerce developer sourcing across three platform models — helping Flux understand when to use each and how to balance risk, cost, and quality:</p>
+
+    <div class="channel-grid">
+      <div class="channel-card">
+        <div class="channel-type">Model 1</div>
+        <div class="channel-title">Marketplaces</div>
+        <p class="channel-desc">Codeable, Upwork, Toptal — flexible, direct hire, variable commitment. Best for speed and cost control. Higher screening burden on the buyer.</p>
+      </div>
+      <div class="channel-card">
+        <div class="channel-type">Model 2</div>
+        <div class="channel-title">Agencies & Networks</div>
+        <p class="channel-desc">Curated networks like Proxify and specialist agencies — end-to-end delivery, embedded teams, long-term retainers. Best for complex builds and strategic partnerships.</p>
+      </div>
+      <div class="channel-card">
+        <div class="channel-type">Model 3</div>
+        <div class="channel-title">Directories</div>
+        <p class="channel-desc">Clutch, Techreviewer — research and validation layer. Use before engaging agencies to assess credibility, vertical expertise, and case study quality.</p>
+      </div>
+    </div>
+
+    <h3>Freelancer Partnership Program Design</h3>
+    <p>Designed a four-phase freelancer onboarding and partnership framework — from identification through enablement — including a quick-start kit, technical documentation, sales playbooks, and a tiered incentive structure rewarding installs and referrals. The program gave freelancers the tools to pitch the plugin to merchant clients with a clear, non-technical value proposition: <em>"Lower your payment fees by 2–5% and eliminate chargebacks — setup takes under 20 minutes."</em></p>
+  </section>
+
+  <!-- WORKSTREAM 2: GRASSHOPPER -->
+  <section>
+    <div class="workstream-header">
+      <span class="workstream-badge">Workstream 2 · Project Grasshopper</span>
+      <div class="workstream-line"></div>
+    </div>
+    <div class="workstream-title">Influencer & Content Marketing Strategy</div>
+    <p>Developer acquisition gets the plugin into the hands of builders. Content marketing builds the merchant-side trust that makes those builders' recommendations land. Project Grasshopper mapped the full WooCommerce influencer ecosystem and designed a multi-channel content strategy to drive organic plugin adoption among merchants.</p>
+
+    <div class="insight-box">
+      <strong>Key insight:</strong> Crypto payment plugins face a unique credibility problem — merchants hear "crypto" and think volatility and complexity. The right content strategy doesn't sell crypto; it sells outcomes: lower fees, no chargebacks, faster settlement. Trusted WooCommerce voices deliver that message with far more credibility than direct advertising.
+    </div>
+
+    <h3>Influencer Ecosystem Mapping</h3>
+    <p>Researched and tiered the WooCommerce YouTube influencer landscape — identifying partners by audience fit, engagement rate, promotional history with comparable plugins, and cost efficiency:</p>
+
+    <div class="solution-grid">
+      <div class="solution-card">
+        <div class="solution-title">Macro-tier (1M+ subscribers)</div>
+        <p class="solution-desc">Highest reach, best for awareness. Past partnerships with Elementor and Astra themes demonstrate ability to drive plugin adoption at scale. High credibility with developers and store owners.</p>
+      </div>
+      <div class="solution-card">
+        <div class="solution-title">Mid-tier (100K–500K)</div>
+        <p class="solution-desc">Best cost-per-conversion. Audiences skew toward WooCommerce practitioners and small business owners actively building or managing stores — the highest-intent segment for a payment plugin.</p>
+      </div>
+      <div class="solution-card">
+        <div class="solution-title">Micro-tier (30K–100K)</div>
+        <p class="solution-desc">Highest engagement rates (4–6%). Niche, dedicated audiences. Best for targeting specific verticals (non-coders, SMBs, WordPress-first builders) where trust and personal recommendation drive decisions.</p>
+      </div>
+      <div class="solution-card">
+        <div class="solution-title">Blog & Written Content</div>
+        <p class="solution-desc">WPBeginner and LearnWoo reach millions of monthly readers researching plugins and e-commerce tools. Blog sponsorships deliver long-tail SEO value alongside immediate traffic.</p>
+      </div>
+    </div>
+
+    <h3>Competitive Benchmarking from Existing Crypto Plugin Promotions</h3>
+    <p>Analyzed existing YouTube promotions for comparable crypto payment plugins (Coinbase Commerce, Cryptomus, Crypto.com, Blockonomics) to extract what content formats, messaging angles, and influencer types drove the strongest adoption outcomes:</p>
+    <ul>
+      <li><strong>Step-by-step tutorials outperform review-only content</strong> — merchants want to see it work, not just hear it's good</li>
+      <li><strong>Auto-conversion to stablecoins is the key objection-handler</strong> — remove volatility fear before it arises</li>
+      <li><strong>Outcome framing beats feature framing</strong> — "reduced transaction fees and faster checkout" outperforms "accepts Bitcoin and Ethereum"</li>
+      <li><strong>Channels with active WooCommerce tutorial libraries convert better</strong> — audience is already primed for plugin discovery</li>
+    </ul>
+
+    <h3>YouTube Ad Strategy</h3>
+    <p>Mapped YouTube ad formats to campaign objectives, allowing Flux to allocate budget efficiently across awareness and conversion goals. Recommended skippable in-stream for brand awareness and overlay ads for direct traffic to a landing page — with UTM tracking across all influencer and paid placements for clean attribution.</p>
+
+    <h3>Agency Partnership Layer</h3>
+    <p>Identified WooCommerce development agencies specializing in beauty, luxury, fashion, and high-ticket verticals as a third acquisition channel — complementing influencer reach with high-trust, account-level introductions. Designed partnership models across four structures: referral, integration, white-label, and co-marketing. Built outreach sequences and a market penetration roadmap across three phases, from initial agency relationship-building through to co-branded case study development.</p>
+
+    <div class="green-box">
+      <strong>Projected impact:</strong> A well-targeted YouTube influencer campaign in the WooCommerce space can generate 3–5× ROI, with comparable plugins reporting 30%+ increases in signups from influencer referrals. Combined with the agency partnership layer, the two-track content strategy was designed to compound over time — influencers build awareness, agencies close adoption.
+    </div>
+  </section>
+
+  <!-- WooCommerce PLUGIN -->
+  <section>
+    <h2>WooCommerce Plugin Build</h2>
+    <p>Alongside the GTM workstreams, I built the WooCommerce plugin itself using Claude Code — handling the technical implementation that made the entire acquisition pipeline worth running. The plugin enabled stablecoin-based payment checkout, integrating into existing WooCommerce payment flows with a setup time of under 20 minutes.</p>
+    <ul>
+      <li>Instant stablecoin settlement — no volatility exposure for merchants</li>
+      <li>Zero chargeback risk — crypto transaction finality eliminates dispute exposure</li>
+      <li>Works alongside existing payment methods — no disruption to current checkout flow</li>
+      <li>Optional NFT-based authenticity certificates for luxury and high-ticket merchants</li>
+    </ul>
+  </section>
+
+  <!-- OUTCOMES -->
+  <section>
+    <h2>Outcomes & Impact</h2>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num">40%</div>
+        <div class="stat-label">Increase in outbound sales</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">50+</div>
+        <div class="stat-label">Clients in automated pipeline</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">~75%</div>
+        <div class="stat-label">Reduction in manual CRM effort</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Verticals mapped & activated</div>
+      </div>
+    </div>
+
+    <p style="margin-top:16px;">The automated developer acquisition pipeline scaled outreach to 50+ clients across retail, hospitality, and sports verticals without proportional headcount growth. The influencer and agency strategies created a repeatable content flywheel — combining trusted third-party voices with direct developer relationships to build the merchant-side trust the product needed to convert.</p>
+  </section>
+
+  <!-- MY CONTRIBUTION -->
+  <section>
+    <h2>My Role & Contributions</h2>
+    <ul>
+      <li><strong>Plugin build:</strong> Built the WooCommerce plugin using Claude Code — the technical product at the center of both GTM tracks</li>
+      <li><strong>Pipeline architecture:</strong> Designed the end-to-end Clay + HubSpot developer acquisition workflow, from profile scraping through AI outreach and CRM sync</li>
+      <li><strong>CRM build:</strong> Set up the HubSpot sales pipeline from scratch, including 5-stage structure, automation workflows, and Breeze AI enrichment integration</li>
+      <li><strong>Agency pain point research:</strong> Conducted structured research into WooCommerce agency friction points and translated findings into product and partnership recommendations</li>
+      <li><strong>Platform ecosystem mapping:</strong> Researched and categorized the full landscape of developer sourcing platforms across marketplaces, agencies, and directories</li>
+      <li><strong>Influencer strategy:</strong> Mapped the WooCommerce influencer ecosystem, benchmarked competitor plugin promotions, and designed the outreach and referral program framework</li>
+      <li><strong>Partnership program design:</strong> Built the freelancer enablement and tiered partnership framework, including sales playbooks, onboarding kits, and incentive structures</li>
+      <li><strong>GTM roadmap:</strong> Synthesized both workstreams into a cohesive GTM strategy with phased execution across developer acquisition, influencer marketing, and agency partnerships</li>
+    </ul>
+  </section>
+
+  <div class="footer">
+    <span>Shrijani (Diya) Manna · Duke MEM '26</span>
+    <span><a href="mailto:sm1091@duke.edu">sm1091@duke.edu</a> · <a href="https://linkedin.com/in/shrijani-manna" target="_blank">LinkedIn</a></span>
+  </div>
+
+</body>
+</html>

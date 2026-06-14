@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shrijani (Diya) Manna — AI/ML · Responsible AI · Product & GTM Strategy · Management Consulting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d1117;
+      --card: #161b22;
+      --border: #21262d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --orange: #D85A30;
+      --green: #1D9E75;
+      --purple: #534AB7;
+      --purple-light: #7c73d1;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(13, 17, 23, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+
+    .nav-logo {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-logo span { color: var(--orange); }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 500;
+      transition: color 0.15s;
+      letter-spacing: 0.01em;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      background: var(--orange);
+      color: #fff !important;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      transition: opacity 0.15s !important;
+    }
+
+    .nav-cta:hover { opacity: 0.88; color: #fff !important; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--muted);
+      border-radius: 2px;
+      transition: 0.2s;
+    }
+
+    /* HERO */
+    .hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 120px 24px 100px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--orange);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      width: 20px;
+      height: 2px;
+      background: var(--orange);
+      display: block;
+    }
+
+    h1 {
+      font-size: clamp(36px, 6vw, 60px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+
+    .hero-title-muted { color: var(--muted); font-weight: 400; }
+
+    .hero-tagline {
+      font-size: clamp(16px, 2.5vw, 22px);
+      font-weight: 400;
+      color: var(--muted);
+      max-width: 600px;
+      margin-top: 20px;
+      margin-bottom: 36px;
+      line-height: 1.5;
+    }
+
+    .hero-tagline em {
+      font-style: normal;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    .hero-badge {
+      background: rgba(216,90,48,0.1);
+      border: 1px solid rgba(216,90,48,0.25);
+      color: var(--orange);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .avail-dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--green);
+      background: rgba(29,158,117,0.1);
+      border: 1px solid rgba(29,158,117,0.25);
+      border-radius: 20px;
+      padding: 3px 10px;
+      margin-left: 12px;
+      vertical-align: middle;
+    }
+
+    .avail-dot-circle {
+      width: 6px;
+      height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .avail-dot-circle::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      border: 1px solid var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    .hero-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 18px;
+      border-radius: 7px;
+      font-size: 13.5px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: var(--orange);
+      color: #fff;
+    }
+
+    .btn-primary:hover { opacity: 0.88; }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--muted);
+      background: var(--card);
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .meta-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 2px;
+    }
+
+    .meta-value {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* SECTION */
+    section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 72px 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--orange);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-size: clamp(24px, 4vw, 36px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      font-size: 15px;
+      margin-bottom: 48px;
+    }
+
+    /* PROJECTS */
+    .projects-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .project-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 32px;
+      transition: border-color 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--orange), var(--purple));
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .project-card:hover {
+      border-color: #30363d;
+      transform: translateY(-2px);
+    }
+
+    .project-card:hover::before { opacity: 1; }
+
+    .project-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--orange);
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
+    }
+
+    .project-subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 400;
+      margin-bottom: 14px;
+    }
+
+    .project-desc {
+      font-size: 14px;
+      color: #adbac7;
+      line-height: 1.65;
+      margin-bottom: 20px;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-num {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--orange);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .tag {
+      background: rgba(83, 74, 183, 0.15);
+      color: var(--purple-light);
+      border: 1px solid rgba(83, 74, 183, 0.3);
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 11.5px;
+      font-weight: 500;
+    }
+
+    .project-links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: transparent;
+      transition: all 0.15s;
+    }
+
+    .link-btn:hover {
+      border-color: var(--muted);
+      color: var(--text);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .link-btn.primary {
+      border-color: rgba(216,90,48,0.4);
+      color: var(--orange);
+    }
+
+    .link-btn.primary:hover {
+      background: rgba(216,90,48,0.08);
+      border-color: var(--orange);
+    }
+
+    /* CURRENTLY BUILDING */
+    .building-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .building-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--green), rgba(29,158,117,0.1));
+    }
+
+    .building-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .building-desc {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 20px;
+      max-width: 700px;
+      line-height: 1.6;
+    }
+
+    .curriculum-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .curriculum-pill {
+      background: rgba(29, 158, 117, 0.12);
+      color: var(--green);
+      border: 1px solid rgba(29, 158, 117, 0.25);
+      border-radius: 4px;
+      padding: 3px 9px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .building-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .pulse {
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .pulse::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      border: 1px solid var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(2.2); }
+    }
+
+    /* EXPERIENCE */
+    .exp-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .exp-item {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 0 32px;
+      padding: 28px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .exp-item:last-child { border-bottom: none; }
+
+    .exp-item {
+      border-left: 3px solid transparent;
+      padding-left: 16px;
+      transition: border-color 0.2s;
+    }
+
+    .exp-item:hover { border-left-color: var(--orange); }
+
+    .exp-date {
+      font-size: 12.5px;
+      color: var(--muted);
+      font-weight: 500;
+      padding-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .exp-company {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .exp-role {
+      font-size: 13.5px;
+      color: var(--orange);
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .exp-desc {
+      font-size: 13.5px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .exp-stat {
+      font-weight: 600;
+      color: var(--green);
+    }
+
+    /* SKILLS */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .skills-group {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .skills-group-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
+
+    .skills-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .skill-pill {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* EDUCATION */
+    .edu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .edu-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+    }
+
+    .edu-school {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+
+    .edu-degree {
+      font-size: 13.5px;
+      color: var(--orange);
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .edu-years {
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    .cert-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      grid-column: 1 / -1;
+      margin-top: 4px;
+    }
+
+    .cert-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+    }
+
+    .cert-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--purple-light);
+      border-radius: 50%;
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+
+    .cert-name {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .cert-org {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* CONTACT */
+    #contact { text-align: center; }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 24px;
+      text-align: center;
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    .icon {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      fill: currentColor;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 700px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 56px;
+        left: 0;
+        right: 0;
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        padding: 16px 24px 20px;
+        gap: 16px;
+      }
+      .hamburger { display: flex; }
+      .exp-item { grid-template-columns: 1fr; gap: 4px; }
+      .exp-date { margin-bottom: 4px; }
+      .edu-grid { grid-template-columns: 1fr; }
+      .hero { padding-top: 56px; }
+      .project-card { padding: 22px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#"><span>Diya</span> Manna</a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact" class="nav-cta">Contact</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger" onclick="toggleNav()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="about">
+  <div class="hero-eyebrow">Available for full-time roles &nbsp;·&nbsp; Durham, NC</div>
+  <h1>Shrijani <span class="hero-title-muted">(Diya)</span> Manna <span class="avail-dot"><span class="avail-dot-circle"></span>Open to opportunities</span></h1>
+  <p style="font-size:clamp(14px,2vw,17px);color:var(--muted);font-weight:500;margin-top:6px;letter-spacing:0.01em;">AI/ML &nbsp;·&nbsp; Responsible AI &nbsp;·&nbsp; Product &amp; GTM Strategy &nbsp;·&nbsp; Management Consulting</p>
+  <p class="hero-tagline"><em>Building AI systems that are technically rigorous and ethically accountable — grounded in fintech, product strategy, and startup experience.</em></p>
+  <div class="hero-badges">
+    <span class="hero-badge">Fintech</span>
+    <span class="hero-badge">Startups</span>
+    <span class="hero-badge">Responsible AI</span>
+    <span class="hero-badge">Product Strategy</span>
+    <span class="hero-badge">GTM</span>
+    <span class="hero-badge">Management Consulting</span>
+  </div>
+  <div class="hero-links">
+    <a href="mailto:sm1091@duke.edu" class="btn btn-primary">
+      <svg class="icon" viewBox="0 0 16 16"><path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13zm0 1h13a.5.5 0 0 1 .5.5V4l-7 4-7-4v-.5a.5.5 0 0 1 .5-.5zm-.5 3.236 6.5 3.714a.5.5 0 0 0 .5 0L14 6.236V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V6.236z"/></svg>
+      Get in touch
+    </a>
+    <a href="https://github.com/diyaboop" target="_blank" rel="noopener" class="btn btn-ghost">
+      <svg class="icon" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      GitHub
+    </a>
+    <a href="https://linkedin.com/in/shrijani-manna" target="_blank" rel="noopener" class="btn btn-ghost">
+      <svg class="icon" viewBox="0 0 16 16"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/></svg>
+      LinkedIn
+    </a>
+    <a href="https://github.com/diyaboop/AI-Engineering-Basics" target="_blank" rel="noopener" class="btn btn-ghost">
+      <svg class="icon" viewBox="0 0 16 16"><path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.746c-.917-.35-2.107-.691-3.287-.811-1.094-.11-2.278-.037-3.213.493V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/></svg>
+      AI Curriculum
+    </a>
+  </div>
+  <div class="hero-meta">
+    <div class="meta-item">
+      <span class="meta-label">Degree</span>
+      <span class="meta-value">Duke MEM '26</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Focus</span>
+      <span class="meta-value">Responsible AI · Product</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Location</span>
+      <span class="meta-value">Durham, NC</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Email</span>
+      <span class="meta-value">sm1091@duke.edu</span>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label">Work</div>
+  <h2 class="section-title">Selected Projects</h2>
+  <p class="section-sub">End-to-end systems where rigor meets accountability.</p>
+
+  <div class="projects-grid">
+
+    <!-- FraudWatch -->
+    <div class="project-card">
+      <div class="project-name">FraudWatch</div>
+      <div class="project-subtitle">Fraud Detection Bias Audit &amp; Model Performance Monitor</div>
+      <p class="project-desc">End-to-end ML pipeline that trains a fraud detection classifier on 590,540 real transactions, audits it for demographic bias, and monitors performance drift weekly. Surfaced that credit card users face a <strong>65% higher wrongful block rate</strong> than debit users (Z=66.6, p&lt;0.001) and a 2.7x product category disparity — a finding invisible without intentional bias evaluation.</p>
+      <div class="stats-row">
+        <div class="stat">
+          <span class="stat-num">45,375</span>
+          <span class="stat-label">False positives identified</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">92.4%</span>
+          <span class="stat-label">Fraud recall</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">2</span>
+          <span class="stat-label">Bias findings (p&lt;0.001)</span>
+        </div>
+      </div>
+      <div class="tags">
+        <span class="tag">Python</span><span class="tag">Scikit-learn</span><span class="tag">FastAPI</span><span class="tag">SQLite</span><span class="tag">Docker</span><span class="tag">Responsible AI</span>
+      </div>
+      <div class="project-links">
+        <a href="https://github.com/diyaboop/fraudwatch" target="_blank" rel="noopener" class="link-btn primary">
+          <svg class="icon" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+        <a href="#" class="link-btn">
+          <svg class="icon" viewBox="0 0 16 16"><path d="M0 2.5A1.5 1.5 0 0 1 1.5 1h11A1.5 1.5 0 0 1 14 2.5v10.528c0 .3-.05.654-.238.972h.738a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 1 1 0v9a1.5 1.5 0 0 1-1.5 1.5H1.497A1.497 1.497 0 0 1 0 13.5v-11zm12 10.972V2.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v11c0 .278.223.5.497.5H12.5a.5.5 0 0 0 .5-.5v-.028z"/></svg>
+          Live Dashboard
+        </a>
+        <a href="#" class="link-btn">
+          <svg class="icon" viewBox="0 0 16 16"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2L9.5 1.5z"/></svg>
+          Case Study
+        </a>
+        <a href="#" class="link-btn">
+          <svg class="icon" viewBox="0 0 16 16"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2L9.5 1.5z"/></svg>
+          PRD
+        </a>
+      </div>
+    </div>
+
+    <!-- Global AI Readiness -->
+    <div class="project-card">
+      <div class="project-name">Global AI Readiness Pipeline</div>
+      <div class="project-subtitle">Stanford HAI 2026 Analysis across 47 Countries</div>
+      <p class="project-desc">End-to-end data pipeline analyzing AI readiness across 47 countries and 16 subregions using Stanford HAI 2026 survey data merged with REST Countries API. Key finding: <strong>Northern/Western Europe scores 20%+ below the global south</strong> on responsible AI governance metrics — challenging the narrative of perceived leadership in AI ethics.</p>
+      <div class="stats-row">
+        <div class="stat">
+          <span class="stat-num">47</span>
+          <span class="stat-label">Countries analyzed</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">16</span>
+          <span class="stat-label">Subregions</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">3</span>
+          <span class="stat-label">Stanford HAI metrics</span>
+        </div>
+      </div>
+      <div class="tags">
+        <span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">REST API</span><span class="tag">SQLite</span><span class="tag">Matplotlib</span><span class="tag">NumPy</span>
+      </div>
+      <div class="project-links">
+        <a href="https://github.com/diyaboop" target="_blank" rel="noopener" class="link-btn primary">
+          <svg class="icon" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+
+    <!-- Food Bank Dashboard -->
+    <div class="project-card">
+      <div class="project-name">Food Bank Partnership Dashboard</div>
+      <div class="project-subtitle">Claude-Powered Operations Tool for Food Bank of Central &amp; Eastern NC</div>
+      <p class="project-desc">Internal operations dashboard enabling food bank staff to query partnership and volunteer data in plain English using Claude. Built after witnessing firsthand how partnership data lived across disconnected spreadsheets at Duke's Office of Community Affairs — replacing hours of manual lookup with instant natural language queries across 34 counties.</p>
+      <div class="stats-row">
+        <div class="stat">
+          <span class="stat-num">607K+</span>
+          <span class="stat-label">Food insecure residents</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">34</span>
+          <span class="stat-label">Counties covered</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">NL</span>
+          <span class="stat-label">Claude-powered queries</span>
+        </div>
+      </div>
+      <div class="tags">
+        <span class="tag">Python</span><span class="tag">Flask</span><span class="tag">Anthropic API</span><span class="tag">HTML/JS</span><span class="tag">Responsible AI</span>
+      </div>
+      <div class="project-links">
+        <a href="https://github.com/diyaboop/food-bank-dashboard" target="_blank" rel="noopener" class="link-btn primary">
+          <svg class="icon" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+
+    <!-- Titanic Bias Audit -->
+    <div class="project-card">
+      <div class="project-name">Titanic Bias Audit</div>
+      <div class="project-subtitle">Statistical Disparity Analysis across Gender and Passenger Class</div>
+      <p class="project-desc">SQL and Python pipeline surfacing survival disparity across gender and passenger class using the Titanic dataset. First-class females survived at <strong>2x the rate of third-class males</strong> — a clear demonstration of intersectional bias embedded in historical decision systems, and a replicable template for auditing modern ML classifiers.</p>
+      <div class="stats-row">
+        <div class="stat">
+          <span class="stat-num">891</span>
+          <span class="stat-label">Passengers analyzed</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">2×</span>
+          <span class="stat-label">Survival disparity</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">↗</span>
+          <span class="stat-label">Intersectional finding</span>
+        </div>
+      </div>
+      <div class="tags">
+        <span class="tag">Python</span><span class="tag">SQL</span><span class="tag">Pandas</span><span class="tag">SQLite</span><span class="tag">Matplotlib</span>
+      </div>
+      <div class="project-links">
+        <a href="https://github.com/diyaboop" target="_blank" rel="noopener" class="link-btn primary">
+          <svg class="icon" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+
+    <!-- CLI Data Analyzer -->
+    <div class="project-card">
+      <div class="project-name">CLI Data Analyzer + Docker</div>
+      <div class="project-subtitle">Automated EDA Report Generator</div>
+      <p class="project-desc">Command-line tool that accepts any CSV file, runs automated exploratory data analysis, and outputs a structured statistical report. Fully containerized with Docker for reproducible, environment-agnostic analysis across any team setup.</p>
+      <div class="tags">
+        <span class="tag">Python</span><span class="tag">argparse</span><span class="tag">Pandas</span><span class="tag">Docker</span>
+      </div>
+      <div class="project-links">
+        <a href="https://github.com/diyaboop" target="_blank" rel="noopener" class="link-btn primary">
+          <svg class="icon" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top:28px;text-align:right;">
+    <a href="https://github.com/diyaboop" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:13.5px;font-weight:600;text-decoration:none;transition:color 0.15s;" onmouseover="this.style.color='var(--orange)'" onmouseout="this.style.color='var(--muted)'">
+      View all projects on GitHub
+      <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- CURRENTLY BUILDING -->
+<section id="building">
+  <div class="section-label">In Progress</div>
+  <h2 class="section-title">Currently Building</h2>
+  <p class="section-sub">Self-directed, structured, daily.</p>
+
+  <div class="building-card">
+    <div class="building-title">8-Week AI Engineering Curriculum</div>
+    <div class="building-desc">Self-directed 8-week AI Engineering curriculum covering Python, Pandas, SQL, linear algebra, gradient descent, REST APIs, sklearn, PyTorch, LLMs, RAG, and MLOps — building toward technical depth in responsible AI and ML systems.</div>
+    <div class="curriculum-pills">
+      <span class="curriculum-pill">Python</span>
+      <span class="curriculum-pill">Pandas</span>
+      <span class="curriculum-pill">SQL</span>
+      <span class="curriculum-pill">Linear Algebra</span>
+      <span class="curriculum-pill">Gradient Descent</span>
+      <span class="curriculum-pill">REST APIs</span>
+      <span class="curriculum-pill">Scikit-learn</span>
+      <span class="curriculum-pill">PyTorch</span>
+      <span class="curriculum-pill">LLMs</span>
+      <span class="curriculum-pill">RAG</span>
+      <span class="curriculum-pill">MLOps</span>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">Career</div>
+  <h2 class="section-title">Experience</h2>
+  <p class="section-sub">Product, data, and engineering across fintech, civic tech, and enterprise.</p>
+
+  <div class="exp-list">
+
+    <div class="exp-item">
+      <div class="exp-date">Jan – Dec 2025</div>
+      <div>
+        <div class="exp-company">Flux Payments</div>
+        <div class="exp-role">Product &amp; Marketing Strategy Student Consultant</div>
+        <div class="exp-desc">Led full-cycle product marketing and GTM strategy for a crypto payment product in the fintech space. Built WooCommerce plugin with Claude Code, <span class="exp-stat">increased outbound sales 40%,</span> and designed automated developer acquisition pipeline scaling outreach to <span class="exp-stat">50+ clients</span> across retail, hospitality, and sports verticals. <a href="flux-case-study.html" style="color:var(--orange);font-weight:600;text-decoration:none;">View case study →</a></div>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-date">Aug – Dec 2025</div>
+      <div>
+        <div class="exp-company">BondCliq</div>
+        <div class="exp-role">Product Strategy Student Consultant</div>
+        <div class="exp-desc">Identified <span class="exp-stat">$500K+ efficiency opportunity</span> through workflow analysis. Built 3-phase AI product roadmap for municipal bond trading operations. <a href="bondcliq-case-study.html" style="color:var(--orange);font-weight:600;text-decoration:none;">View case study →</a></div>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-date">Aug – Dec 2025</div>
+      <div>
+        <div class="exp-company">Sparc</div>
+        <div class="exp-role">Product Strategy Student Consultant</div>
+        <div class="exp-desc">Conducted <span class="exp-stat">40+ user interviews.</span> Defined KPIs targeting <span class="exp-stat">70% completion rate</span> and <span class="exp-stat">65% retention</span> for student-facing product. <a href="sparc-case-study.html" style="color:var(--orange);font-weight:600;text-decoration:none;">View case study →</a></div>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-date">Jun – Aug 2025</div>
+      <div>
+        <div class="exp-company">Duke Office of Community Affairs</div>
+        <div class="exp-role">Operations Intern</div>
+        <div class="exp-desc">Built Power Apps appointment scheduling tool and event data visualization dashboard. Observed data fragmentation challenges that directly inspired the Food Bank Partnership Dashboard project.</div>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-date">Oct 2023 – Jul 2024</div>
+      <div>
+        <div class="exp-company">Deloitte</div>
+        <div class="exp-role">Enterprise Performance Analyst</div>
+        <div class="exp-desc">Led SAP S/4HANA deployments for enterprise clients. <span class="exp-stat">Reduced system downtime 20%</span> through SQL-driven root cause analysis and process optimization.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label">Capabilities</div>
+  <h2 class="section-title">Skills</h2>
+  <p class="section-sub">Technical depth with product breadth.</p>
+
+  <div class="skills-grid">
+    <div class="skills-group">
+      <div class="skills-group-label">Languages &amp; Data</div>
+      <div class="skills-pills">
+        <span class="skill-pill">Python</span>
+        <span class="skill-pill">SQL</span>
+        <span class="skill-pill">Pandas</span>
+        <span class="skill-pill">NumPy</span>
+        <span class="skill-pill">Matplotlib</span>
+        <span class="skill-pill">Seaborn</span>
+      </div>
+    </div>
+    <div class="skills-group">
+      <div class="skills-group-label">ML &amp; AI</div>
+      <div class="skills-pills">
+        <span class="skill-pill">Scikit-learn</span>
+        <span class="skill-pill">Anthropic API</span>
+        <span class="skill-pill">Responsible AI</span>
+        <span class="skill-pill">Bias Auditing</span>
+        <span class="skill-pill">Model Monitoring</span>
+      </div>
+    </div>
+    <div class="skills-group">
+      <div class="skills-group-label">Engineering</div>
+      <div class="skills-pills">
+        <span class="skill-pill">FastAPI</span>
+        <span class="skill-pill">Flask</span>
+        <span class="skill-pill">REST APIs</span>
+        <span class="skill-pill">Docker</span>
+        <span class="skill-pill">SQLite</span>
+        <span class="skill-pill">Git</span>
+      </div>
+    </div>
+    <div class="skills-group">
+      <div class="skills-group-label">Product</div>
+      <div class="skills-pills">
+        <span class="skill-pill">Product Roadmapping</span>
+        <span class="skill-pill">User Research</span>
+        <span class="skill-pill">A/B Testing</span>
+        <span class="skill-pill">Go-to-Market</span>
+        <span class="skill-pill">KPI Definition</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION & CERTS -->
+<section id="education">
+  <div class="section-label">Background</div>
+  <h2 class="section-title">Education &amp; Certifications</h2>
+  <p class="section-sub">Engineering foundations, management lens.</p>
+
+  <div class="edu-grid">
+    <div class="edu-card">
+      <div class="edu-school">Duke University, Pratt School of Engineering</div>
+      <div class="edu-degree">Master of Engineering Management</div>
+      <div class="edu-years">Aug 2024 – May 2026</div>
+    </div>
+    <div class="edu-card">
+      <div class="edu-school">Manipal Academy of Higher Education</div>
+      <div class="edu-degree">B.Tech Electronics &amp; Communication Engineering</div>
+      <div class="edu-years">Aug 2019 – Jul 2023</div>
+    </div>
+
+    <div class="cert-list">
+      <div class="cert-item">
+        <div class="cert-dot"></div>
+        <div>
+          <div class="cert-name">Cooperative AI</div>
+          <div class="cert-org">Cooperative AI Foundation · 2026</div>
+        </div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-dot"></div>
+        <div>
+          <div class="cert-name">Prompt Engineering &amp; Programming with OpenAI</div>
+          <div class="cert-org">Columbia University · 2025</div>
+        </div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-dot"></div>
+        <div>
+          <div class="cert-name">Enterprise Design Thinking Practitioner</div>
+          <div class="cert-org">IBM · 2025</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">Let's talk</div>
+  <h2 class="section-title">Get in Touch</h2>
+  <p class="section-sub" style="max-width:480px;margin-left:auto;margin-right:auto;">Open to AI engineering, responsible AI, and product roles. Based in Durham, NC — available for full-time positions.</p>
+  <div class="contact-links">
+    <a href="mailto:sm1091@duke.edu" class="btn btn-primary">
+      <svg class="icon" viewBox="0 0 16 16"><path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13zm0 1h13a.5.5 0 0 1 .5.5V4l-7 4-7-4v-.5a.5.5 0 0 1 .5-.5zm-.5 3.236 6.5 3.714a.5.5 0 0 0 .5 0L14 6.236V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V6.236z"/></svg>
+      sm1091@duke.edu
+    </a>
+    <a href="https://linkedin.com/in/shrijani-manna" target="_blank" rel="noopener" class="btn btn-ghost">
+      <svg class="icon" viewBox="0 0 16 16"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/></svg>
+      LinkedIn
+    </a>
+    <a href="https://github.com/diyaboop" target="_blank" rel="noopener" class="btn btn-ghost">
+      <svg class="icon" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      GitHub
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>Shrijani (Diya) Manna &nbsp;·&nbsp; Durham, NC &nbsp;·&nbsp;
+    <a href="mailto:sm1091@duke.edu">sm1091@duke.edu</a> &nbsp;·&nbsp;
+    <a href="https://github.com/diyaboop" target="_blank" rel="noopener">github.com/diyaboop</a> &nbsp;·&nbsp;
+    <a href="https://linkedin.com/in/shrijani-manna" target="_blank" rel="noopener">linkedin.com/in/shrijani-manna</a>
+  </p>
+</footer>
+
+<script>
+  function toggleNav() {
+    document.getElementById('nav-links').classList.toggle('open');
+  }
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', () => {
+      document.getElementById('nav-links').classList.remove('open');
+    });
+  });
+</script>
+</body>
+</html>

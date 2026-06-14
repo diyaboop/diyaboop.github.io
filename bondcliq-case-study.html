@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BondCliq — AI Strategy Case Study · Diya Manna</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d1117;
+      --card: #161b22;
+      --border: #21262d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --orange: #D85A30;
+      --green: #1D9E75;
+      --purple: #534AB7;
+      --purple-light: #7c73d1;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 14px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 60px 40px 80px;
+    }
+
+    /* PRINT */
+    @media print {
+      body { background: #fff; color: #111; max-width: 100%; padding: 0; }
+      :root { --bg: #fff; --card: #f6f8fa; --border: #e1e4e8; --text: #111; --muted: #555; }
+      .no-print { display: none; }
+      section { page-break-inside: avoid; }
+    }
+
+    /* HEADER */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 48px;
+      transition: color 0.15s;
+    }
+    .back-link:hover { color: var(--text); }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--orange);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 17px;
+      color: var(--muted);
+      font-weight: 400;
+      margin-bottom: 28px;
+    }
+
+    .meta-row {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      padding: 20px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 56px;
+    }
+
+    .meta-item { display: flex; flex-direction: column; }
+    .meta-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 2px;
+    }
+    .meta-value { font-size: 13.5px; font-weight: 600; color: var(--text); }
+
+    /* TAGS */
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 48px; }
+    .tag {
+      background: rgba(83,74,183,0.15);
+      color: var(--purple-light);
+      border: 1px solid rgba(83,74,183,0.3);
+      border-radius: 4px;
+      padding: 3px 9px;
+      font-size: 11.5px;
+      font-weight: 500;
+    }
+
+    /* SECTIONS */
+    section { margin-bottom: 52px; }
+
+    h2 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--orange);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+      margin-top: 20px;
+    }
+
+    p { color: #adbac7; margin-bottom: 14px; }
+    p:last-child { margin-bottom: 0; }
+
+    strong { color: var(--text); font-weight: 600; }
+
+    ul { padding-left: 18px; color: #adbac7; margin-bottom: 14px; }
+    ul li { margin-bottom: 6px; }
+    ul li::marker { color: var(--orange); }
+
+    /* STAT CARDS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 24px 0;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--orange);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* PHASE CARDS */
+    .phase-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .phase-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .phase-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--purple-light);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+
+    .phase-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    .phase-items {
+      list-style: none;
+      padding: 0;
+      color: var(--muted);
+      font-size: 12.5px;
+    }
+
+    .phase-items li {
+      margin-bottom: 4px;
+      padding-left: 12px;
+      position: relative;
+    }
+
+    .phase-items li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--orange);
+      font-size: 10px;
+    }
+
+    /* INSIGHT BOX */
+    .insight-box {
+      background: rgba(216,90,48,0.06);
+      border: 1px solid rgba(216,90,48,0.2);
+      border-left: 3px solid var(--orange);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 20px 0;
+      color: #adbac7;
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+
+    /* FOOTER */
+    .footer {
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .footer a { color: var(--orange); text-decoration: none; }
+
+    @media (max-width: 600px) {
+      body { padding: 40px 20px; }
+      h1 { font-size: 28px; }
+      .stats-grid, .phase-grid { grid-template-columns: 1fr; }
+      .meta-row { gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="back-link no-print">
+    ← Back to portfolio
+  </a>
+
+  <div class="eyebrow">Case Study · Product Strategy</div>
+  <h1>BondCliq</h1>
+  <p class="subtitle">AI Enablement Strategy for Fixed Income Markets</p>
+
+  <div class="meta-row">
+    <div class="meta-item">
+      <span class="meta-label">Context</span>
+      <span class="meta-value">Duke MEM Consulting Practicum</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Client</span>
+      <span class="meta-value">BondCliq</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Role</span>
+      <span class="meta-value">Product Strategy Student Consultant</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Team Size</span>
+      <span class="meta-value">6 consultants</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Deliverable</span>
+      <span class="meta-value">3-Phase AI Product Roadmap</span>
+    </div>
+  </div>
+
+  <div class="tags">
+    <span class="tag">AI Strategy</span>
+    <span class="tag">Fixed Income</span>
+    <span class="tag">Product Roadmap</span>
+    <span class="tag">Market Research</span>
+    <span class="tag">Fintech</span>
+    <span class="tag">Go-to-Market</span>
+  </div>
+
+  <!-- BACKGROUND -->
+  <section>
+    <h2>Background & Problem</h2>
+    <p>BondCliq is a pre-trade transparency platform for corporate bond markets — a space still operating on decades-old infrastructure. While equities modernized with electronic trading and real-time pricing, fixed income remains <strong>fragmented, relationship-driven, and opaque</strong>: dealers hoard pricing data, quotes are inconsistent, and traders lack the tools to validate information efficiently.</p>
+    <p>Our team was engaged to answer one question: <strong>How should BondCliq build and sequence an AI product strategy that fits the current market readiness of its users?</strong></p>
+
+    <div class="insight-box">
+      <strong>The core market gap:</strong> Corporate bonds lack displayed bid/ask levels, depth and size information, and consistent comparable quotes across dealers — creating information asymmetry that limits both automation and trust. AI is only as effective as the underlying data it runs on.
+    </div>
+  </section>
+
+  <!-- RESEARCH -->
+  <section>
+    <h2>Research & Discovery</h2>
+    <p>We conducted primary research through structured mentor interviews with fixed income market professionals and an AI Readiness Survey distributed to key industry participants across asset managers and broker-dealers.</p>
+
+    <h3>Key Findings from Survey</h3>
+    <ul>
+      <li>Majority of firms were in the <strong>"In Development"</strong> phase for AI adoption — signaling a critical window before market consolidation</li>
+      <li>Top pain points: quote comparison and summarization, dealer selection, data redundancy with AI tools, and efficient price discovery</li>
+      <li>Compliance-readiness and explainability were non-negotiable adoption blockers — black-box approaches were rejected</li>
+      <li>Users want <strong>augmentation, not automation</strong> — tools that assist traders, not replace their judgment</li>
+    </ul>
+
+    <h3>Competitive Landscape</h3>
+    <p>Competitors including Overbond, LTX (Broadridge), Liquidnet FI, and MarketAxess all focus on <strong>execution automation</strong>. BondCliq's differentiated position is in <strong>pre-trade intelligence</strong> — a space competitors cannot enter without BondCliq's unique dealer participation and quote contribution network.</p>
+
+    <div class="insight-box">
+      <strong>Strategic insight:</strong> BondCliq doesn't need to match competitors on execution. It needs to own the layer that feeds them — pre-trade pricing intelligence that is cleaner, more reliable, and more transparent than anything else in the market.
+    </div>
+  </section>
+
+  <!-- OPPORTUNITY -->
+  <section>
+    <h2>Opportunity Identified</h2>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num">$500K+</div>
+        <div class="stat-label">Efficiency opportunity identified</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">50 min</div>
+        <div class="stat-label">Daily time saved per trader (target)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">$50K</div>
+        <div class="stat-label">Target AI revenue / month (Year 1)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">$500K</div>
+        <div class="stat-label">Consistency Engine savings per desk</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">$1–2M</div>
+        <div class="stat-label">Dealer Analytics savings per asset manager</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">12–18mo</div>
+        <div class="stat-label">Estimated payback period</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUTION -->
+  <section>
+    <h2>Solution: 3-Phase AI Roadmap</h2>
+    <p>We designed a sequenced AI product strategy built around three features — each mapped to BondCliq's existing data moat and the compliance-first expectations of fixed income traders.</p>
+
+    <h3>Core Feature Set</h3>
+    <ul>
+      <li><strong>Consistency Engine</strong> — Flags stale, outlier, or missing quotes. Automates data sanitization to protect signal quality and build trader trust.</li>
+      <li><strong>Bond Summaries</strong> — Auto-generates audit-ready trade notes with key risks and comparables, exportable to PDF/email. Saves ~30 min/day per trader.</li>
+      <li><strong>Dealer Analytics</strong> — Scores dealers on pricing quality and speed. Guides smarter RFQ selection and exposes competitive dynamics objectively.</li>
+    </ul>
+
+    <div class="phase-grid">
+      <div class="phase-card">
+        <div class="phase-label">Phase 1 · Prove</div>
+        <div class="phase-title">MVP Foundation</div>
+        <ul class="phase-items">
+          <li>Consistency Engine MVP</li>
+          <li>Bond Summaries MVP</li>
+          <li>5–10 pilot power users</li>
+          <li>Target: ≥20% faster validation</li>
+          <li>NPS ≥ 7/10 from UAT</li>
+        </ul>
+      </div>
+      <div class="phase-card">
+        <div class="phase-label">Phase 2 · Scale</div>
+        <div class="phase-title">Scale Intelligence</div>
+        <ul class="phase-items">
+          <li>Full Dealer Analytics rollout</li>
+          <li>Anomaly detection + repricing</li>
+          <li>Freemium + paid tier launch</li>
+          <li>Target: 70%+ weekly AI engagement</li>
+          <li>$50K/month AI revenue</li>
+        </ul>
+      </div>
+      <div class="phase-card">
+        <div class="phase-label">Phase 3 · Expand</div>
+        <div class="phase-title">Ecosystem & Personalization</div>
+        <ul class="phase-items">
+          <li>Predictive dealer recommendations</li>
+          <li>EUR &amp; GBP market expansion</li>
+          <li>Execution partner API integrations</li>
+          <li>Target: 2–3 bps execution improvement</li>
+          <li>Two non-US markets live</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- RATIONALE -->
+  <section>
+    <h2>Why This Roadmap Wins</h2>
+    <ul>
+      <li><strong>Compliance-first design</strong> — Every feature is audit-ready and explainable, meeting 80% of regulatory prerequisites out of the box. Competitors' black-box approaches cannot match this.</li>
+      <li><strong>Data moat defense</strong> — The Consistency Engine protects BondCliq's core asset: clean, reliable quote data from dealer participation. More traders → more data → stronger rankings → higher switching costs.</li>
+      <li><strong>Sequenced risk</strong> — Phase 1 proves ROI with a small pilot before committing to full infrastructure investment. No big bets until the model is validated.</li>
+      <li><strong>Network effects</strong> — Unlike execution platforms, BondCliq's value compounds: better data quality attracts more dealers, which attracts more traders, which funds better AI.</li>
+    </ul>
+
+    <div class="insight-box">
+      <strong>Strategic framing:</strong> The market has a "Price Discovery" problem. BondCliq has the "Pricing Intelligence" solution. By leading with transparency and ease of integration — not complexity — BondCliq wins the pre-trade layer before competitors can pivot.
+    </div>
+  </section>
+
+  <!-- MY CONTRIBUTION -->
+  <section>
+    <h2>My Contribution</h2>
+    <ul>
+      <li>Led survey design for the AI Readiness research, ensuring questions mapped to the core structural pain points uncovered in mentor sessions</li>
+      <li>Authored the market context article <em>"From GameStop to Robo-Advisors: How AI Is Democratizing Wall Street"</em> — connecting macro democratization trends to BondCliq's specific opportunity</li>
+      <li>Contributed to competitive landscape analysis identifying the "missing layer" in corporate bond pre-trade transparency</li>
+      <li>Helped structure the phased roadmap logic, ensuring each phase had measurable success metrics and clear compliance guardrails</li>
+      <li>Synthesized mentor session insights into survey design principles — connecting market structure theory (information asymmetry, OTC fragmentation) to practical AI feature prioritization</li>
+    </ul>
+  </section>
+
+  <div class="footer">
+    <span>Shrijani (Diya) Manna · Duke MEM '26</span>
+    <span><a href="mailto:sm1091@duke.edu">sm1091@duke.edu</a> · <a href="https://linkedin.com/in/shrijani-manna" target="_blank">LinkedIn</a></span>
+  </div>
+
+</body>
+</html>
