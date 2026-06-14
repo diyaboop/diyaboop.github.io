@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FraudWatch — Case Study · Diya Manna</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d1117; --card: #161b22; --border: #21262d;
+      --text: #e6edf3; --muted: #8b949e;
+      --orange: #D85A30; --green: #1D9E75; --purple: #534AB7; --purple-light: #7c73d1;
+    }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 14px; line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      max-width: 860px; margin: 0 auto; padding: 60px 40px 80px;
+    }
+    @media print {
+      body { background: #fff; color: #111; max-width: 100%; padding: 20px 32px; }
+      :root { --bg:#fff; --card:#f6f8fa; --border:#e1e4e8; --text:#111; --muted:#555; }
+      .no-print { display: none; }
+      section { page-break-inside: avoid; }
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--muted); text-decoration: none; font-size: 13px;
+      font-weight: 500; margin-bottom: 48px; transition: color 0.15s;
+    }
+    .back-link:hover { color: var(--text); }
+    .eyebrow { font-size: 11px; font-weight: 700; color: var(--orange); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+    h1 { font-size: 40px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 10px; }
+    .subtitle { font-size: 17px; color: var(--muted); font-weight: 400; margin-bottom: 28px; }
+    .meta-row { display: flex; gap: 28px; flex-wrap: wrap; padding: 20px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+    .meta-item { display: flex; flex-direction: column; }
+    .meta-label { font-size: 10.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 2px; }
+    .meta-value { font-size: 13.5px; font-weight: 600; color: var(--text); }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 48px; }
+    .tag { background: rgba(83,74,183,0.15); color: var(--purple-light); border: 1px solid rgba(83,74,183,0.3); border-radius: 4px; padding: 3px 9px; font-size: 11.5px; font-weight: 500; }
+    section { margin-bottom: 52px; }
+    h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    h3 { font-size: 13px; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; margin-top: 24px; }
+    p { color: #adbac7; margin-bottom: 14px; }
+    p:last-child { margin-bottom: 0; }
+    strong { color: var(--text); font-weight: 600; }
+    ul { padding-left: 18px; color: #adbac7; margin-bottom: 14px; }
+    ul li { margin-bottom: 6px; }
+    ul li::marker { color: var(--orange); }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 24px 0; }
+    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px 14px; text-align: center; }
+    .stat-num { font-size: 26px; font-weight: 800; color: var(--orange); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 5px; }
+    .stat-label { font-size: 10.5px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
+
+    .bias-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 13px; }
+    .bias-table th { background: rgba(216,90,48,0.1); color: var(--orange); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+    .bias-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: #adbac7; }
+    .bias-table tr:last-child td { border-bottom: none; }
+    .bias-table .flag { color: var(--orange); font-weight: 700; }
+    .bias-table .seg { color: var(--text); font-weight: 600; }
+
+    .reg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+    .reg-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+    .reg-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .reg-desc { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+    .arch-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 20px 0; }
+    .arch-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 10px; text-align: center; position: relative; }
+    .arch-card::after { content: '→'; position: absolute; right: -14px; top: 50%; transform: translateY(-50%); color: var(--orange); font-size: 11px; }
+    .arch-card:last-child::after { display: none; }
+    .arch-icon { font-size: 18px; margin-bottom: 5px; }
+    .arch-name { font-size: 11px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+    .arch-file { font-size: 10px; color: var(--muted); }
+
+    .insight-box { background: rgba(216,90,48,0.06); border: 1px solid rgba(216,90,48,0.2); border-left: 3px solid var(--orange); border-radius: 8px; padding: 16px 20px; margin: 20px 0; color: #adbac7; font-size: 13.5px; line-height: 1.6; }
+    .green-box { background: rgba(29,158,117,0.06); border: 1px solid rgba(29,158,117,0.2); border-left: 3px solid var(--green); border-radius: 8px; padding: 16px 20px; margin: 20px 0; color: #adbac7; font-size: 13.5px; line-height: 1.6; }
+
+    .prd-link-bar { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin: 28px 0; }
+    .prd-link-bar a { display: inline-flex; align-items: center; gap: 6px; color: var(--orange); text-decoration: none; font-size: 13.5px; font-weight: 600; }
+    .prd-link-bar a:hover { opacity: 0.8; }
+    .prd-link-bar span { color: var(--muted); font-size: 13px; }
+
+    .footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); }
+    .footer a { color: var(--orange); text-decoration: none; }
+
+    @media (max-width: 640px) {
+      body { padding: 40px 20px; } h1 { font-size: 28px; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .arch-grid { grid-template-columns: 1fr 1fr; } .arch-card::after { display: none; }
+      .reg-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="back-link no-print">← Back to portfolio</a>
+
+  <div class="eyebrow">Case Study · Responsible AI · ML Engineering</div>
+  <h1>FraudWatch</h1>
+  <p class="subtitle">Bias-Audited Fraud Detection & Model Performance Monitor</p>
+
+  <div class="meta-row">
+    <div class="meta-item">
+      <span class="meta-label">Type</span>
+      <span class="meta-value">Self-directed ML project</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Dataset</span>
+      <span class="meta-value">IEEE-CIS · 590,540 transactions</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Model</span>
+      <span class="meta-value">Random Forest · 100 trees</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Monitoring</span>
+      <span class="meta-value">12 weeks continuous drift tracking</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Date</span>
+      <span class="meta-value">June 2026</span>
+    </div>
+  </div>
+
+  <div class="tags">
+    <span class="tag">Python</span><span class="tag">Scikit-learn</span><span class="tag">Pandas</span>
+    <span class="tag">SciPy</span><span class="tag">FastAPI</span><span class="tag">SQLite</span>
+    <span class="tag">Docker</span><span class="tag">Responsible AI</span><span class="tag">Bias Auditing</span><span class="tag">Model Monitoring</span>
+  </div>
+
+  <div class="prd-link-bar">
+    <svg width="15" height="15" fill="var(--orange)" viewBox="0 0 16 16"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2L9.5 1.5z"/></svg>
+    <a href="fraudwatch-prd.html">Read the full PRD →</a>
+    <span>Product Requirements Document · v1.0 · June 2026</span>
+  </div>
+
+  <!-- PROBLEM -->
+  <section>
+    <h2>Problem</h2>
+    <p>Fraud detection models flag millions of transactions daily. When false positives concentrate on specific customer profiles — credit card holders, certain product categories, non-US billing addresses — the system creates <strong>measurable disparate impact without any discriminatory intent.</strong></p>
+    <p>Most fraud teams monitor aggregate precision and recall. They do not segment performance by customer group. Bias audits, when they happen at all, are manual, infrequent, and assembled under pressure before regulatory exams. There is no automated alerting when segment-level disparity exceeds acceptable thresholds.</p>
+
+    <div class="insight-box">
+      <strong>The invisible harm:</strong> A model can achieve 92% recall globally while systematically wronging a specific customer segment at 2–3× the rate of others. Aggregate metrics hide this. FraudWatch makes it visible — and quantifies whether the disparity is statistically real or random noise.
+    </div>
+  </section>
+
+  <!-- SOLUTION -->
+  <section>
+    <h2>Solution</h2>
+    <p>FraudWatch is an end-to-end ML pipeline that trains a fraud classifier, audits it for demographic bias using z-tests for statistical significance, and monitors performance drift weekly — all queryable through a live FastAPI layer and stored in SQLite for full audit traceability.</p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num">92.4%</div>
+        <div class="stat-label">Avg fraud recall · 12 weeks</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">45,375</div>
+        <div class="stat-label">False positives identified</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">2.7×</div>
+        <div class="stat-label">FPR disparity · product category</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">0 / 12</div>
+        <div class="stat-label">Weeks with missed drift alert</div>
+      </div>
+    </div>
+
+    <h3>System Architecture</h3>
+    <div class="arch-grid">
+      <div class="arch-card">
+        <div class="arch-icon">🏋️</div>
+        <div class="arch-name">Training</div>
+        <div class="arch-file">train.py</div>
+      </div>
+      <div class="arch-card">
+        <div class="arch-icon">🔍</div>
+        <div class="arch-name">Bias Audit</div>
+        <div class="arch-file">audit.py</div>
+      </div>
+      <div class="arch-card">
+        <div class="arch-icon">📈</div>
+        <div class="arch-name">Drift Monitor</div>
+        <div class="arch-file">monitor.py</div>
+      </div>
+      <div class="arch-card">
+        <div class="arch-icon">⚡</div>
+        <div class="arch-name">API Layer</div>
+        <div class="arch-file">api.py · FastAPI</div>
+      </div>
+      <div class="arch-card">
+        <div class="arch-icon">🗄️</div>
+        <div class="arch-name">Storage</div>
+        <div class="arch-file">SQLite · fraudwatch.db</div>
+      </div>
+    </div>
+
+    <p>Raw transaction CSVs merge on TransactionID → threshold filter → 30-feature selection → categorical encoding → 80/20 stratified split → Random Forest training → segment-level FPR calculation → z-test → SQLite storage → visualization → report generation. Full pipeline reproducible with one command.</p>
+  </section>
+
+  <!-- BIAS AUDIT FINDINGS -->
+  <section>
+    <h2>Bias Audit Findings</h2>
+    <p>The audit surfaces statistically significant disparate impact across three dimensions. Every finding includes a z-statistic and p-value so compliance teams can distinguish real disparity from sampling noise.</p>
+
+    <table class="bias-table">
+      <thead>
+        <tr>
+          <th>Segment</th>
+          <th>Group A</th>
+          <th>FPR A</th>
+          <th>Group B</th>
+          <th>FPR B</th>
+          <th>Disparity</th>
+          <th>Z-stat</th>
+          <th>Significant</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="seg">Card Type (card6)</td>
+          <td>Credit</td>
+          <td class="flag">56.8%</td>
+          <td>Debit</td>
+          <td>34.3%</td>
+          <td class="flag">+22.5 pp (1.66×)</td>
+          <td>Z = 66.6</td>
+          <td class="flag">p &lt; 0.001</td>
+        </tr>
+        <tr>
+          <td class="seg">Product Category</td>
+          <td>Cat 0</td>
+          <td class="flag">82.3%</td>
+          <td>Cat 4</td>
+          <td>30.8%</td>
+          <td class="flag">+51.5 pp (2.67×)</td>
+          <td>Z = 109.1</td>
+          <td class="flag">p &lt; 0.001</td>
+        </tr>
+        <tr>
+          <td class="seg">Billing Region</td>
+          <td>Non-US</td>
+          <td class="flag">77–85%</td>
+          <td>US</td>
+          <td>34.8%</td>
+          <td class="flag">+42–50 pp (2.2×)</td>
+          <td>—</td>
+          <td class="flag">Notable</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="insight-box">
+      <strong>Credit card users are 65% more likely to be wrongly blocked than debit card users</strong> (Z=66.6, p&lt;0.001). This isn't a rounding error — it's a statistically robust finding that represents a regulatory liability under ECOA and a direct source of customer harm. 45,375 false positives in a single test window, each representing a wrongly blocked transaction.
+    </div>
+  </section>
+
+  <!-- REGULATORY CONTEXT -->
+  <section>
+    <h2>Regulatory Context</h2>
+    <p>FraudWatch is designed so that compliance documentation is a byproduct of normal operations — not a pre-audit scramble. Every audit result is timestamped and stored in SQLite. Bias findings map to specific regulatory requirements.</p>
+
+    <div class="reg-grid">
+      <div class="reg-card">
+        <div class="reg-name">ECOA</div>
+        <div class="reg-desc">Prohibits credit discrimination. FPR disparity detection by segment proxy quantifies disparate impact before it reaches regulators.</div>
+      </div>
+      <div class="reg-card">
+        <div class="reg-name">EU AI Act · Art. 10–13</div>
+        <div class="reg-desc">Bias testing required for high-risk AI in credit scoring. Automated audit with statistical evidence and human oversight documentation.</div>
+      </div>
+      <div class="reg-card">
+        <div class="reg-name">CFPB UDAAP</div>
+        <div class="reg-desc">False positive burden constitutes potential consumer harm. FraudWatch makes that harm measurable and attributable to specific segments.</div>
+      </div>
+      <div class="reg-card">
+        <div class="reg-name">SR 11-7</div>
+        <div class="reg-desc">Model risk management requires validation and ongoing monitoring. Weekly drift tracking with configurable alerts and full audit trail satisfies this.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- USER STORIES -->
+  <section>
+    <h2>Who This Is Built For</h2>
+
+    <h3>Risk Analyst</h3>
+    <p>Needs segment-level FPR by card type and product category to identify which customer groups are being disproportionately blocked — and a z-test to confirm the disparity is real before escalating to leadership.</p>
+
+    <h3>Compliance Officer</h3>
+    <p>Needs exportable, structured audit reports with regulatory mapping — ready to include in model risk documentation without manual compilation. FraudWatch generates these as CSV exports from every audit run.</p>
+
+    <h3>ML Engineer</h3>
+    <p>Needs automated alerts when weekly recall drops below threshold, and week-by-week metrics to identify when drift started and correlate it with data or behavioral changes.</p>
+
+    <h3>Product Manager</h3>
+    <p>Needs a single dashboard showing recall, precision, and FPR trends to communicate model health to leadership in a weekly review — without a data science handoff every time.</p>
+  </section>
+
+  <!-- BUSINESS IMPACT -->
+  <section>
+    <h2>Business Impact</h2>
+    <ul>
+      <li><strong>45,375 false positives surfaced</strong> in a single test window — each a wrongly blocked customer transaction that would otherwise go undetected</li>
+      <li><strong>Zero drift across 12 weeks</strong> confirms model stability and enables confident production deployment without manual monitoring overhead</li>
+      <li><strong>Full pipeline reproducible with one command</strong> — reducing audit prep time from days to minutes</li>
+      <li><strong>Compliance documentation generated continuously</strong>, not assembled manually before audits</li>
+      <li>Quantifies regulatory exposure under ECOA, EU AI Act, CFPB UDAAP, and SR 11-7 — before an examiner does</li>
+    </ul>
+
+    <div class="green-box">
+      <strong>The broader point:</strong> A fraud model that achieves 92% recall globally can still be systematically harming a specific customer segment. FraudWatch operationalizes the insight that responsible AI isn't a checkbox — it requires continuous, automated, statistically rigorous auditing built into the deployment lifecycle.
+    </div>
+  </section>
+
+  <div class="prd-link-bar">
+    <svg width="15" height="15" fill="var(--orange)" viewBox="0 0 16 16"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2L9.5 1.5z"/></svg>
+    <a href="fraudwatch-prd.html">Read the full Product Requirements Document →</a>
+  </div>
+
+  <div class="footer">
+    <span>Shrijani (Diya) Manna · Duke MEM '26</span>
+    <span><a href="mailto:sm1091@duke.edu">sm1091@duke.edu</a> · <a href="https://github.com/diyaboop/fraud-watch" target="_blank">GitHub</a> · <a href="https://linkedin.com/in/shrijani-manna" target="_blank">LinkedIn</a></span>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FraudWatch PRD · Diya Manna</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d1117; --card: #161b22; --border: #21262d;
+      --text: #e6edf3; --muted: #8b949e;
+      --orange: #D85A30; --green: #1D9E75; --purple: #534AB7; --purple-light: #7c73d1;
+    }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 14px; line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      max-width: 860px; margin: 0 auto; padding: 60px 40px 80px;
+    }
+    @media print {
+      body { background: #fff; color: #111; max-width: 100%; padding: 20px 32px; }
+      :root { --bg:#fff; --card:#f6f8fa; --border:#e1e4e8; --text:#111; --muted:#555; }
+      .no-print { display: none; }
+      section { page-break-inside: avoid; }
+    }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500; margin-bottom: 16px; transition: color 0.15s; }
+    .back-link:hover { color: var(--text); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 40px; font-size: 12.5px; color: var(--muted); }
+    .breadcrumb a { color: var(--muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--orange); }
+    .breadcrumb span { color: var(--border); }
+
+    .doc-header { margin-bottom: 40px; }
+    .doc-type { font-size: 11px; font-weight: 700; color: var(--orange); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+    h1 { font-size: 36px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 8px; }
+    .doc-subtitle { font-size: 16px; color: var(--muted); margin-bottom: 24px; }
+
+    .doc-meta { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 48px; }
+    .doc-meta-cell { background: var(--card); padding: 12px 16px; }
+    .doc-meta-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 3px; }
+    .doc-meta-value { font-size: 13px; font-weight: 600; color: var(--text); }
+
+    section { margin-bottom: 48px; }
+    .section-num { font-size: 11px; font-weight: 700; color: var(--orange); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+    h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    h3 { font-size: 13.5px; font-weight: 700; color: var(--text); margin-bottom: 8px; margin-top: 20px; }
+    h4 { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; margin-top: 16px; }
+    p { color: #adbac7; margin-bottom: 12px; }
+    p:last-child { margin-bottom: 0; }
+    strong { color: var(--text); font-weight: 600; }
+    ul { padding-left: 18px; color: #adbac7; margin-bottom: 12px; }
+    ul li { margin-bottom: 5px; }
+    ul li::marker { color: var(--orange); }
+
+    .goals-table, .req-table, .risk-table, .reg-table, .api-table, .ac-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 12.5px; }
+    .goals-table th, .req-table th, .risk-table th, .reg-table th, .api-table th, .ac-table th {
+      background: rgba(216,90,48,0.08); color: var(--orange); font-size: 10.5px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.05em; padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--border);
+    }
+    .goals-table td, .req-table td, .risk-table td, .reg-table td, .api-table td, .ac-table td {
+      padding: 9px 12px; border-bottom: 1px solid var(--border); color: #adbac7; vertical-align: top;
+    }
+    .goals-table tr:last-child td, .req-table tr:last-child td, .risk-table tr:last-child td,
+    .reg-table tr:last-child td, .api-table tr:last-child td, .ac-table tr:last-child td { border-bottom: none; }
+    .must { color: var(--orange); font-weight: 700; font-size: 11px; }
+    .should { color: var(--green); font-weight: 700; font-size: 11px; }
+    .could { color: var(--muted); font-weight: 700; font-size: 11px; }
+    .wont { color: #444; font-weight: 700; font-size: 11px; text-decoration: line-through; }
+    .high { color: var(--orange); font-weight: 600; font-size: 11px; }
+    .medium { color: #e3b341; font-weight: 600; font-size: 11px; }
+    .low { color: var(--green); font-weight: 600; font-size: 11px; }
+    td strong { color: var(--text); }
+
+    .persona-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+    .persona-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+    .persona-name { font-size: 13.5px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .persona-desc { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+    .arch-row { display: grid; grid-template-columns: 140px 140px 1fr 1fr; gap: 1px; background: var(--border); border-radius: 8px; overflow: hidden; margin: 4px 0; font-size: 12px; }
+    .arch-row > div { background: var(--card); padding: 10px 12px; color: #adbac7; }
+    .arch-row > div:first-child { color: var(--text); font-weight: 600; }
+    .arch-row > div:nth-child(2) { color: var(--purple-light); font-size: 11.5px; font-family: monospace; }
+    .arch-header > div { background: rgba(216,90,48,0.08) !important; color: var(--orange) !important; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .epic-block { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; margin: 12px 0; }
+    .epic-label { font-size: 10.5px; font-weight: 700; color: var(--purple-light); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
+    .epic-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+    .story-list { list-style: none; padding: 0; margin: 0; color: #adbac7; font-size: 12.5px; }
+    .story-list li { margin-bottom: 8px; padding-left: 14px; position: relative; line-height: 1.55; }
+    .story-list li::before { content: '↳'; position: absolute; left: 0; color: var(--orange); font-size: 10px; top: 1px; }
+
+    .insight-box { background: rgba(216,90,48,0.06); border: 1px solid rgba(216,90,48,0.2); border-left: 3px solid var(--orange); border-radius: 8px; padding: 14px 18px; margin: 16px 0; color: #adbac7; font-size: 13px; line-height: 1.6; }
+
+    .scope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+    .scope-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+    .scope-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+    .in-scope { color: var(--green); }
+    .out-scope { color: var(--muted); }
+    .scope-list { list-style: none; padding: 0; font-size: 12.5px; color: #adbac7; }
+    .scope-list li { margin-bottom: 5px; padding-left: 14px; position: relative; }
+    .scope-list li::before { content: '✓'; position: absolute; left: 0; font-size: 11px; }
+    .scope-list.out li::before { content: '✗'; color: var(--muted); }
+    .scope-list.in li::before { color: var(--green); }
+
+    .case-link-bar { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin: 28px 0; }
+    .case-link-bar a { display: inline-flex; align-items: center; gap: 6px; color: var(--orange); text-decoration: none; font-size: 13.5px; font-weight: 600; }
+    .case-link-bar span { color: var(--muted); font-size: 13px; }
+
+    .footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); }
+    .footer a { color: var(--orange); text-decoration: none; }
+
+    @media (max-width: 640px) {
+      body { padding: 40px 20px; } h1 { font-size: 26px; }
+      .doc-meta { grid-template-columns: 1fr 1fr; }
+      .persona-grid, .scope-grid { grid-template-columns: 1fr; }
+      .arch-row { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="breadcrumb no-print">
+    <a href="index.html">Portfolio</a>
+    <span>›</span>
+    <a href="fraudwatch-case-study.html">FraudWatch</a>
+    <span>›</span>
+    <span style="color:var(--text)">PRD</span>
+  </div>
+
+  <div class="doc-header">
+    <div class="doc-type">Product Requirements Document</div>
+    <h1>FraudWatch</h1>
+    <p class="doc-subtitle">Fraud Detection Bias Audit & Model Performance Monitor</p>
+  </div>
+
+  <div class="doc-meta">
+    <div class="doc-meta-cell"><div class="doc-meta-label">Author</div><div class="doc-meta-value">Shrijani (Diya) Manna</div></div>
+    <div class="doc-meta-cell"><div class="doc-meta-label">Version</div><div class="doc-meta-value">1.0 · Draft</div></div>
+    <div class="doc-meta-cell"><div class="doc-meta-label">Date</div><div class="doc-meta-value">June 2026</div></div>
+    <div class="doc-meta-cell"><div class="doc-meta-label">Status</div><div class="doc-meta-value" style="color:var(--orange)">Draft</div></div>
+    <div class="doc-meta-cell"><div class="doc-meta-label">Audience</div><div class="doc-meta-value">Engineering · Risk · Compliance</div></div>
+  </div>
+
+  <!-- 1. OVERVIEW -->
+  <section>
+    <div class="section-num">Section 1</div>
+    <h2>Overview</h2>
+    <p>FraudWatch is an internal ML monitoring tool that trains a fraud detection classifier on financial transaction data, audits it for demographic bias, and tracks performance drift over time. It is designed for risk teams at financial services companies and responsible AI practitioners who need automated, auditable evidence that their fraud models are performing equitably across customer segments.</p>
+  </section>
+
+  <!-- 2. PROBLEM -->
+  <section>
+    <div class="section-num">Section 2</div>
+    <h2>Problem Statement</h2>
+    <h3>2.1 Background</h3>
+    <p>Fraud detection models make high-stakes decisions affecting real customers. A false positive — wrongly flagging a legitimate transaction — blocks the customer's purchase, damages trust, and creates customer service overhead. When false positives are systematically concentrated on specific customer segments (by card type, product category, or geography), the model is not just inaccurate — <strong>it is discriminatory.</strong> This creates regulatory exposure under ECOA, EU AI Act Article 10, and CFPB model risk guidance.</p>
+    <h3>2.2 Current State</h3>
+    <ul>
+      <li>Most fraud teams monitor aggregate precision and recall but do not segment performance by customer group</li>
+      <li>Bias audits, when they happen, are manual, infrequent, and not part of standard model deployment</li>
+      <li>There is no automated alerting when model performance degrades or when segment-level disparity exceeds acceptable thresholds</li>
+      <li>Compliance documentation for model fairness is assembled manually before audits rather than generated continuously</li>
+    </ul>
+    <h3>2.3 Opportunity</h3>
+    <p>Automate the entire bias audit and monitoring workflow so risk teams get continuous, segment-level visibility into model fairness — not just aggregate accuracy. <strong>Make compliance documentation a byproduct of normal operations, not a pre-audit scramble.</strong></p>
+  </section>
+
+  <!-- 3. GOALS -->
+  <section>
+    <div class="section-num">Section 3</div>
+    <h2>Goals & Success Metrics</h2>
+    <table class="goals-table">
+      <thead><tr><th>Goal</th><th>Metric</th><th>Target</th><th>Baseline</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Detect bias automatically</strong></td><td>Segments flagged with FPR &gt; 2× overall</td><td>100% detection rate</td><td>0% — manual only</td></tr>
+        <tr><td><strong>Monitor drift continuously</strong></td><td>Weeks without missed drift alert</td><td>0 missed alerts</td><td>No monitoring</td></tr>
+        <tr><td><strong>Reduce compliance prep time</strong></td><td>Hours to generate audit report</td><td>&lt; 5 minutes</td><td>2–3 days manual</td></tr>
+        <tr><td><strong>Maintain fraud capture rate</strong></td><td>Recall across all segments</td><td>&gt; 85% weekly</td><td>92% current</td></tr>
+        <tr><td><strong>Surface actionable findings</strong></td><td>Statistically significant disparities flagged</td><td>All p&lt;0.05 flagged</td><td>None flagged</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 4. USERS -->
+  <section>
+    <div class="section-num">Section 4</div>
+    <h2>Users & User Stories</h2>
+    <h3>4.1 User Personas</h3>
+    <div class="persona-grid">
+      <div class="persona-card">
+        <div class="persona-name">Risk Analyst</div>
+        <div class="persona-desc">Reviews model behavior post-deployment. Needs segment-level audit reports to identify where the model is misbehaving and prioritize remediation.</div>
+      </div>
+      <div class="persona-card">
+        <div class="persona-name">Compliance Officer</div>
+        <div class="persona-desc">Responsible for regulatory filings and internal audits. Needs audit trails, statistical evidence, and regulatory mapping to demonstrate due diligence.</div>
+      </div>
+      <div class="persona-card">
+        <div class="persona-name">ML Engineer</div>
+        <div class="persona-desc">Owns the model and retraining pipeline. Needs drift alerts and performance baselines to know when to retrain.</div>
+      </div>
+      <div class="persona-card">
+        <div class="persona-name">Product Manager</div>
+        <div class="persona-desc">Responsible for the fraud detection product. Needs to understand precision/recall tradeoffs and customer impact to set thresholds and communicate with leadership.</div>
+      </div>
+    </div>
+
+    <h3>4.2 User Stories</h3>
+    <div class="epic-block">
+      <div class="epic-label">Epic 1</div>
+      <div class="epic-title">Bias Audit</div>
+      <ul class="story-list">
+        <li>As a <strong>Risk Analyst</strong>, I want to see false positive rates broken down by card type and product category so I can identify which customer segments are being disproportionately blocked and escalate for remediation.</li>
+        <li>As a <strong>Risk Analyst</strong>, I want to run a statistical significance test on segment disparities so I know whether the difference is real or random noise before escalating.</li>
+        <li>As a <strong>Compliance Officer</strong>, I want to export a structured bias audit report so I can include it in model risk documentation without manual compilation.</li>
+      </ul>
+    </div>
+    <div class="epic-block">
+      <div class="epic-label">Epic 2</div>
+      <div class="epic-title">Performance Monitoring</div>
+      <ul class="story-list">
+        <li>As an <strong>ML Engineer</strong>, I want to receive an alert when weekly recall drops below 0.85 so I know immediately when the model needs retraining without manual monitoring.</li>
+        <li>As an <strong>ML Engineer</strong>, I want to see performance metrics broken down by week so I can identify when drift started and correlate it with data or behavioral changes.</li>
+        <li>As a <strong>Product Manager</strong>, I want to see a single dashboard showing recall, precision, and FPR trends so I can communicate model health to leadership in a weekly review.</li>
+      </ul>
+    </div>
+    <div class="epic-block">
+      <div class="epic-label">Epic 3</div>
+      <div class="epic-title">Compliance Reporting</div>
+      <ul class="story-list">
+        <li>As a <strong>Compliance Officer</strong>, I want to see bias findings mapped to specific regulatory requirements so I can demonstrate during an audit that we are actively monitoring for discrimination.</li>
+        <li>As a <strong>Risk Analyst</strong>, I want to query the audit database with SQL so I can run custom analyses on specific time periods or segments without engineering support.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 5. FUNCTIONAL REQUIREMENTS -->
+  <section>
+    <div class="section-num">Section 5</div>
+    <h2>Functional Requirements</h2>
+    <table class="req-table">
+      <thead><tr><th>ID</th><th>Priority</th><th>Requirement</th></tr></thead>
+      <tbody>
+        <tr><td>FR-01</td><td><span class="must">MUST</span></td><td>Train a Random Forest classifier on transaction data with class imbalance handling</td></tr>
+        <tr><td>FR-02</td><td><span class="must">MUST</span></td><td>Calculate false positive rate, false negative rate, and recall per customer segment</td></tr>
+        <tr><td>FR-03</td><td><span class="must">MUST</span></td><td>Run z-test for statistical significance on all segment disparities</td></tr>
+        <tr><td>FR-04</td><td><span class="must">MUST</span></td><td>Flag any segment with FPR more than 2× the overall average</td></tr>
+        <tr><td>FR-05</td><td><span class="must">MUST</span></td><td>Track precision, recall, and FPR on a weekly basis across 12+ deployment weeks</td></tr>
+        <tr><td>FR-06</td><td><span class="must">MUST</span></td><td>Alert when recall drops below configurable threshold (default 0.85)</td></tr>
+        <tr><td>FR-07</td><td><span class="must">MUST</span></td><td>Store all audit results and weekly metrics in SQLite for querying</td></tr>
+        <tr><td>FR-08</td><td><span class="must">MUST</span></td><td>Generate disparity charts and drift charts as PNG outputs</td></tr>
+        <tr><td>FR-09</td><td><span class="must">MUST</span></td><td>Export bias summary as CSV for compliance reporting</td></tr>
+        <tr><td>FR-10</td><td><span class="should">SHOULD</span></td><td>Expose audit results via REST API endpoints</td></tr>
+        <tr><td>FR-11</td><td><span class="should">SHOULD</span></td><td>Containerize full pipeline with Docker</td></tr>
+        <tr><td>FR-12</td><td><span class="could">COULD</span></td><td>Interactive dashboard for real-time monitoring</td></tr>
+        <tr><td>FR-13</td><td><span class="wont">WON'T</span></td><td>Real-time transaction scoring in this version</td></tr>
+        <tr><td>FR-14</td><td><span class="wont">WON'T</span></td><td>Multi-model comparison in this version</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 6. NON-FUNCTIONAL -->
+  <section>
+    <div class="section-num">Section 6</div>
+    <h2>Non-Functional Requirements</h2>
+    <ul>
+      <li><strong>Performance</strong> — Full pipeline (train + audit + monitor) completes in under 15 minutes on standard hardware</li>
+      <li><strong>Reproducibility</strong> — All results reproducible with fixed <code style="color:var(--purple-light);background:rgba(83,74,183,0.1);padding:1px 5px;border-radius:3px;">random_state=42</code> — same input always produces same output</li>
+      <li><strong>Auditability</strong> — All audit results stored with timestamps in SQLite — full history retained indefinitely</li>
+      <li><strong>Portability</strong> — Entire pipeline containerized with Docker — runs identically on any machine</li>
+      <li><strong>Configurability</strong> — Alert thresholds (recall floor, FPR ceiling, disparity multiplier) configurable via CLI args</li>
+    </ul>
+  </section>
+
+  <!-- 7. SYSTEM DESIGN -->
+  <section>
+    <div class="section-num">Section 7</div>
+    <h2>System Design</h2>
+
+    <h3>7.1 Architecture</h3>
+    <div style="margin:16px 0;display:flex;flex-direction:column;gap:2px;">
+      <div class="arch-row arch-header">
+        <div>Module</div><div>File</div><div>Responsibility</div><div>Outputs</div>
+      </div>
+      <div class="arch-row"><div>Training</div><div>train.py</div><div>Load, merge, clean, encode, train RF, evaluate</div><div>fraud_model.pkl · features.pkl</div></div>
+      <div class="arch-row"><div>Bias Audit</div><div>audit.py</div><div>Load model, calculate segment FPR, z-test, visualize</div><div>audit_results.csv · disparity_chart.png</div></div>
+      <div class="arch-row"><div>Drift Monitor</div><div>monitor.py</div><div>Weekly batch metrics, alert thresholds, drift detection</div><div>weekly_metrics in SQLite · drift_chart.png</div></div>
+      <div class="arch-row"><div>API Layer</div><div>api.py</div><div>FastAPI endpoints: /metrics /audit /monitor /predict</div><div>JSON responses</div></div>
+      <div class="arch-row"><div>Dashboard</div><div>dashboard/</div><div>React frontend consuming API endpoints</div><div>Interactive UI</div></div>
+      <div class="arch-row"><div>Database</div><div>fraudwatch.db</div><div>SQLite — audit_results, weekly_metrics, bias_summary</div><div>Query-ready audit trail</div></div>
+    </div>
+
+    <h3>7.2 Data Flow</h3>
+    <div class="insight-box" style="font-size:12.5px;">
+      Raw CSVs (train_transaction.csv + train_identity.csv) → merge on TransactionID → threshold filter (drop &gt;50% missing) → feature selection (30 features) → categorical encoding → missing value fill (-999) → train/test split (80/20, stratified) → Random Forest training → predictions → audit DataFrame → segment groupby → FPR calculation → z-test → SQLite storage → visualization → report generation.
+    </div>
+
+    <h3>7.3 API Endpoints</h3>
+    <table class="api-table">
+      <thead><tr><th>Endpoint</th><th>Method</th><th>Description</th><th>Response</th></tr></thead>
+      <tbody>
+        <tr><td><code style="color:var(--purple-light)">/metrics</code></td><td>GET</td><td>Overall model performance — precision, recall, FPR</td><td>JSON</td></tr>
+        <tr><td><code style="color:var(--purple-light)">/audit</code></td><td>GET</td><td>Bias audit results by segment</td><td>JSON + PNG</td></tr>
+        <tr><td><code style="color:var(--purple-light)">/monitor</code></td><td>GET</td><td>Weekly performance metrics and drift alerts</td><td>JSON + PNG</td></tr>
+        <tr><td><code style="color:var(--purple-light)">/predict</code></td><td>POST</td><td>Score a single transaction for fraud probability</td><td>JSON {fraud_proba, prediction}</td></tr>
+        <tr><td><code style="color:var(--purple-light)">/health</code></td><td>GET</td><td>API health check</td><td>JSON {status: ok}</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 8. ACCEPTANCE CRITERIA -->
+  <section>
+    <div class="section-num">Section 8</div>
+    <h2>Acceptance Criteria</h2>
+    <table class="ac-table">
+      <thead><tr><th>ID</th><th>Given / When / Then</th></tr></thead>
+      <tbody>
+        <tr><td>AC-01</td><td><strong>Given</strong> a trained model, <strong>when</strong> audit.py runs, <strong>then</strong> FPR is calculated for every unique value of card4, card6, ProductCD, and addr2</td></tr>
+        <tr><td>AC-02</td><td><strong>Given</strong> two segments with FPR disparity, <strong>when</strong> z-test runs, <strong>then</strong> p-value and significance flag are returned for each pair</td></tr>
+        <tr><td>AC-03</td><td><strong>Given</strong> any segment with FPR &gt; 2× overall average, <strong>when</strong> audit completes, <strong>then</strong> that segment is flagged in bias_summary.csv</td></tr>
+        <tr><td>AC-04</td><td><strong>Given</strong> 12 weeks of transaction data, <strong>when</strong> monitor.py runs, <strong>then</strong> precision, recall, and FPR are calculated and stored for each week</td></tr>
+        <tr><td>AC-05</td><td><strong>Given</strong> recall drops below 0.85 in any week, <strong>when</strong> monitor.py runs, <strong>then</strong> a drift alert is printed and flagged in the database</td></tr>
+        <tr><td>AC-06</td><td><strong>Given</strong> the full pipeline runs, <strong>when</strong> complete, <strong>then</strong> disparity_chart.png and drift_chart.png are saved to outputs/</td></tr>
+        <tr><td>AC-07</td><td><strong>Given</strong> the Docker container builds, <strong>when</strong> run with correct data volume mount, <strong>then</strong> full pipeline executes without errors</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 9. RISKS -->
+  <section>
+    <div class="section-num">Section 9</div>
+    <h2>Risks & Open Questions</h2>
+    <table class="risk-table">
+      <thead><tr><th>Risk</th><th>Level</th><th>Mitigation</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Data availability</strong> — IEEE-CIS dataset is 650MB, requires Kaggle access</td><td><span class="medium">MEDIUM</span></td><td>Provide sample dataset for testing; document Kaggle download steps</td></tr>
+        <tr><td><strong>Proxy discrimination</strong> — card4/card6/ProductCD are proxies, not protected classes</td><td><span class="high">HIGH</span></td><td>Document clearly; real protected attributes require additional data collection in production</td></tr>
+        <tr><td><strong>Threshold sensitivity</strong> — 0.3 fraud probability threshold is manually chosen; different thresholds change bias findings significantly</td><td><span class="medium">MEDIUM</span></td><td>Make threshold configurable via CLI; document sensitivity analysis</td></tr>
+        <tr><td><strong>Model retraining</strong> — current model trained once; production retraining requires re-running audit</td><td><span class="low">LOW</span></td><td>Document retraining workflow; design audit to run automatically post-retrain</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Open Questions</h3>
+    <ul>
+      <li>Should the disparity threshold (2×) be configurable or fixed? Who owns that decision in production?</li>
+      <li>What is the remediation workflow when bias is detected — who gets notified, what actions are taken?</li>
+      <li>Should the API require authentication? What data governance applies to audit results?</li>
+      <li>In production, how frequently should the audit run — on every retrain, weekly, or monthly?</li>
+    </ul>
+  </section>
+
+  <!-- 10. SCOPE -->
+  <section>
+    <div class="section-num">Section 10</div>
+    <h2>Scope (v1)</h2>
+    <div class="scope-grid">
+      <div class="scope-card">
+        <div class="scope-label in-scope">In Scope</div>
+        <ul class="scope-list in">
+          <li>Batch fraud classification on IEEE-CIS data</li>
+          <li>Segment-level FPR audit with z-test significance</li>
+          <li>12-week drift monitoring with configurable alerts</li>
+          <li>SQLite audit trail with full history</li>
+          <li>CSV and PNG compliance exports</li>
+          <li>FastAPI layer for query access</li>
+          <li>Docker containerization</li>
+        </ul>
+      </div>
+      <div class="scope-card">
+        <div class="scope-label out-scope">Out of Scope (v1)</div>
+        <ul class="scope-list out">
+          <li>Real-time transaction scoring</li>
+          <li>Multi-model comparison</li>
+          <li>Automated retraining on drift detection</li>
+          <li>Protected class analysis (race, gender, age)</li>
+          <li>Production-scale consumer traffic deployment</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. REGULATORY -->
+  <section>
+    <div class="section-num">Section 11</div>
+    <h2>Regulatory Context</h2>
+    <table class="reg-table">
+      <thead><tr><th>Regulation</th><th>Requirement</th><th>FraudWatch Coverage</th></tr></thead>
+      <tbody>
+        <tr><td><strong>ECOA</strong></td><td>Prohibit credit discrimination by protected characteristics</td><td>FPR disparity detection by segment proxy; quantifies disparate impact before deployment</td></tr>
+        <tr><td><strong>EU AI Act · Art. 10–13</strong></td><td>Bias testing required for high-risk AI in credit scoring</td><td>Automated bias audit with statistical evidence; human oversight documentation</td></tr>
+        <tr><td><strong>CFPB UDAAP</strong></td><td>Ongoing validation and unfair/deceptive/abusive act prevention</td><td>False positive burden measurable by segment; weekly monitoring with configurable alerts</td></tr>
+        <tr><td><strong>SR 11-7</strong></td><td>Model risk management — validation and ongoing monitoring</td><td>Audit trail in SQLite; reproducible results; weekly drift monitoring satisfies ongoing validation</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div class="case-link-bar">
+    <svg width="15" height="15" fill="var(--orange)" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    <a href="https://github.com/diyaboop/fraud-watch" target="_blank">View on GitHub →</a>
+    <span style="margin-left:12px;">|</span>
+    <a href="fraudwatch-case-study.html" style="margin-left:12px;">← Back to Case Study</a>
+  </div>
+
+  <div class="footer">
+    <span>FraudWatch PRD v1.0 · Shrijani (Diya) Manna · Duke MEM '26</span>
+    <span><a href="mailto:sm1091@duke.edu">sm1091@duke.edu</a> · <a href="https://linkedin.com/in/shrijani-manna" target="_blank">LinkedIn</a></span>
+  </div>
+
+</body>
+</html>
