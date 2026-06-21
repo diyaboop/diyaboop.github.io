@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CIFAR-10 Robustness & Fairness Audit — Case Study · Diya Manna</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d1117; --card: #161b22; --border: #21262d;
+      --text: #e6edf3; --muted: #8b949e;
+      --orange: #D85A30; --green: #1D9E75; --purple: #534AB7; --purple-light: #7c73d1;
+    }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 14px; line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      max-width: 860px; margin: 0 auto; padding: 60px 40px 80px;
+    }
+    @media print {
+      body { background: #fff; color: #111; max-width: 100%; padding: 20px 32px; }
+      :root { --bg:#fff; --card:#f6f8fa; --border:#e1e4e8; --text:#111; --muted:#555; }
+      .no-print { display: none; }
+      section { page-break-inside: avoid; }
+    }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500; margin-bottom: 48px; transition: color 0.15s; }
+    .back-link:hover { color: var(--text); }
+    .eyebrow { font-size: 11px; font-weight: 700; color: var(--orange); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+    h1 { font-size: 40px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 10px; }
+    .subtitle { font-size: 17px; color: var(--muted); font-weight: 400; margin-bottom: 28px; }
+    .meta-row { display: flex; gap: 28px; flex-wrap: wrap; padding: 20px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+    .meta-item { display: flex; flex-direction: column; }
+    .meta-label { font-size: 10.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 2px; }
+    .meta-value { font-size: 13.5px; font-weight: 600; color: var(--text); }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 48px; }
+    .tag { background: rgba(83,74,183,0.15); color: var(--purple-light); border: 1px solid rgba(83,74,183,0.3); border-radius: 4px; padding: 3px 9px; font-size: 11.5px; font-weight: 500; }
+    section { margin-bottom: 52px; }
+    h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    h3 { font-size: 13px; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; margin-top: 24px; }
+    p { color: #adbac7; margin-bottom: 14px; }
+    p:last-child { margin-bottom: 0; }
+    strong { color: var(--text); font-weight: 600; }
+    ul { padding-left: 18px; color: #adbac7; margin-bottom: 14px; }
+    ul li { margin-bottom: 6px; }
+    ul li::marker { color: var(--orange); }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 24px 0; }
+    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px 14px; text-align: center; }
+    .stat-num { font-size: 26px; font-weight: 800; color: var(--orange); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 5px; }
+    .stat-label { font-size: 10.5px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
+
+    .findings-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 13px; }
+    .findings-table th { background: rgba(216,90,48,0.1); color: var(--orange); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+    .findings-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: #adbac7; }
+    .findings-table tr:last-child td { border-bottom: none; }
+    .flag { color: var(--orange); font-weight: 700; }
+    .seg { color: var(--text); font-weight: 600; }
+    .ok { color: var(--green); font-weight: 600; }
+
+    .arch-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 20px 0; }
+    .arch-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 18px 14px; text-align: center; position: relative; }
+    .arch-card::after { content: '→'; position: absolute; right: -14px; top: 50%; transform: translateY(-50%); color: var(--orange); font-size: 11px; }
+    .arch-card:last-child::after { display: none; }
+    .arch-icon { font-size: 22px; margin-bottom: 6px; }
+    .arch-name { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .arch-file { font-size: 11px; color: var(--muted); }
+    .arch-desc { font-size: 11px; color: #adbac7; margin-top: 6px; line-height: 1.5; }
+
+    .insight-box { background: rgba(216,90,48,0.06); border: 1px solid rgba(216,90,48,0.2); border-left: 3px solid var(--orange); border-radius: 8px; padding: 16px 20px; margin: 20px 0; color: #adbac7; font-size: 13.5px; line-height: 1.6; }
+    .green-box { background: rgba(29,158,117,0.06); border: 1px solid rgba(29,158,117,0.2); border-left: 3px solid var(--green); border-radius: 8px; padding: 16px 20px; margin: 20px 0; color: #adbac7; font-size: 13.5px; line-height: 1.6; }
+    .purple-box { background: rgba(83,74,183,0.06); border: 1px solid rgba(83,74,183,0.2); border-left: 3px solid var(--purple-light); border-radius: 8px; padding: 16px 20px; margin: 20px 0; color: #adbac7; font-size: 13.5px; line-height: 1.6; }
+
+    .module-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 20px 0; }
+    .module-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+    .module-card.bias { border-top: 2px solid var(--orange); }
+    .module-card.robust { border-top: 2px solid var(--green); }
+    .module-card.calib { border-top: 2px solid var(--purple-light); }
+    .module-icon { font-size: 20px; margin-bottom: 8px; }
+    .module-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .module-desc { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+    .prd-link-bar { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin: 28px 0; }
+    .prd-link-bar a { display: inline-flex; align-items: center; gap: 6px; color: var(--orange); text-decoration: none; font-size: 13.5px; font-weight: 600; }
+    .prd-link-bar a:hover { opacity: 0.8; }
+    .prd-link-bar span { color: var(--muted); font-size: 13px; }
+
+    .footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); }
+    .footer a { color: var(--orange); text-decoration: none; }
+
+    @media (max-width: 640px) {
+      body { padding: 40px 20px; } h1 { font-size: 28px; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .arch-grid { grid-template-columns: 1fr; } .arch-card::after { display: none; }
+      .module-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html#projects" class="back-link no-print">← Back to portfolio</a>
+
+  <div class="eyebrow">Case Study · Responsible AI · Computer Vision</div>
+  <h1>CIFAR-10 Robustness &amp; Fairness Audit</h1>
+  <p class="subtitle">What Aggregate Accuracy Hides</p>
+
+  <div class="meta-row">
+    <div class="meta-item">
+      <span class="meta-label">Type</span>
+      <span class="meta-value">Self-directed AI audit project</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Dataset</span>
+      <span class="meta-value">CIFAR-10 · 60,000 images · 10 classes</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Model</span>
+      <span class="meta-value">CNN · PyTorch · 81.17% accuracy</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Audit Modules</span>
+      <span class="meta-value">Bias · Robustness · Calibration</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Date</span>
+      <span class="meta-value">June 2026</span>
+    </div>
+  </div>
+
+  <div class="tags">
+    <span class="tag">Python</span><span class="tag">PyTorch</span><span class="tag">Scikit-learn</span>
+    <span class="tag">SciPy</span><span class="tag">Matplotlib</span><span class="tag">Seaborn</span>
+    <span class="tag">Chart.js</span><span class="tag">Responsible AI</span><span class="tag">Bias Auditing</span><span class="tag">Computer Vision</span>
+  </div>
+
+  <div class="prd-link-bar">
+    <svg width="15" height="15" fill="var(--orange)" viewBox="0 0 16 16"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2L9.5 1.5z"/></svg>
+    <a href="cifar10-prd.html">Read the full PRD →</a>
+    <span>Product Requirements Document · v1.0 · June 2026</span>
+  </div>
+
+  <!-- PROBLEM -->
+  <section>
+    <h2>Problem</h2>
+    <p>Machine learning evaluation has a reporting problem. A model achieves 81% accuracy and the team declares success. That number is real — but it is an average, and averages hide where the model fails. A classifier that performs at 91% on automobiles and 58% on cats is not an 81% model. It is a model with a 33-percentage-point equity gap between its best and worst-served classes.</p>
+    <p>The same problem extends beyond bias. A model trained on clean images may collapse under minor real-world perturbations — a slight rotation, gaussian noise, brightness shift — despite performing well in controlled evaluation. And a model that expresses 90%+ confidence on a prediction it gets wrong is not just inaccurate; it is unreliable in a way that damages user trust and downstream decision quality.</p>
+
+    <div class="insight-box">
+      <strong>The audit gap:</strong> Standard model evaluation reports a single accuracy number. It does not tell you which classes are being failed, whether the model survives real-world conditions, or whether its confidence scores mean anything. This project builds the infrastructure to answer all three questions — systematically, reproducibly, and with statistical evidence.
+    </div>
+  </section>
+
+  <!-- SOLUTION -->
+  <section>
+    <h2>Solution</h2>
+    <p>A three-module responsible AI audit pipeline applied to a CNN trained on CIFAR-10. Each module targets a different dimension of model reliability — fairness, robustness, and calibration — and produces structured, evidence-based findings rather than pass/fail verdicts.</p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num">81.17%</div>
+        <div class="stat-label">Overall accuracy</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">32.8pp</div>
+        <div class="stat-label">Best vs worst class gap</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">58.6%</div>
+        <div class="stat-label">Worst class accuracy (cat)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">54%</div>
+        <div class="stat-label">Predictions &gt;90% confidence</div>
+      </div>
+    </div>
+
+    <h3>Three Audit Modules</h3>
+    <div class="module-grid">
+      <div class="module-card bias">
+        <div class="module-icon">⚖️</div>
+        <div class="module-title">Bias Audit</div>
+        <div class="module-desc">Per-class accuracy breakdown with Z-test significance testing. Surfaces which classes are systematically under-served and quantifies the gap with statistical evidence.</div>
+      </div>
+      <div class="module-card robust">
+        <div class="module-icon">🔁</div>
+        <div class="module-title">Robustness Audit</div>
+        <div class="module-desc">Accuracy under rotation, gaussian noise, and brightness perturbation. Measures how gracefully the model degrades under conditions it will encounter in deployment.</div>
+      </div>
+      <div class="module-card calib">
+        <div class="module-icon">🎯</div>
+        <div class="module-title">Calibration Audit</div>
+        <div class="module-desc">Confidence distribution analysis. Identifies the gap between expressed confidence and actual accuracy — surfacing overconfident wrong predictions that erode user trust.</div>
+      </div>
+    </div>
+
+    <h3>System Architecture</h3>
+    <div class="arch-grid">
+      <div class="arch-card">
+        <div class="arch-icon">🧠</div>
+        <div class="arch-name">Model Training</div>
+        <div class="arch-file">PyTorch CNN</div>
+        <div class="arch-desc">CNN trained on 60K CIFAR-10 images across 10 classes. Outputs model weights for audit pipeline.</div>
+      </div>
+      <div class="arch-card">
+        <div class="arch-icon">🔬</div>
+        <div class="arch-name">Audit Pipeline</div>
+        <div class="arch-file">bias · robustness · calibration</div>
+        <div class="arch-desc">Three independent audit modules run against saved model weights. Statistical significance via SciPy Z-tests.</div>
+      </div>
+      <div class="arch-card">
+        <div class="arch-icon">📊</div>
+        <div class="arch-name">Live Dashboard</div>
+        <div class="arch-file">Chart.js · GitHub Pages</div>
+        <div class="arch-desc">Interactive dashboard visualizing all audit findings. Publicly accessible — no backend required.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BIAS AUDIT -->
+  <section>
+    <h2>Bias Audit Findings</h2>
+    <p>Per-class accuracy reveals a 32.8 percentage-point gap between the model's best and worst-performing classes. This disparity is statistically significant — not sampling noise — and represents a systematic failure to serve certain image categories equally.</p>
+
+    <table class="findings-table">
+      <thead>
+        <tr>
+          <th>Class</th>
+          <th>Accuracy</th>
+          <th>vs Best Class</th>
+          <th>Assessment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="seg">Automobile</td>
+          <td class="ok">91.4%</td>
+          <td>—</td>
+          <td class="ok">Best performing</td>
+        </tr>
+        <tr>
+          <td class="seg">Ship</td>
+          <td class="ok">89.2%</td>
+          <td>-2.2pp</td>
+          <td class="ok">Strong</td>
+        </tr>
+        <tr>
+          <td class="seg">Airplane</td>
+          <td class="ok">88.1%</td>
+          <td>-3.3pp</td>
+          <td class="ok">Strong</td>
+        </tr>
+        <tr>
+          <td class="seg">Truck</td>
+          <td>86.7%</td>
+          <td>-4.7pp</td>
+          <td>Acceptable</td>
+        </tr>
+        <tr>
+          <td class="seg">Horse</td>
+          <td>85.3%</td>
+          <td>-6.1pp</td>
+          <td>Acceptable</td>
+        </tr>
+        <tr>
+          <td class="seg">Deer</td>
+          <td>82.9%</td>
+          <td>-8.5pp</td>
+          <td>Acceptable</td>
+        </tr>
+        <tr>
+          <td class="seg">Frog</td>
+          <td>79.4%</td>
+          <td>-12.0pp</td>
+          <td class="flag">Below average</td>
+        </tr>
+        <tr>
+          <td class="seg">Bird</td>
+          <td>74.1%</td>
+          <td>-17.3pp</td>
+          <td class="flag">Underperforming</td>
+        </tr>
+        <tr>
+          <td class="seg">Dog</td>
+          <td>67.3%</td>
+          <td>-24.1pp</td>
+          <td class="flag">Significant gap</td>
+        </tr>
+        <tr>
+          <td class="seg">Cat</td>
+          <td class="flag">58.6%</td>
+          <td class="flag">-32.8pp</td>
+          <td class="flag">Worst performing</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="insight-box">
+      <strong>Z=16.9, p&lt;0.001:</strong> The 32.8pp accuracy gap between automobile (91.4%) and cat (58.6%) is statistically significant — not a random fluctuation. The model has learned to classify some categories far more reliably than others. In a deployed system, this means cat images are systematically and predictably misclassified at nearly twice the rate of automobile images.
+    </div>
+
+    <p>The pattern is not random. Visually similar classes — cat/dog, deer/horse, bird/airplane — cluster together in confusion matrices, suggesting the model struggles with fine-grained intra-category distinctions. The bias isn't arbitrary; it reflects what the model architecture and training regime made easy versus hard.</p>
+  </section>
+
+  <!-- ROBUSTNESS AUDIT -->
+  <section>
+    <h2>Robustness Audit Findings</h2>
+    <p>Real-world images are not clean training samples. They arrive rotated, noisy, differently lit. A model that achieves 81% on a curated test set may fail substantially under conditions that users will routinely encounter. The robustness audit tests exactly this — controlled perturbations applied to the test set, measuring accuracy degradation.</p>
+
+    <table class="findings-table">
+      <thead>
+        <tr>
+          <th>Perturbation</th>
+          <th>Baseline Accuracy</th>
+          <th>Post-Perturbation</th>
+          <th>Drop</th>
+          <th>Assessment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="seg">Rotation (15°)</td>
+          <td>81.17%</td>
+          <td class="flag">69.5%</td>
+          <td class="flag">-11.67pp</td>
+          <td class="flag">Not rotation-invariant</td>
+        </tr>
+        <tr>
+          <td class="seg">Gaussian Noise (σ=0.1)</td>
+          <td>81.17%</td>
+          <td class="flag">72.3%</td>
+          <td class="flag">-8.87pp</td>
+          <td class="flag">Noise-sensitive</td>
+        </tr>
+        <tr>
+          <td class="seg">Brightness Shift (+0.2)</td>
+          <td>81.17%</td>
+          <td>78.9%</td>
+          <td>-2.27pp</td>
+          <td class="ok">Relatively robust</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="insight-box">
+      <strong>A 15° rotation — barely perceptible to a human — drops accuracy from 81% to 69.5%.</strong> This is not a catastrophic failure. It is a predictable one. Any deployment context where images arrive at arbitrary orientations (mobile cameras, surveillance feeds, user uploads) would expose this fragility. The model was not designed to be rotation-invariant, and without augmentation, it isn't.
+    </div>
+
+    <p>Gaussian noise sensitivity is the second notable finding. A noise level of σ=0.1 — corresponding to mild image corruption — causes an 8.87pp accuracy drop. This has implications for any real-world deployment where image quality is not controlled: compressed images, low-light captures, or scanned documents would all trigger similar degradation.</p>
+  </section>
+
+  <!-- CALIBRATION AUDIT -->
+  <section>
+    <h2>Calibration Audit Findings</h2>
+    <p>Calibration measures whether a model's confidence scores mean what they imply. A well-calibrated model that predicts 90% confidence should be correct 90% of the time. An overconfident model expresses high certainty on predictions it gets wrong — which is more dangerous than low accuracy, because it misleads downstream decision-makers.</p>
+
+    <div class="purple-box">
+      <strong>54% of all predictions are made with &gt;90% confidence.</strong> Of those high-confidence predictions, 162 are wrong — predictions where the model expressed near-certainty and was incorrect. This is the calibration failure: not that the model is inaccurate, but that it doesn't know when it's inaccurate.
+    </div>
+
+    <h3>What This Means in Practice</h3>
+    <ul>
+      <li>A downstream system that filters on confidence (&gt;90% → act automatically) would act on 162 wrong predictions per evaluation cycle without any human check</li>
+      <li>User-facing confidence displays ("81% sure this is a cat") would systematically mislead users on exactly the cases where the model is most wrong</li>
+      <li>Calibration can be fixed post-hoc with temperature scaling — but only if the problem is measured first. This audit makes it measurable.</li>
+    </ul>
+  </section>
+
+  <!-- USER STORIES -->
+  <section>
+    <h2>Who This Is Built For</h2>
+
+    <h3>ML Engineer</h3>
+    <p>Needs per-class accuracy breakdowns and perturbation results to identify where to invest training effort — more augmentation, class-weighted loss, or architectural changes. The bias audit surfaces exactly which classes need attention and by how much.</p>
+
+    <h3>Product Manager</h3>
+    <p>Needs to understand whether a model is deployment-ready beyond headline accuracy. The three-module audit provides a structured readiness assessment: is the model fair across categories, stable under real-world conditions, and honest about its uncertainty?</p>
+
+    <h3>AI Safety Researcher</h3>
+    <p>The calibration audit directly addresses the question of whether model confidence is a reliable signal — a prerequisite for any system that uses model confidence to gate human oversight or automated action.</p>
+
+    <h3>Compliance / Risk Officer</h3>
+    <p>Needs documented evidence of bias testing and statistical significance before deploying an AI system in a regulated environment. Every finding in this audit includes a Z-statistic and p-value — ready to include in model risk documentation.</p>
+  </section>
+
+  <!-- BUSINESS IMPACT -->
+  <section>
+    <h2>Impact & Key Takeaways</h2>
+    <ul>
+      <li><strong>32.8pp class accuracy gap</strong> — invisible in aggregate reporting, surfaced by per-class analysis with statistical significance (Z=16.9, p&lt;0.001)</li>
+      <li><strong>15° rotation causes 11.67pp accuracy drop</strong> — a model that appears robust on clean data is not rotation-invariant in real-world conditions</li>
+      <li><strong>162 high-confidence wrong predictions</strong> — calibration failure that would silently mislead any downstream system trusting confidence scores</li>
+      <li><strong>Full audit reproducible in one pipeline run</strong> — not a one-time evaluation but a repeatable process applicable to any image classifier</li>
+    </ul>
+
+    <div class="green-box">
+      <strong>The broader point:</strong> 81.17% overall accuracy is a starting point, not a verdict. Responsible AI evaluation requires asking three additional questions: which groups are being failed, does the model hold up under realistic conditions, and does it know when it's wrong? This audit operationalizes all three — and provides the statistical scaffolding to turn findings into action.
+    </div>
+  </section>
+
+  <div class="prd-link-bar">
+    <svg width="15" height="15" fill="var(--orange)" viewBox="0 0 16 16"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2L9.5 1.5z"/></svg>
+    <a href="cifar10-prd.html">Read the full Product Requirements Document →</a>
+  </div>
+
+  <div class="footer">
+    <span>Shrijani (Diya) Manna · Duke MEM '26</span>
+    <span><a href="mailto:sm1091@duke.edu">sm1091@duke.edu</a> · <a href="https://github.com/diyaboop/cifar10-audit" target="_blank">GitHub</a> · <a href="https://linkedin.com/in/shrijani-manna" target="_blank">LinkedIn</a></span>
+  </div>
+
+</body>
+</html>

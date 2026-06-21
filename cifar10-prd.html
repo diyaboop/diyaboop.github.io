@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CIFAR-10 Audit PRD · Diya Manna</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d1117; --card: #161b22; --border: #21262d;
+      --text: #e6edf3; --muted: #8b949e;
+      --orange: #D85A30; --green: #1D9E75; --purple: #534AB7; --purple-light: #7c73d1;
+    }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 14px; line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      max-width: 860px; margin: 0 auto; padding: 60px 40px 80px;
+    }
+    @media print {
+      body { background: #fff; color: #111; max-width: 100%; padding: 20px 32px; }
+      :root { --bg:#fff; --card:#f6f8fa; --border:#e1e4e8; --text:#111; --muted:#555; }
+      .no-print { display: none; }
+      section { page-break-inside: avoid; }
+    }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500; margin-bottom: 16px; transition: color 0.15s; }
+    .back-link:hover { color: var(--text); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 40px; font-size: 12.5px; color: var(--muted); }
+    .breadcrumb a { color: var(--muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--orange); }
+    .breadcrumb span { color: var(--border); }
+
+    .doc-header { margin-bottom: 40px; }
+    .doc-type { font-size: 11px; font-weight: 700; color: var(--orange); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+    h1 { font-size: 36px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 8px; }
+    .doc-subtitle { font-size: 16px; color: var(--muted); margin-bottom: 24px; }
+
+    .doc-meta { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 48px; }
+    .doc-meta-cell { background: var(--card); padding: 12px 16px; }
+    .doc-meta-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 3px; }
+    .doc-meta-value { font-size: 13px; font-weight: 600; color: var(--text); }
+
+    section { margin-bottom: 48px; }
+    .section-num { font-size: 11px; font-weight: 700; color: var(--orange); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+    h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    h3 { font-size: 13.5px; font-weight: 700; color: var(--text); margin-bottom: 8px; margin-top: 20px; }
+    h4 { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; margin-top: 16px; }
+    p { color: #adbac7; margin-bottom: 12px; }
+    p:last-child { margin-bottom: 0; }
+    strong { color: var(--text); font-weight: 600; }
+    ul { padding-left: 18px; color: #adbac7; margin-bottom: 12px; }
+    ul li { margin-bottom: 5px; }
+    ul li::marker { color: var(--orange); }
+
+    .goals-table, .req-table, .risk-table, .api-table, .ac-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 12.5px; }
+    .goals-table th, .req-table th, .risk-table th, .api-table th, .ac-table th {
+      background: rgba(216,90,48,0.08); color: var(--orange); font-size: 10.5px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.05em; padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--border);
+    }
+    .goals-table td, .req-table td, .risk-table td, .api-table td, .ac-table td {
+      padding: 9px 12px; border-bottom: 1px solid var(--border); color: #adbac7; vertical-align: top;
+    }
+    .goals-table tr:last-child td, .req-table tr:last-child td, .risk-table tr:last-child td,
+    .api-table tr:last-child td, .ac-table tr:last-child td { border-bottom: none; }
+    .must { color: var(--orange); font-weight: 700; font-size: 11px; }
+    .should { color: var(--green); font-weight: 700; font-size: 11px; }
+    .could { color: var(--muted); font-weight: 700; font-size: 11px; }
+    .wont { color: #444; font-weight: 700; font-size: 11px; text-decoration: line-through; }
+    .high { color: var(--orange); font-weight: 600; font-size: 11px; }
+    .medium { color: #e3b341; font-weight: 600; font-size: 11px; }
+    .low { color: var(--green); font-weight: 600; font-size: 11px; }
+    td strong { color: var(--text); }
+
+    .persona-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+    .persona-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+    .persona-name { font-size: 13.5px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .persona-desc { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+    .arch-row { display: grid; grid-template-columns: 140px 140px 1fr 1fr; gap: 1px; background: var(--border); border-radius: 8px; overflow: hidden; margin: 4px 0; font-size: 12px; }
+    .arch-row > div { background: var(--card); padding: 10px 12px; color: #adbac7; }
+    .arch-row > div:first-child { color: var(--text); font-weight: 600; }
+    .arch-row > div:nth-child(2) { color: var(--purple-light); font-size: 11.5px; font-family: monospace; }
+    .arch-header > div { background: rgba(216,90,48,0.08) !important; color: var(--orange) !important; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .epic-block { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; margin: 12px 0; }
+    .epic-label { font-size: 10.5px; font-weight: 700; color: var(--purple-light); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
+    .epic-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+    .story-list { list-style: none; padding: 0; margin: 0; color: #adbac7; font-size: 12.5px; }
+    .story-list li { margin-bottom: 8px; padding-left: 14px; position: relative; line-height: 1.55; }
+    .story-list li::before { content: '↳'; position: absolute; left: 0; color: var(--orange); font-size: 10px; top: 1px; }
+
+    .insight-box { background: rgba(216,90,48,0.06); border: 1px solid rgba(216,90,48,0.2); border-left: 3px solid var(--orange); border-radius: 8px; padding: 14px 18px; margin: 16px 0; color: #adbac7; font-size: 13px; line-height: 1.6; }
+
+    .scope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+    .scope-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+    .scope-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+    .in-scope { color: var(--green); }
+    .out-scope { color: var(--muted); }
+
+    .footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); }
+    .footer a { color: var(--orange); text-decoration: none; }
+
+    @media (max-width: 640px) {
+      body { padding: 40px 20px; } h1 { font-size: 26px; }
+      .doc-meta { grid-template-columns: 1fr 1fr; }
+      .persona-grid { grid-template-columns: 1fr; }
+      .scope-grid { grid-template-columns: 1fr; }
+      .arch-row { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html#projects" class="back-link no-print">← Back to portfolio</a>
+
+  <div class="breadcrumb no-print">
+    <a href="index.html#projects">Portfolio</a>
+    <span>›</span>
+    <a href="cifar10-case-study.html">CIFAR-10 Audit</a>
+    <span>›</span>
+    <span style="color:var(--text)">PRD</span>
+  </div>
+
+  <div class="doc-header">
+    <div class="doc-type">Product Requirements Document</div>
+    <h1>CIFAR-10 Robustness &amp; Fairness Audit</h1>
+    <p class="doc-subtitle">Responsible AI Audit Pipeline for Image Classifiers</p>
+  </div>
+
+  <div class="doc-meta">
+    <div class="doc-meta-cell"><div class="doc-meta-label">Author</div><div class="doc-meta-value">Shrijani (Diya) Manna</div></div>
+    <div class="doc-meta-cell"><div class="doc-meta-label">Version</div><div class="doc-meta-value">1.0</div></div>
+    <div class="doc-meta-cell"><div class="doc-meta-label">Status</div><div class="doc-meta-value">Draft</div></div>
+    <div class="doc-meta-cell"><div class="doc-meta-label">Date</div><div class="doc-meta-value">June 2026</div></div>
+    <div class="doc-meta-cell"><div class="doc-meta-label">Audience</div><div class="doc-meta-value">Engineering · AI Safety · Product</div></div>
+  </div>
+
+  <!-- SECTION 1: OVERVIEW -->
+  <section>
+    <div class="section-num">Section 1</div>
+    <h2>Overview</h2>
+    <p>This document defines the product requirements for a three-module responsible AI audit pipeline applied to a convolutional neural network (CNN) trained on the CIFAR-10 image classification benchmark. The pipeline addresses a gap in standard ML evaluation: aggregate accuracy metrics do not reveal which classes are systematically underperformed, whether the model survives real-world perturbations, or whether its confidence scores are reliable signals.</p>
+    <p>The audit produces structured, evidence-based findings with statistical significance testing across three dimensions: class-level fairness (bias audit), input perturbation stability (robustness audit), and confidence reliability (calibration audit). All findings are visualized in a live public dashboard.</p>
+  </section>
+
+  <!-- SECTION 2: PROBLEM STATEMENT -->
+  <section>
+    <div class="section-num">Section 2</div>
+    <h2>Problem Statement</h2>
+    <p>Standard image classifier evaluation reports a single accuracy number. This creates three blind spots:</p>
+    <ul>
+      <li><strong>Class bias:</strong> Aggregate accuracy hides per-class disparity. A model scoring 81% may perform at 91% on one class and 58% on another — a 33pp equity gap invisible in top-line reporting.</li>
+      <li><strong>Robustness gaps:</strong> Models trained on curated datasets degrade under real-world perturbations (rotation, noise, lighting variation) without any warning in standard metrics.</li>
+      <li><strong>Calibration failures:</strong> Models that express high confidence on wrong predictions mislead downstream systems that use confidence scores to gate automated action or human oversight.</li>
+    </ul>
+    <div class="insight-box">
+      <strong>The core problem:</strong> Deploying a model without auditing these three dimensions means deploying unknown risk. This pipeline makes that risk visible, measurable, and documentable before deployment decisions are made.
+    </div>
+  </section>
+
+  <!-- SECTION 3: GOALS -->
+  <section>
+    <div class="section-num">Section 3</div>
+    <h2>Goals &amp; Success Metrics</h2>
+    <table class="goals-table">
+      <thead>
+        <tr><th>Goal</th><th>Metric</th><th>Target</th><th>Baseline</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Surface class bias</strong></td>
+          <td>Per-class accuracy + Z-test significance</td>
+          <td>All 10 classes audited with p-value</td>
+          <td>No per-class reporting</td>
+        </tr>
+        <tr>
+          <td><strong>Quantify robustness</strong></td>
+          <td>Accuracy under ≥3 perturbation types</td>
+          <td>Rotation, noise, brightness tested</td>
+          <td>Clean-data only evaluation</td>
+        </tr>
+        <tr>
+          <td><strong>Audit calibration</strong></td>
+          <td>High-confidence wrong prediction count</td>
+          <td>Count &amp; % of overconfident errors surfaced</td>
+          <td>Confidence scores unreported</td>
+        </tr>
+        <tr>
+          <td><strong>Deliver live dashboard</strong></td>
+          <td>Public URL, no backend required</td>
+          <td>All 3 audit modules visualized</td>
+          <td>Static report only</td>
+        </tr>
+        <tr>
+          <td><strong>Statistical rigor</strong></td>
+          <td>Z-test on class accuracy gaps</td>
+          <td>p-value reported for all key findings</td>
+          <td>No significance testing</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- SECTION 4: PERSONAS & USER STORIES -->
+  <section>
+    <div class="section-num">Section 4</div>
+    <h2>Personas &amp; User Stories</h2>
+
+    <div class="persona-grid">
+      <div class="persona-card">
+        <div class="persona-name">ML Engineer</div>
+        <div class="persona-desc">Needs per-class and per-perturbation accuracy to identify where to invest training effort — more augmentation, class-weighted loss, or architecture changes.</div>
+      </div>
+      <div class="persona-card">
+        <div class="persona-name">Product Manager</div>
+        <div class="persona-desc">Needs a structured readiness assessment beyond headline accuracy — is the model fair, stable under real conditions, and honest about uncertainty?</div>
+      </div>
+      <div class="persona-card">
+        <div class="persona-name">AI Safety Researcher</div>
+        <div class="persona-desc">Needs calibration evidence to determine whether model confidence is a reliable signal for gating human oversight or automated action.</div>
+      </div>
+      <div class="persona-card">
+        <div class="persona-name">Compliance / Risk Officer</div>
+        <div class="persona-desc">Needs documented bias testing with statistical significance (Z-stat, p-value) ready to include in model risk documentation before deployment approval.</div>
+      </div>
+    </div>
+
+    <div class="epic-block">
+      <div class="epic-label">Epic 1</div>
+      <div class="epic-title">Bias Audit — Class-Level Fairness</div>
+      <ul class="story-list">
+        <li><strong>Given</strong> a trained CNN and CIFAR-10 test set, <strong>When</strong> the bias audit runs, <strong>Then</strong> per-class accuracy is computed and displayed for all 10 classes with best/worst highlighted.</li>
+        <li><strong>Given</strong> per-class accuracy data, <strong>When</strong> the gap between best and worst class exceeds 10pp, <strong>Then</strong> a Z-test is computed and the result flagged with p-value.</li>
+        <li><strong>Given</strong> audit results, <strong>When</strong> a user views the dashboard, <strong>Then</strong> a bar chart ranks all classes by accuracy with a visual threshold line at the mean.</li>
+      </ul>
+    </div>
+
+    <div class="epic-block">
+      <div class="epic-label">Epic 2</div>
+      <div class="epic-title">Robustness Audit — Perturbation Stability</div>
+      <ul class="story-list">
+        <li><strong>Given</strong> a clean test set, <strong>When</strong> rotation (15°), gaussian noise (σ=0.1), and brightness shift (+0.2) are applied, <strong>Then</strong> accuracy is measured under each perturbation independently.</li>
+        <li><strong>Given</strong> perturbation results, <strong>When</strong> any perturbation causes &gt;5pp accuracy drop, <strong>Then</strong> it is flagged as a robustness failure in the dashboard.</li>
+        <li><strong>Given</strong> robustness findings, <strong>When</strong> a user views the dashboard, <strong>Then</strong> a comparison chart shows baseline vs post-perturbation accuracy side-by-side for each test.</li>
+      </ul>
+    </div>
+
+    <div class="epic-block">
+      <div class="epic-label">Epic 3</div>
+      <div class="epic-title">Calibration Audit — Confidence Reliability</div>
+      <ul class="story-list">
+        <li><strong>Given</strong> model predictions with softmax confidence scores, <strong>When</strong> the calibration audit runs, <strong>Then</strong> the count and percentage of predictions with &gt;90% confidence is computed and segmented by correct vs incorrect.</li>
+        <li><strong>Given</strong> calibration results, <strong>When</strong> wrong predictions with &gt;90% confidence exceed 5% of all high-confidence predictions, <strong>Then</strong> a calibration failure warning is displayed.</li>
+        <li><strong>Given</strong> calibration findings, <strong>When</strong> a user views the dashboard, <strong>Then</strong> a confidence distribution histogram shows the shape of confidence scores across correct and incorrect predictions.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SECTION 5: FUNCTIONAL REQUIREMENTS -->
+  <section>
+    <div class="section-num">Section 5</div>
+    <h2>Functional Requirements (MoSCoW)</h2>
+    <table class="req-table">
+      <thead>
+        <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>FR-01</strong></td><td>Train CNN on CIFAR-10 (60K images, 10 classes) and save model weights</td><td><span class="must">MUST</span></td></tr>
+        <tr><td><strong>FR-02</strong></td><td>Compute per-class accuracy across all 10 CIFAR-10 classes</td><td><span class="must">MUST</span></td></tr>
+        <tr><td><strong>FR-03</strong></td><td>Run Z-test on best vs worst class accuracy gap and report p-value</td><td><span class="must">MUST</span></td></tr>
+        <tr><td><strong>FR-04</strong></td><td>Apply rotation perturbation (15°) and measure accuracy degradation</td><td><span class="must">MUST</span></td></tr>
+        <tr><td><strong>FR-05</strong></td><td>Apply gaussian noise (σ=0.1) and measure accuracy degradation</td><td><span class="must">MUST</span></td></tr>
+        <tr><td><strong>FR-06</strong></td><td>Apply brightness shift (+0.2) and measure accuracy degradation</td><td><span class="must">MUST</span></td></tr>
+        <tr><td><strong>FR-07</strong></td><td>Extract softmax confidence scores and compute high-confidence prediction distribution</td><td><span class="must">MUST</span></td></tr>
+        <tr><td><strong>FR-08</strong></td><td>Count and flag wrong predictions with &gt;90% expressed confidence</td><td><span class="must">MUST</span></td></tr>
+        <tr><td><strong>FR-09</strong></td><td>Render all findings in a live Chart.js dashboard hosted on GitHub Pages</td><td><span class="must">MUST</span></td></tr>
+        <tr><td><strong>FR-10</strong></td><td>Display aggregate stats (overall accuracy, class gap, worst class, confidence %) as header metrics</td><td><span class="must">MUST</span></td></tr>
+        <tr><td><strong>FR-11</strong></td><td>Generate per-class accuracy bar chart ranked worst to best</td><td><span class="should">SHOULD</span></td></tr>
+        <tr><td><strong>FR-12</strong></td><td>Generate robustness comparison chart (baseline vs each perturbation)</td><td><span class="should">SHOULD</span></td></tr>
+        <tr><td><strong>FR-13</strong></td><td>Generate confidence distribution histogram segmented by correct/incorrect</td><td><span class="should">SHOULD</span></td></tr>
+        <tr><td><strong>FR-14</strong></td><td>Export audit findings as JSON for downstream documentation use</td><td><span class="could">COULD</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- SECTION 6: NON-FUNCTIONAL REQUIREMENTS -->
+  <section>
+    <div class="section-num">Section 6</div>
+    <h2>Non-Functional Requirements</h2>
+    <ul>
+      <li><strong>Reproducibility:</strong> Full pipeline (train → audit → dashboard) reproducible with a single command from a clean environment</li>
+      <li><strong>No backend dependency:</strong> Dashboard must be fully static — hosted on GitHub Pages with no server-side runtime</li>
+      <li><strong>Statistical validity:</strong> All significance claims must use appropriate two-sample Z-tests with correct degrees of freedom</li>
+      <li><strong>Modularity:</strong> Each audit module (bias, robustness, calibration) must be independently runnable without executing the full pipeline</li>
+      <li><strong>Accessibility:</strong> Dashboard must be publicly accessible without authentication or local setup</li>
+    </ul>
+  </section>
+
+  <!-- SECTION 7: ARCHITECTURE -->
+  <section>
+    <div class="section-num">Section 7</div>
+    <h2>Architecture &amp; Technical Design</h2>
+
+    <div class="arch-row arch-header">
+      <div>Module</div><div>File</div><div>Input</div><div>Output</div>
+    </div>
+    <div class="arch-row">
+      <div>Model Training</div><div>train.py</div><div>CIFAR-10 dataset (PyTorch DataLoader)</div><div>model.pth weights · training metrics</div>
+    </div>
+    <div class="arch-row">
+      <div>Bias Audit</div><div>bias_audit.py</div><div>model.pth · test set predictions</div><div>Per-class accuracy · Z-stat · p-value</div>
+    </div>
+    <div class="arch-row">
+      <div>Robustness Audit</div><div>robustness_audit.py</div><div>model.pth · perturbation configs</div><div>Accuracy under each perturbation type</div>
+    </div>
+    <div class="arch-row">
+      <div>Calibration Audit</div><div>calibration_audit.py</div><div>model.pth · softmax outputs</div><div>Confidence distribution · overconfident error count</div>
+    </div>
+    <div class="arch-row">
+      <div>Dashboard</div><div>dashboard.html</div><div>audit_results.json</div><div>Live Chart.js visualizations · GitHub Pages</div>
+    </div>
+
+    <h3>Data Flow</h3>
+    <p>CIFAR-10 (via PyTorch torchvision) → CNN training (train.py) → model.pth saved → three audit modules run independently against saved weights → findings written to audit_results.json → Chart.js dashboard reads JSON at page load → GitHub Pages serves static HTML/JS dashboard at public URL.</p>
+
+    <h3>Key Technical Choices</h3>
+    <ul>
+      <li><strong>PyTorch</strong> for model training — native CIFAR-10 DataLoader, GPU-compatible, standard for CV research</li>
+      <li><strong>SciPy</strong> for Z-test significance testing — <code>scipy.stats.proportions_ztest</code> with Bonferroni correction for multiple comparisons</li>
+      <li><strong>Chart.js</strong> for dashboard — no backend, renders in browser from JSON, embeds cleanly in GitHub Pages</li>
+      <li><strong>Matplotlib / Seaborn</strong> for static audit visualizations generated during pipeline run</li>
+    </ul>
+  </section>
+
+  <!-- SECTION 8: ACCEPTANCE CRITERIA -->
+  <section>
+    <div class="section-num">Section 8</div>
+    <h2>Acceptance Criteria</h2>
+    <table class="ac-table">
+      <thead>
+        <tr><th>ID</th><th>Criteria</th><th>Verification</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>AC-01</strong></td>
+          <td>CNN achieves ≥75% overall accuracy on CIFAR-10 test set</td>
+          <td>Automated accuracy check in train.py output</td>
+        </tr>
+        <tr>
+          <td><strong>AC-02</strong></td>
+          <td>Per-class accuracy computed and displayed for all 10 classes</td>
+          <td>Dashboard shows 10 bars; all class names labeled correctly</td>
+        </tr>
+        <tr>
+          <td><strong>AC-03</strong></td>
+          <td>Z-test run on best vs worst class with p-value displayed</td>
+          <td>p-value visible in bias audit section of dashboard</td>
+        </tr>
+        <tr>
+          <td><strong>AC-04</strong></td>
+          <td>Three perturbation types applied; accuracy reported for each</td>
+          <td>Robustness chart shows 4 bars (baseline + 3 perturbations)</td>
+        </tr>
+        <tr>
+          <td><strong>AC-05</strong></td>
+          <td>High-confidence wrong predictions counted and displayed</td>
+          <td>Calibration section shows count and % of overconfident errors</td>
+        </tr>
+        <tr>
+          <td><strong>AC-06</strong></td>
+          <td>Dashboard loads from public GitHub Pages URL with no auth</td>
+          <td>URL accessible from incognito browser with no login</td>
+        </tr>
+        <tr>
+          <td><strong>AC-07</strong></td>
+          <td>Full pipeline reproducible from clean Python environment</td>
+          <td>Fresh venv install + python run_audit.py completes without errors</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- SECTION 9: RISKS -->
+  <section>
+    <div class="section-num">Section 9</div>
+    <h2>Risks &amp; Open Questions</h2>
+    <table class="risk-table">
+      <thead>
+        <tr><th>Risk</th><th>Level</th><th>Mitigation</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Model underfits below accuracy threshold</strong><br><span style="font-size:11.5px;color:var(--muted);">CNN may not reach 75% without hyperparameter tuning</span></td>
+          <td><span class="medium">MEDIUM</span></td>
+          <td>Default learning rate schedule with early stopping; document final accuracy regardless of threshold</td>
+        </tr>
+        <tr>
+          <td><strong>Perturbation severity is subjective</strong><br><span style="font-size:11.5px;color:var(--muted);">σ=0.1 and 15° are design choices, not standards</span></td>
+          <td><span class="low">LOW</span></td>
+          <td>Document chosen values explicitly; make perturbation configs parameterizable for future runs</td>
+        </tr>
+        <tr>
+          <td><strong>Dashboard data staleness</strong><br><span style="font-size:11.5px;color:var(--muted);">Static JSON means dashboard doesn't update if model is retrained</span></td>
+          <td><span class="low">LOW</span></td>
+          <td>Include model training date in JSON metadata; document manual refresh process in README</td>
+        </tr>
+        <tr>
+          <td><strong>Z-test assumptions violated</strong><br><span style="font-size:11.5px;color:var(--muted);">Class sample sizes vary; small classes may violate normality assumptions</span></td>
+          <td><span class="medium">MEDIUM</span></td>
+          <td>Report sample size per class alongside Z-stat; note assumptions in dashboard footnote</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Open Questions</h3>
+    <ul>
+      <li>Should robustness be tested per-class (e.g., does rotation hurt cat classification more than automobile) or only aggregate?</li>
+      <li>Is temperature scaling (post-hoc calibration fix) in scope for v1 or deferred to v2?</li>
+      <li>Should the dashboard support uploading a new model.pth to re-run audits dynamically, or remain static?</li>
+    </ul>
+  </section>
+
+  <!-- SECTION 10: SCOPE -->
+  <section>
+    <div class="section-num">Section 10</div>
+    <h2>Scope</h2>
+    <div class="scope-grid">
+      <div class="scope-card">
+        <div class="scope-label in-scope">✓ In Scope</div>
+        <ul style="color:#adbac7;font-size:13px;padding-left:16px;">
+          <li>CNN training on CIFAR-10</li>
+          <li>Per-class accuracy bias audit with Z-test</li>
+          <li>Three-perturbation robustness audit</li>
+          <li>Confidence distribution calibration audit</li>
+          <li>Static Chart.js dashboard on GitHub Pages</li>
+          <li>audit_results.json export</li>
+          <li>Matplotlib/Seaborn static visualizations</li>
+        </ul>
+      </div>
+      <div class="scope-card">
+        <div class="scope-label out-scope">✗ Out of Scope (v1)</div>
+        <ul style="color:var(--muted);font-size:13px;padding-left:16px;">
+          <li>Custom dataset support (CIFAR-10 only)</li>
+          <li>Real-time model retraining from dashboard</li>
+          <li>Temperature scaling / calibration correction</li>
+          <li>Backend API for dynamic audit runs</li>
+          <li>Per-class robustness analysis</li>
+          <li>Adversarial attack testing (FGSM, PGD)</li>
+          <li>Multi-model comparison mode</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 11: RESPONSIBLE AI CONTEXT -->
+  <section>
+    <div class="section-num">Section 11</div>
+    <h2>Responsible AI Context</h2>
+    <p>This project is itself a responsible AI artifact — not just an application of responsible AI practices. It demonstrates that model evaluation is incomplete without fairness, robustness, and calibration analysis, and provides a replicable template for applying this standard to any image classifier.</p>
+    <table class="req-table">
+      <thead>
+        <tr><th>Principle</th><th>How This Project Addresses It</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Fairness</strong></td>
+          <td>Per-class bias audit with statistical significance testing surfaces and quantifies unequal treatment across categories</td>
+        </tr>
+        <tr>
+          <td><strong>Robustness</strong></td>
+          <td>Perturbation testing documents model behavior under conditions that deviate from controlled training distribution</td>
+        </tr>
+        <tr>
+          <td><strong>Transparency</strong></td>
+          <td>All findings publicly accessible via live dashboard; methodology documented in code and PRD</td>
+        </tr>
+        <tr>
+          <td><strong>Accountability</strong></td>
+          <td>Statistical evidence (Z-stat, p-value) enables audit findings to be challenged, replicated, and included in model risk documentation</td>
+        </tr>
+        <tr>
+          <td><strong>Human Oversight</strong></td>
+          <td>Calibration audit specifically addresses whether model confidence can be trusted to gate automated vs. human-reviewed decisions</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div class="footer">
+    <span>Shrijani (Diya) Manna · Duke MEM '26</span>
+    <span><a href="mailto:sm1091@duke.edu">sm1091@duke.edu</a> · <a href="https://github.com/diyaboop/cifar10-audit" target="_blank">GitHub</a> · <a href="https://linkedin.com/in/shrijani-manna" target="_blank">LinkedIn</a></span>
+  </div>
+
+</body>
+</html>
