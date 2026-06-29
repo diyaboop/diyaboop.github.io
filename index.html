@@ -914,6 +914,41 @@
       </div>
     </div>
 
+    <!-- Financial Document Classification Bias Auditor -->
+    <div class="project-card">
+      <div class="project-name">Financial Document Classification Bias Auditor</div>
+      <div class="project-subtitle">Auditing Systematic Bias in Financial Services Document AI</div>
+      <p class="project-desc">ResNet18 transfer learning model trained on 3,492 financial document images, then audited for systematic classification bias and robustness failures. Reveals that typed documents collapse to 0% accuracy under 30° rotation while handwritten documents improve — exposing how layout-dependent learning creates disparate outcomes for customers using low-quality scanners.</p>
+      <ul style="margin:10px 0 14px 16px;padding:0;list-style:disc;">
+        <li style="font-size:13.5px;color:#c9d1d9;margin-bottom:6px;line-height:1.6;"><strong style="color:var(--text);">Bias:</strong> 65pp accuracy gap between News (100%) and Email (35%) — Z=6.98, p&lt;0.001</li>
+        <li style="font-size:13.5px;color:#c9d1d9;margin-bottom:6px;line-height:1.6;"><strong style="color:var(--text);">Robustness:</strong> Typed documents (Form, Letter, Email) all collapse to 0% accuracy at 30° rotation</li>
+        <li style="font-size:13.5px;color:#c9d1d9;line-height:1.6;"><strong style="color:var(--text);">Counterintuitive:</strong> Handwritten documents become <em>more</em> accurate under rotation — 65.9% → 92.7%</li>
+      </ul>
+      <div class="stats-row">
+        <div class="stat">
+          <span class="stat-num">73.14%</span>
+          <span class="stat-label">Baseline accuracy</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">65pp</span>
+          <span class="stat-label">Best vs worst class gap</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">0%</span>
+          <span class="stat-label">Form/Letter/Email at 30° rotation</span>
+        </div>
+      </div>
+      <div class="tags">
+        <span class="tag">Python</span><span class="tag">PyTorch</span><span class="tag">ResNet18</span><span class="tag">Transfer Learning</span><span class="tag">Scikit-learn</span><span class="tag">SciPy</span><span class="tag">Matplotlib</span><span class="tag">Seaborn</span><span class="tag">Responsible AI</span>
+      </div>
+      <div class="project-links">
+        <a href="https://github.com/diyaboop/financial-doc-audit" target="_blank" rel="noopener" class="link-btn primary">
+          <svg class="icon" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+
     <!-- Global AI Readiness -->
     <div class="project-card">
       <div class="project-name">Global AI Readiness Pipeline</div>
