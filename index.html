@@ -729,7 +729,9 @@
       pointer-events: none;
     }
 
-    body > * { position: relative; z-index: 1; }
+    /* Lift content above fixed canvas/doodle layers — nav keeps its own sticky */
+    .hero, section, footer, .doodle-layer { position: relative; z-index: 1; }
+    .doodle-layer { position: fixed; } /* restore fixed for doodle layer */
 
     /* SCROLL FADE-UP */
     .fade-up {
@@ -812,42 +814,6 @@
       .doodle-layer { display: none; }
     }
 
-    .thought-bubble {
-      font-size: 11.5px;
-      font-weight: 600;
-      font-family: 'Inter', sans-serif;
-      color: rgba(155,63,98,0.75);
-      background: rgba(247,217,227,0.82);
-      border: 1.5px solid rgba(155,63,98,0.28);
-      border-radius: 22px;
-      padding: 6px 14px;
-      white-space: nowrap;
-      backdrop-filter: blur(8px);
-    }
-    /* two-class specificity wins over either .doodle or .thought-bubble alone */
-    .doodle.thought-bubble { position: absolute; }
-    .thought-bubble::before {
-      content: '';
-      position: absolute;
-      bottom: -9px;
-      left: 18px;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: rgba(247,217,227,0.82);
-      border: 1.5px solid rgba(155,63,98,0.22);
-    }
-    .thought-bubble::after {
-      content: '';
-      position: absolute;
-      bottom: -17px;
-      left: 26px;
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: rgba(247,217,227,0.7);
-      border: 1px solid rgba(155,63,98,0.18);
-    }
 
     /* ENHANCED CARD HOVER — gradient border sweep */
     .project-card::before {
@@ -937,15 +903,8 @@
 <!-- DOODLE LAYER -->
 <div class="doodle-layer" aria-hidden="true">
 
-  <!-- Thought bubbles -->
-  <div class="doodle thought-bubble" style="top:17%;right:7%;animation:floatA 7s ease-in-out infinite;">why does it fail?</div>
-  <div class="doodle thought-bubble" style="top:38%;left:3%;animation:floatB 9s ease-in-out infinite;">who bears the cost?</div>
-  <div class="doodle thought-bubble" style="top:62%;right:5%;animation:floatC 8s ease-in-out infinite;">loss → 0</div>
-  <div class="doodle thought-bubble" style="top:78%;left:4%;animation:floatA 10s ease-in-out infinite 1s;">p(harm | context)</div>
-  <div class="doodle thought-bubble" style="top:50%;right:3%;animation:floatB 8.5s ease-in-out infinite 2s;">bias ≠ fairness</div>
-
-  <!-- Brain sketch SVG -->
-  <div class="doodle" style="top:10%;right:14%;opacity:0.22;animation:floatC 12s ease-in-out infinite;">
+  <!-- Brain sketch — top right -->
+  <div class="doodle" style="top:8%;right:5%;opacity:0.20;animation:floatC 12s ease-in-out infinite;">
     <svg width="96" height="84" viewBox="0 0 96 84" fill="none" stroke="rgba(155,63,98,0.9)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
       <path d="M48 74 C28 74 14 62 14 48 C14 36 22 28 32 26 C30 18 38 10 46 12 C47 8 49 8 50 12 C58 10 66 18 64 26 C74 28 82 36 82 48 C82 62 68 74 48 74Z"/>
       <line x1="48" y1="12" x2="48" y2="74"/>
@@ -988,11 +947,121 @@
     </svg>
   </div>
 
-  <!-- Math / ML symbols -->
-  <div class="doodle" style="top:28%;left:2%;font-family:Georgia,serif;font-size:30px;color:rgba(155,63,98,0.22);font-style:italic;animation:floatB 13s ease-in-out infinite;">∇w</div>
-  <div class="doodle" style="top:68%;right:10%;font-family:Georgia,serif;font-size:24px;color:rgba(155,63,98,0.18);font-style:italic;animation:floatC 10s ease-in-out infinite 2s;">σ(x)</div>
-  <div class="doodle" style="top:88%;left:18%;font-family:Georgia,serif;font-size:20px;color:rgba(155,63,98,0.15);letter-spacing:0.05em;animation:floatA 15s ease-in-out infinite 1s;">attention</div>
-  <div class="doodle" style="top:22%;left:8%;font-family:Georgia,serif;font-size:18px;color:rgba(155,63,98,0.14);font-style:italic;animation:floatC 12s ease-in-out infinite 4s;">f(x) = σ(Wx+b)</div>
+
+  <!-- Neuron — left mid -->
+  <div class="doodle" style="top:38%;left:1%;opacity:0.22;animation:floatB 11s ease-in-out infinite 1s;">
+    <svg width="64" height="72" viewBox="0 0 64 72" fill="none" stroke="rgba(155,63,98,1)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <!-- dendrites -->
+      <path d="M32 26 C30 19 34 13 30 7"/>
+      <path d="M32 26 C25 21 18 23 12 17"/>
+      <path d="M32 26 C39 21 46 23 52 17"/>
+      <path d="M32 26 C27 20 25 13 21 8"/>
+      <path d="M32 26 C37 20 39 13 43 8"/>
+      <!-- cell body -->
+      <circle cx="32" cy="33" r="9" fill="rgba(247,217,227,0.35)"/>
+      <!-- axon -->
+      <path d="M32 42 C32 50 30 55 32 61"/>
+      <!-- terminals -->
+      <path d="M32 61 C28 65 26 68 23 70"/>
+      <path d="M32 61 C32 66 32 69 32 71"/>
+      <path d="M32 61 C36 65 38 68 41 70"/>
+    </svg>
+  </div>
+
+  <!-- Lightbulb — right upper -->
+  <div class="doodle" style="top:22%;right:3%;opacity:0.20;animation:floatA 9s ease-in-out infinite 2s;">
+    <svg width="44" height="56" viewBox="0 0 44 56" fill="none" stroke="rgba(155,63,98,1)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 5 C13 5 7 12 7 20 C7 27 11 32 15 36 L15 43 C15 44.5 16.5 46 18 46 L26 46 C27.5 46 29 44.5 29 43 L29 36 C33 32 37 27 37 20 C37 12 31 5 22 5Z"/>
+      <line x1="16" y1="46" x2="28" y2="46"/>
+      <line x1="17" y1="50" x2="27" y2="50"/>
+      <path d="M16 32 Q19 27 22 32 Q25 37 28 32"/>
+      <line x1="22" y1="2" x2="22" y2="0"/>
+      <line x1="8"  y1="8"  x2="6"  y2="6"/>
+      <line x1="36" y1="8"  x2="38" y2="6"/>
+      <line x1="4"  y1="20" x2="2"  y2="20"/>
+      <line x1="40" y1="20" x2="42" y2="20"/>
+    </svg>
+  </div>
+
+  <!-- Synapse — right lower -->
+  <div class="doodle" style="top:60%;right:2%;opacity:0.22;animation:floatC 13s ease-in-out infinite 0.5s;">
+    <svg width="68" height="38" viewBox="0 0 68 38" fill="none" stroke="rgba(155,63,98,1)" stroke-width="1.3" stroke-linecap="round">
+      <path d="M2 19 Q8 13 14 19"/>
+      <ellipse cx="20" cy="19" rx="7" ry="7" fill="rgba(247,217,227,0.35)"/>
+      <circle cx="31" cy="13" r="2.2" fill="rgba(155,63,98,0.45)" stroke="none"/>
+      <circle cx="34" cy="20" r="2.2" fill="rgba(155,63,98,0.45)" stroke="none"/>
+      <circle cx="31" cy="27" r="2.2" fill="rgba(155,63,98,0.45)" stroke="none"/>
+      <ellipse cx="48" cy="19" rx="7" ry="7" fill="rgba(247,217,227,0.35)"/>
+      <path d="M55 19 Q61 13 66 19"/>
+    </svg>
+  </div>
+
+  <!-- EEG wave — bottom left -->
+  <div class="doodle" style="top:83%;left:1%;opacity:0.18;animation:floatA 14s ease-in-out infinite 3s;">
+    <svg width="88" height="26" viewBox="0 0 88 26" fill="none" stroke="rgba(155,63,98,1)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M0 13 L10 13 L14 4 L18 22 L22 6 L26 20 L30 13 L42 13 L46 5 L50 21 L54 9 L58 17 L62 13 L78 13"/>
+    </svg>
+  </div>
+
+  <!-- Squiggle connector — left upper -->
+  <div class="doodle" style="top:15%;left:0%;opacity:0.16;animation:floatB 16s ease-in-out infinite 4s;">
+    <svg width="72" height="22" viewBox="0 0 72 22" fill="none" stroke="rgba(155,63,98,1)" stroke-width="1.3" stroke-linecap="round">
+      <path d="M2 11 Q12 2 22 11 Q32 20 42 11 Q52 2 62 11 Q66 14 70 11"/>
+    </svg>
+  </div>
+
+  <!-- Squiggle — bottom right -->
+  <div class="doodle" style="top:75%;right:1%;opacity:0.14;animation:floatC 12s ease-in-out infinite 2s;">
+    <svg width="60" height="18" viewBox="0 0 60 18" fill="none" stroke="rgba(155,63,98,1)" stroke-width="1.3" stroke-linecap="round">
+      <path d="M2 9 Q10 2 18 9 Q26 16 34 9 Q42 2 50 9 Q54 12 58 9"/>
+    </svg>
+  </div>
+
+  <!-- Sparkle — upper left -->
+  <div class="doodle" style="top:30%;left:3%;opacity:0.22;animation:floatA 10s ease-in-out infinite 1s;">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="rgba(155,63,98,1)" stroke-width="1.3" stroke-linecap="round">
+      <line x1="11" y1="1"  x2="11" y2="21"/>
+      <line x1="1"  y1="11" x2="21" y2="11"/>
+      <line x1="4"  y1="4"  x2="18" y2="18"/>
+      <line x1="18" y1="4"  x2="4"  y2="18"/>
+    </svg>
+  </div>
+
+  <!-- Sparkle small — right mid -->
+  <div class="doodle" style="top:48%;right:5%;opacity:0.18;animation:floatB 8s ease-in-out infinite 3s;">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="rgba(155,63,98,1)" stroke-width="1.2" stroke-linecap="round">
+      <line x1="8" y1="1"  x2="8"  y2="15"/>
+      <line x1="1" y1="8"  x2="15" y2="8"/>
+      <line x1="3" y1="3"  x2="13" y2="13"/>
+      <line x1="13" y1="3" x2="3"  y2="13"/>
+    </svg>
+  </div>
+
+  <!-- Small brain — left lower -->
+  <div class="doodle" style="top:62%;left:1.5%;opacity:0.17;animation:floatC 15s ease-in-out infinite 2s;">
+    <svg width="52" height="46" viewBox="0 0 52 46" fill="none" stroke="rgba(155,63,98,1)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M26 40 C15 40 8 33 8 25 C8 18 13 14 19 13 C18 8 23 4 26 5 C29 4 34 8 33 13 C39 14 44 18 44 25 C44 33 37 40 26 40Z"/>
+      <line x1="26" y1="5" x2="26" y2="40"/>
+      <path d="M19 13 C21 21 24 22 26 21"/>
+      <path d="M33 13 C31 21 28 22 26 21"/>
+      <path d="M12 28 C17 26 21 29 24 28"/>
+      <path d="M40 28 C35 26 31 29 28 28"/>
+    </svg>
+  </div>
+
+  <!-- Tiny connected nodes — bottom mid-right -->
+  <div class="doodle" style="top:90%;right:6%;opacity:0.16;animation:floatA 11s ease-in-out infinite 5s;">
+    <svg width="50" height="36" viewBox="0 0 50 36" fill="none" stroke="rgba(155,63,98,1)" stroke-width="1.2" stroke-linecap="round">
+      <circle cx="8"  cy="18" r="4" fill="rgba(247,217,227,0.4)"/>
+      <circle cx="25" cy="8"  r="4" fill="rgba(247,217,227,0.4)"/>
+      <circle cx="25" cy="28" r="4" fill="rgba(247,217,227,0.4)"/>
+      <circle cx="42" cy="18" r="4" fill="rgba(247,217,227,0.4)"/>
+      <line x1="12" y1="18" x2="21" y2="10"/>
+      <line x1="12" y1="18" x2="21" y2="26"/>
+      <line x1="29" y1="10" x2="38" y2="18"/>
+      <line x1="29" y1="26" x2="38" y2="18"/>
+    </svg>
+  </div>
 
 </div>
 
@@ -1711,22 +1780,32 @@
     requestAnimationFrame(draw);
   })();
 
-  // SCROLL FADE-UP + SECTION TITLE UNDERLINE
+  // SCROLL FADE-UP — section-level, with reduced-motion bypass
   (function() {
-    const fadeTargets = document.querySelectorAll('.project-card, .exp-item, .skills-group, .edu-card, .cert-item, .building-card, section .section-sub');
-    fadeTargets.forEach(el => el.classList.add('fade-up'));
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const sections = document.querySelectorAll('section');
+    const titles   = document.querySelectorAll('.section-title');
 
-    const io = new IntersectionObserver((entries) => {
+    if (reduced) {
+      // Show everything immediately, still trigger underline
+      titles.forEach(t => t.classList.add('visible'));
+      return;
+    }
+
+    // Start each section hidden
+    sections.forEach(s => s.classList.add('fade-up'));
+
+    const sectionIO = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) {
           e.target.classList.add('visible');
-          io.unobserve(e.target);
+          sectionIO.unobserve(e.target);
         }
       });
-    }, { threshold: 0.1 });
-    fadeTargets.forEach(el => io.observe(el));
+    }, { threshold: 0.07, rootMargin: '0px 0px -40px 0px' });
+    sections.forEach(s => sectionIO.observe(s));
 
-    // Section title underline sweep
+    // Section title underline sweep (fires after section is visible)
     const titleIO = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) {
@@ -1734,8 +1813,8 @@
           titleIO.unobserve(e.target);
         }
       });
-    }, { threshold: 0.4 });
-    document.querySelectorAll('.section-title').forEach(el => titleIO.observe(el));
+    }, { threshold: 0.5 });
+    titles.forEach(t => titleIO.observe(t));
   })();
 
   // STAT COUNTER ANIMATION
