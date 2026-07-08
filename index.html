@@ -952,10 +952,100 @@
       .edu-grid { grid-template-columns: 1fr; }
       .hero { padding-top: 56px; }
       .project-card { padding: 22px 20px; }
+      .card-img { margin: -22px -20px 18px; }
+    }
+
+    /* ── CUSTOM CURSOR ── */
+    .has-custom-cursor, .has-custom-cursor * { cursor: none !important; }
+    #cursor {
+      position: fixed; width: 9px; height: 9px;
+      background: rgba(155,63,98,0.88);
+      border-radius: 50%; pointer-events: none; z-index: 10000;
+      transform: translate(-50%,-50%);
+      transition: width .18s cubic-bezier(.34,1.56,.64,1), height .18s cubic-bezier(.34,1.56,.64,1), background .18s;
+      mix-blend-mode: multiply;
+    }
+    #cursor-ring {
+      position: fixed; width: 32px; height: 32px;
+      border: 1.5px solid rgba(155,63,98,0.32);
+      border-radius: 50%; pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: width .28s cubic-bezier(.34,1.56,.64,1), height .28s cubic-bezier(.34,1.56,.64,1), border-color .2s;
+    }
+    .has-custom-cursor.cursor-hover #cursor { width: 18px; height: 18px; background: rgba(155,63,98,0.45); }
+    .has-custom-cursor.cursor-hover #cursor-ring { width: 52px; height: 52px; border-color: rgba(155,63,98,0.5); }
+
+    /* ── FILTER CHIPS ── */
+    .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+    .filter-chip {
+      padding: 5px 14px; border-radius: 20px;
+      border: 1px solid rgba(155,63,98,0.22);
+      background: transparent; color: var(--muted);
+      font-size: 12.5px; font-weight: 500; font-family: inherit;
+      cursor: pointer; transition: all .15s;
+    }
+    .filter-chip:hover { border-color: rgba(155,63,98,0.48); color: var(--orange); }
+    .filter-chip.active { background: rgba(155,63,98,0.09); border-color: rgba(155,63,98,0.42); color: var(--orange); font-weight: 600; }
+
+    /* ── CARD IMAGE ── */
+    .card-img {
+      margin: -28px -32px 22px;
+      height: 172px; position: relative; overflow: hidden;
+      border-radius: 11px 11px 0 0;
+      background: rgba(251,240,244,0.85);
+    }
+    .card-img-inner {
+      width: 100%; height: 100%;
+      transition: transform .32s ease;
+    }
+    .project-card:hover .card-img-inner { transform: scale(1.035); }
+
+    /* ── CARD NUMBER ── */
+    .card-num {
+      font-size: 10px; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--muted); opacity: .7;
+      margin-bottom: 5px;
+    }
+
+    /* ── SHORT DESCRIPTION ── */
+    .project-short {
+      font-size: 13.5px; color: var(--muted); line-height: 1.62;
+      margin: 5px 0 14px;
+    }
+
+    /* ── EXPAND TOGGLE ── */
+    .expand-toggle {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 600; letter-spacing: .02em;
+      color: var(--orange); cursor: pointer;
+      border: none; background: none; padding: 0;
+      margin-top: 8px; font-family: inherit;
+      transition: opacity .15s;
+    }
+    .expand-toggle:hover { opacity: .72; }
+    .expand-toggle .chevron { transition: transform .25s; display: inline-block; line-height: 1; }
+    .expand-toggle.open .chevron { transform: rotate(180deg); }
+
+    /* ── EXPAND DETAILS ── */
+    .expand-details {
+      max-height: 0; overflow: hidden;
+      transition: max-height .42s cubic-bezier(.4,0,.2,1);
+    }
+    .expand-details.open { max-height: 800px; }
+    .expand-inner {
+      padding-top: 18px; margin-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Hide/fade cards when filtered out */
+    .project-card.filtered-out {
+      display: none;
     }
   </style>
 </head>
 <body>
+<div id="cursor" aria-hidden="true"></div>
+<div id="cursor-ring" aria-hidden="true"></div>
 <canvas id="neural-bg" aria-hidden="true"></canvas>
 
 <!-- DOODLE LAYER -->
@@ -1195,240 +1285,441 @@
   <h2 class="section-title">Selected Projects</h2>
   <p class="section-sub">End-to-end systems where rigor meets accountability.</p>
 
+  <!-- FILTER BAR -->
+  <div class="filter-bar" role="group" aria-label="Filter projects">
+    <button class="filter-chip active" data-filter="all">All</button>
+    <button class="filter-chip" data-filter="responsible-ai">Responsible AI</button>
+    <button class="filter-chip" data-filter="llm">LLM &amp; RAG</button>
+    <button class="filter-chip" data-filter="computer-vision">Computer Vision</button>
+    <button class="filter-chip" data-filter="policy">Policy &amp; Data</button>
+  </div>
+
   <div class="projects-grid">
 
     <!-- FraudWatch -->
-    <div class="project-card" id="fraudwatch">
-      <div class="card-spark" aria-hidden="true"><svg width="52" height="36" viewBox="0 0 52 36" fill="none"><line class="sl" x1="8" y1="26" x2="28" y2="10" stroke="rgba(155,63,98,0.5)" stroke-width="1.1"/><line class="sl" x1="28" y1="10" x2="46" y2="24" stroke="rgba(155,63,98,0.5)" stroke-width="1.1"/><circle class="sn" cx="8" cy="26" r="3.5" fill="rgba(247,217,227,0.9)" stroke="rgba(155,63,98,0.6)" stroke-width="1.2"/><circle class="sn" cx="28" cy="10" r="3.5" fill="rgba(247,217,227,0.9)" stroke="rgba(155,63,98,0.6)" stroke-width="1.2" style="transition-delay:0.08s"/><circle class="sn" cx="46" cy="24" r="3.5" fill="rgba(247,217,227,0.9)" stroke="rgba(155,63,98,0.6)" stroke-width="1.2" style="transition-delay:0.16s"/></svg></div>
+    <div class="project-card" id="fraudwatch" data-tags="responsible-ai">
       <div class="card-doodle" aria-hidden="true"><svg width="38" height="38" viewBox="0 0 38 38" fill="none" stroke="rgba(155,63,98,1)" stroke-width="1.5" stroke-linecap="round"><circle cx="15" cy="15" r="10"/><line x1="22.5" y1="22.5" x2="34" y2="34"/><line x1="9" y1="15" x2="21" y2="15" stroke-width="1.1" stroke-opacity="0.7"/><circle cx="15" cy="15" r="3" fill="rgba(155,63,98,0.18)" stroke="none"/></svg></div>
+
+      <!-- Card illustration -->
+      <div class="card-img">
+        <div class="card-img-inner">
+          <svg viewBox="0 0 700 172" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+            <rect width="700" height="172" fill="rgba(251,240,244,0.95)"/>
+            <!-- bar chart -->
+            <rect x="58" y="96" width="36" height="58" rx="4" fill="rgba(155,63,98,0.11)"/>
+            <rect x="106" y="72" width="36" height="82" rx="4" fill="rgba(155,63,98,0.11)"/>
+            <rect x="154" y="55" width="36" height="99" rx="4" fill="rgba(155,63,98,0.11)"/>
+            <rect x="202" y="108" width="36" height="46" rx="4" fill="rgba(155,63,98,0.72)"/>
+            <rect x="250" y="80" width="36" height="74" rx="4" fill="rgba(155,63,98,0.11)"/>
+            <line x1="45" y1="154" x2="305" y2="154" stroke="rgba(155,63,98,0.22)" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- anomaly ring -->
+            <circle cx="220" cy="108" r="26" fill="none" stroke="rgba(155,63,98,0.55)" stroke-width="1.5" stroke-dasharray="5 3"/>
+            <!-- magnifying glass -->
+            <circle cx="430" cy="86" r="44" fill="rgba(247,228,236,0.65)"/>
+            <circle cx="420" cy="76" r="28" fill="rgba(251,240,244,0.9)" stroke="rgba(155,63,98,0.6)" stroke-width="2"/>
+            <line x1="440" y1="97" x2="460" y2="118" stroke="rgba(155,63,98,0.65)" stroke-width="3.5" stroke-linecap="round"/>
+            <!-- ! in lens -->
+            <line x1="420" y1="66" x2="420" y2="82" stroke="rgba(155,63,98,0.75)" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="420" cy="88" r="2" fill="rgba(155,63,98,0.75)"/>
+            <!-- neural dots -->
+            <circle cx="590" cy="38" r="5" fill="rgba(155,63,98,0.22)"/>
+            <circle cx="638" cy="72" r="5" fill="rgba(155,63,98,0.22)"/>
+            <circle cx="608" cy="128" r="5" fill="rgba(155,63,98,0.22)"/>
+            <circle cx="560" cy="105" r="3.5" fill="rgba(155,63,98,0.16)"/>
+            <line x1="590" y1="38" x2="638" y2="72" stroke="rgba(155,63,98,0.18)" stroke-width="1.2"/>
+            <line x1="638" y1="72" x2="608" y2="128" stroke="rgba(155,63,98,0.18)" stroke-width="1.2"/>
+            <line x1="560" y1="105" x2="590" y2="38" stroke="rgba(155,63,98,0.12)" stroke-width="1"/>
+            <line x1="560" y1="105" x2="608" y2="128" stroke="rgba(155,63,98,0.12)" stroke-width="1"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="card-num">Project — 01</div>
       <div class="project-name">FraudWatch</div>
-      <div class="project-subtitle">Fraud Detection Bias Audit &amp; Model Performance Monitor</div>
-      <p class="project-desc">End-to-end ML pipeline that trains a fraud detection classifier on 590,540 real transactions, audits it for demographic bias, and monitors performance drift weekly. Surfaced that credit card users face a <strong>65% higher wrongful block rate</strong> than debit users (Z=66.6, p&lt;0.001) and a 2.7x product category disparity — a finding invisible without intentional bias evaluation.</p>
-      <div class="stats-row">
-        <div class="stat">
-          <span class="stat-num">45,375</span>
-          <span class="stat-label">False positives identified</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num">92.4%</span>
-          <span class="stat-label">Fraud recall</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num">2</span>
-          <span class="stat-label">Bias findings (p&lt;0.001)</span>
-        </div>
-      </div>
+      <p class="project-short">ML pipeline auditing a fraud detection classifier on 590K transactions. Surfaced a 65% higher wrongful block rate for credit card users — invisible without intentional bias evaluation.</p>
       <div class="tags">
-        <span class="tag">Python</span><span class="tag">Scikit-learn</span><span class="tag">FastAPI</span><span class="tag">SQLite</span><span class="tag">Docker</span><span class="tag">Responsible AI</span>
+        <span class="tag">Python</span><span class="tag">Scikit-learn</span><span class="tag">FastAPI</span><span class="tag">Docker</span><span class="tag">Responsible AI</span>
       </div>
-      <div class="project-links">
-        <a href="https://github.com/diyaboop/fraud-watch" target="_blank" rel="noopener" class="link-btn primary">
-          <svg class="icon" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-          GitHub
-        </a>
-        <a href="https://fraud-watch.onrender.com" target="_blank" rel="noopener" class="link-btn">
-          <svg class="icon" viewBox="0 0 16 16"><path d="M0 2.5A1.5 1.5 0 0 1 1.5 1h11A1.5 1.5 0 0 1 14 2.5v10.528c0 .3-.05.654-.238.972h.738a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 1 1 0v9a1.5 1.5 0 0 1-1.5 1.5H1.497A1.497 1.497 0 0 1 0 13.5v-11zm12 10.972V2.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v11c0 .278.223.5.497.5H12.5a.5.5 0 0 0 .5-.5v-.028z"/></svg>
-          Live Dashboard
-        </a>
-        <a href="fraudwatch-case-study.html" class="link-btn">
-          <svg class="icon" viewBox="0 0 16 16"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2L9.5 1.5z"/></svg>
-          View Case Study
-        </a>
-        <a href="fraudwatch-prd.html" class="link-btn">
-          <svg class="icon" viewBox="0 0 16 16"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2L9.5 1.5z"/></svg>
-          View PRD
-        </a>
+      <button class="expand-toggle" aria-expanded="false">
+        <span class="toggle-label">View Details</span>
+        <span class="chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="expand-details" aria-hidden="true">
+        <div class="expand-inner">
+          <div class="project-subtitle">Fraud Detection Bias Audit &amp; Model Performance Monitor</div>
+          <p class="project-desc" style="margin-top:8px;">End-to-end ML pipeline that trains a fraud detection classifier on 590,540 real transactions, audits it for demographic bias, and monitors performance drift weekly. Surfaced that credit card users face a <strong>65% higher wrongful block rate</strong> than debit users (Z=66.6, p&lt;0.001) and a 2.7x product category disparity — a finding invisible without intentional bias evaluation.</p>
+          <div class="stats-row">
+            <div class="stat"><span class="stat-num">45,375</span><span class="stat-label">False positives identified</span></div>
+            <div class="stat"><span class="stat-num">92.4%</span><span class="stat-label">Fraud recall</span></div>
+            <div class="stat"><span class="stat-num">2</span><span class="stat-label">Bias findings (p&lt;0.001)</span></div>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/diyaboop/fraud-watch" target="_blank" rel="noopener" class="link-btn primary"><svg class="icon" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a>
+            <a href="https://fraud-watch.onrender.com" target="_blank" rel="noopener" class="link-btn"><svg class="icon" viewBox="0 0 16 16"><path d="M0 2.5A1.5 1.5 0 0 1 1.5 1h11A1.5 1.5 0 0 1 14 2.5v10.528c0 .3-.05.654-.238.972h.738a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 1 1 0v9a1.5 1.5 0 0 1-1.5 1.5H1.497A1.497 1.497 0 0 1 0 13.5v-11zm12 10.972V2.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v11c0 .278.223.5.497.5H12.5a.5.5 0 0 0 .5-.5v-.028z"/></svg>Live Dashboard</a>
+            <a href="fraudwatch-case-study.html" class="link-btn"><svg class="icon" viewBox="0 0 16 16"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2L9.5 1.5z"/></svg>Case Study</a>
+            <a href="fraudwatch-prd.html" class="link-btn"><svg class="icon" viewBox="0 0 16 16"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2L9.5 1.5z"/></svg>PRD</a>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- CIFAR-10 Robustness & Fairness Audit -->
-    <div class="project-card">
-      <div class="card-spark" aria-hidden="true"><svg width="52" height="36" viewBox="0 0 52 36" fill="none"><line class="sl" x1="8" y1="26" x2="28" y2="10" stroke="rgba(155,63,98,0.5)" stroke-width="1.1"/><line class="sl" x1="28" y1="10" x2="46" y2="24" stroke="rgba(155,63,98,0.5)" stroke-width="1.1"/><circle class="sn" cx="8" cy="26" r="3.5" fill="rgba(247,217,227,0.9)" stroke="rgba(155,63,98,0.6)" stroke-width="1.2"/><circle class="sn" cx="28" cy="10" r="3.5" fill="rgba(247,217,227,0.9)" stroke="rgba(155,63,98,0.6)" stroke-width="1.2" style="transition-delay:0.08s"/><circle class="sn" cx="46" cy="24" r="3.5" fill="rgba(247,217,227,0.9)" stroke="rgba(155,63,98,0.6)" stroke-width="1.2" style="transition-delay:0.16s"/></svg></div>
+    <div class="project-card" data-tags="responsible-ai computer-vision">
       <div class="card-doodle" aria-hidden="true"><svg width="42" height="28" viewBox="0 0 42 28" fill="none" stroke="rgba(155,63,98,1)" stroke-width="1.5" stroke-linecap="round"><path d="M2 14 C8 3 34 3 40 14 C34 25 8 25 2 14Z"/><circle cx="21" cy="14" r="6"/><circle cx="21" cy="14" r="2.5" fill="rgba(155,63,98,0.2)" stroke="none"/></svg></div>
+
+      <!-- Card illustration -->
+      <div class="card-img">
+        <div class="card-img-inner">
+          <svg viewBox="0 0 700 172" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+            <rect width="700" height="172" fill="rgba(251,240,244,0.95)"/>
+            <!-- image classifier grid -->
+            <rect x="60" y="34" width="52" height="44" rx="5" fill="rgba(155,63,98,0.13)"/>
+            <rect x="122" y="34" width="52" height="44" rx="5" fill="rgba(94,75,168,0.12)"/>
+            <rect x="184" y="34" width="52" height="44" rx="5" fill="rgba(155,63,98,0.08)"/>
+            <rect x="60" y="88" width="52" height="44" rx="5" fill="rgba(94,75,168,0.08)"/>
+            <rect x="122" y="88" width="52" height="44" rx="5" fill="rgba(155,63,98,0.55)" stroke="rgba(155,63,98,0.9)" stroke-width="2"/>
+            <rect x="184" y="88" width="52" height="44" rx="5" fill="rgba(155,63,98,0.13)"/>
+            <!-- ✓ on good cells, ✗ on biased -->
+            <line x1="76" y1="56" x2="82" y2="62" stroke="rgba(155,63,98,0.55)" stroke-width="2" stroke-linecap="round"/>
+            <line x1="82" y1="62" x2="95" y2="47" stroke="rgba(155,63,98,0.55)" stroke-width="2" stroke-linecap="round"/>
+            <line x1="133" y1="103" x2="165" y2="119" stroke="rgba(247,228,236,0.9)" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="165" y1="103" x2="133" y2="119" stroke="rgba(247,228,236,0.9)" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- accuracy arc -->
+            <circle cx="420" cy="86" r="58" fill="rgba(247,228,236,0.5)" stroke="rgba(155,63,98,0.15)" stroke-width="1.5"/>
+            <path d="M368 86 A52 52 0 1 1 423 138" stroke="rgba(155,63,98,0.0)" stroke-width="0" fill="none"/>
+            <circle cx="420" cy="86" r="42" fill="rgba(251,240,244,0.9)" stroke="rgba(155,63,98,0.12)" stroke-width="1"/>
+            <!-- arc progress ring -->
+            <circle cx="420" cy="86" r="52" fill="none" stroke="rgba(155,63,98,0.5)" stroke-width="5" stroke-linecap="round"
+              stroke-dasharray="265 327" stroke-dashoffset="82" transform="rotate(-90 420 86)"/>
+            <!-- 81% label approximation via shapes -->
+            <rect x="396" y="78" width="4" height="16" rx="2" fill="rgba(155,63,98,0.55)"/>
+            <rect x="402" y="78" width="12" height="4" rx="2" fill="rgba(155,63,98,0.55)"/>
+            <rect x="402" y="86" width="12" height="4" rx="2" fill="rgba(155,63,98,0.55)"/>
+            <rect x="402" y="90" width="12" height="4" rx="2" fill="rgba(155,63,98,0.55)"/>
+            <rect x="410" y="94" width="4" height="0" rx="0" fill="rgba(155,63,98,0.55)"/>
+            <!-- gap indicator -->
+            <line x1="395" y1="108" x2="445" y2="108" stroke="rgba(155,63,98,0.3)" stroke-width="1" stroke-dasharray="3 2"/>
+            <!-- nodes bg -->
+            <circle cx="590" cy="35" r="4.5" fill="rgba(155,63,98,0.2)"/>
+            <circle cx="640" cy="70" r="4.5" fill="rgba(155,63,98,0.2)"/>
+            <circle cx="612" cy="130" r="4.5" fill="rgba(155,63,98,0.2)"/>
+            <circle cx="565" cy="100" r="3" fill="rgba(155,63,98,0.14)"/>
+            <line x1="590" y1="35" x2="640" y2="70" stroke="rgba(155,63,98,0.16)" stroke-width="1.1"/>
+            <line x1="640" y1="70" x2="612" y2="130" stroke="rgba(155,63,98,0.16)" stroke-width="1.1"/>
+            <line x1="565" y1="100" x2="590" y2="35" stroke="rgba(155,63,98,0.1)" stroke-width="1"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="card-num">Project — 02</div>
       <div class="project-name">CIFAR-10 Robustness &amp; Fairness Audit</div>
-      <div class="project-subtitle">What Aggregate Accuracy Hides</div>
-      <p class="project-desc">End-to-end responsible AI audit pipeline applied to a CIFAR-10 image classifier — surfacing systematic class bias, robustness failures under real-world conditions, and confidence calibration issues that aggregate accuracy metrics hide. Three audit modules: bias audit, robustness audit, and calibration audit.</p>
-      <ul style="margin:10px 0 14px 16px;padding:0;list-style:disc;">
-        <li style="font-size:13.5px;color:var(--muted);margin-bottom:6px;line-height:1.6;"><strong style="color:var(--text);">Bias:</strong> 32.8pp accuracy gap between automobile (91.4%) and cat (58.6%) — Z=16.9, p&lt;0.001</li>
-        <li style="font-size:13.5px;color:var(--muted);margin-bottom:6px;line-height:1.6;"><strong style="color:var(--text);">Robustness:</strong> 15° rotation drops accuracy from 81% to 69.5% — model is not rotation-invariant</li>
-        <li style="font-size:13.5px;color:var(--muted);line-height:1.6;"><strong style="color:var(--text);">Calibration:</strong> 54% of predictions express &gt;90% confidence — 162 wrong predictions made with near-certain confidence</li>
-      </ul>
-      <div class="stats-row">
-        <div class="stat">
-          <span class="stat-num">81.17%</span>
-          <span class="stat-label">Overall accuracy</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num">32.8pp</span>
-          <span class="stat-label">Best vs worst class gap</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num">54%</span>
-          <span class="stat-label">Predictions &gt;90% confidence</span>
-        </div>
-      </div>
+      <p class="project-short">Responsible AI audit on a CIFAR-10 image classifier revealing a 32.8pp accuracy gap between classes. Three modules: bias, robustness under rotation/noise, and confidence calibration.</p>
       <div class="tags">
-        <span class="tag">Python</span><span class="tag">PyTorch</span><span class="tag">Scikit-learn</span><span class="tag">SciPy</span><span class="tag">Matplotlib</span><span class="tag">Seaborn</span><span class="tag">Chart.js</span><span class="tag">Responsible AI</span>
+        <span class="tag">PyTorch</span><span class="tag">Scikit-learn</span><span class="tag">Computer Vision</span><span class="tag">Responsible AI</span>
       </div>
-      <div class="project-links">
-        <a href="https://github.com/diyaboop/cifar10-audit" target="_blank" rel="noopener" class="link-btn primary">
-          <svg class="icon" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-          GitHub
-        </a>
-        <a href="https://diyaboop.github.io/cifar10-audit/dashboard.html" target="_blank" rel="noopener" class="link-btn">
-          <svg class="icon" viewBox="0 0 16 16"><path d="M0 2.5A1.5 1.5 0 0 1 1.5 1h11A1.5 1.5 0 0 1 14 2.5v10.528c0 .3-.05.654-.238.972h.738a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 1 1 0v9a1.5 1.5 0 0 1-1.5 1.5H1.497A1.497 1.497 0 0 1 0 13.5v-11zm12 10.972V2.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v11c0 .278.223.5.497.5H12.5a.5.5 0 0 0 .5-.5v-.028z"/></svg>
-          Live Dashboard
-        </a>
-        <a href="cifar10-case-study.html" class="link-btn">
-          <svg class="icon" viewBox="0 0 16 16"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2L9.5 1.5z"/></svg>
-          View Case Study
-        </a>
-        <a href="cifar10-prd.html" class="link-btn">
-          <svg class="icon" viewBox="0 0 16 16"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2L9.5 1.5z"/></svg>
-          View PRD
-        </a>
+      <button class="expand-toggle" aria-expanded="false">
+        <span class="toggle-label">View Details</span>
+        <span class="chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="expand-details" aria-hidden="true">
+        <div class="expand-inner">
+          <div class="project-subtitle">What Aggregate Accuracy Hides</div>
+          <p class="project-desc" style="margin-top:8px;">End-to-end responsible AI audit pipeline applied to a CIFAR-10 image classifier — surfacing systematic class bias, robustness failures under real-world conditions, and confidence calibration issues that aggregate accuracy metrics hide.</p>
+          <ul style="margin:10px 0 14px 16px;padding:0;list-style:disc;">
+            <li style="font-size:13.5px;color:var(--muted);margin-bottom:6px;line-height:1.6;"><strong style="color:var(--text);">Bias:</strong> 32.8pp accuracy gap between automobile (91.4%) and cat (58.6%) — Z=16.9, p&lt;0.001</li>
+            <li style="font-size:13.5px;color:var(--muted);margin-bottom:6px;line-height:1.6;"><strong style="color:var(--text);">Robustness:</strong> 15° rotation drops accuracy from 81% to 69.5% — model is not rotation-invariant</li>
+            <li style="font-size:13.5px;color:var(--muted);line-height:1.6;"><strong style="color:var(--text);">Calibration:</strong> 54% of predictions over 90% confidence — model is systematically overconfident</li>
+          </ul>
+          <div class="stats-row">
+            <div class="stat"><span class="stat-num">81.17%</span><span class="stat-label">Overall accuracy</span></div>
+            <div class="stat"><span class="stat-num">32.8pp</span><span class="stat-label">Best vs worst class gap</span></div>
+            <div class="stat"><span class="stat-num">54%</span><span class="stat-label">Predictions &gt;90% confidence</span></div>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/diyaboop/cifar10-audit" target="_blank" rel="noopener" class="link-btn primary"><svg class="icon" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a>
+            <a href="https://diyaboop.github.io/cifar10-audit/dashboard.html" target="_blank" rel="noopener" class="link-btn"><svg class="icon" viewBox="0 0 16 16"><path d="M0 2.5A1.5 1.5 0 0 1 1.5 1h11A1.5 1.5 0 0 1 14 2.5v10.528c0 .3-.05.654-.238.972h.738a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 1 1 0v9a1.5 1.5 0 0 1-1.5 1.5H1.497A1.497 1.497 0 0 1 0 13.5v-11zm12 10.972V2.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v11c0 .278.223.5.497.5H12.5a.5.5 0 0 0 .5-.5v-.028z"/></svg>Live Dashboard</a>
+            <a href="cifar10-case-study.html" class="link-btn"><svg class="icon" viewBox="0 0 16 16"><path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2L9.5 1.5z"/></svg>Case Study</a>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- EU AI Act Compliance Assistant -->
-    <div class="project-card">
-      <div class="card-spark" aria-hidden="true"><svg width="52" height="36" viewBox="0 0 52 36" fill="none"><line class="sl" x1="8" y1="26" x2="28" y2="10" stroke="rgba(155,63,98,0.5)" stroke-width="1.1"/><line class="sl" x1="28" y1="10" x2="46" y2="24" stroke="rgba(155,63,98,0.5)" stroke-width="1.1"/><circle class="sn" cx="8" cy="26" r="3.5" fill="rgba(247,217,227,0.9)" stroke="rgba(155,63,98,0.6)" stroke-width="1.2"/><circle class="sn" cx="28" cy="10" r="3.5" fill="rgba(247,217,227,0.9)" stroke="rgba(155,63,98,0.6)" stroke-width="1.2" style="transition-delay:0.08s"/><circle class="sn" cx="46" cy="24" r="3.5" fill="rgba(247,217,227,0.9)" stroke="rgba(155,63,98,0.6)" stroke-width="1.2" style="transition-delay:0.16s"/></svg></div>
+    <div class="project-card" data-tags="llm policy">
       <div class="card-doodle" aria-hidden="true"><svg width="32" height="38" viewBox="0 0 32 38" fill="none" stroke="rgba(155,63,98,1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 2 L30 8 L30 22 C30 30 23 35 16 37 C9 35 2 30 2 22 L2 8 Z"/><path d="M10 19 L13.5 23.5 L22 14"/></svg></div>
+
+      <!-- Card illustration -->
+      <div class="card-img">
+        <div class="card-img-inner">
+          <svg viewBox="0 0 700 172" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+            <rect width="700" height="172" fill="rgba(251,240,244,0.95)"/>
+            <!-- document shape -->
+            <rect x="55" y="22" width="140" height="130" rx="8" fill="rgba(247,228,236,0.7)" stroke="rgba(155,63,98,0.25)" stroke-width="1.5"/>
+            <rect x="55" y="22" width="140" height="22" rx="8" fill="rgba(155,63,98,0.15)"/>
+            <rect x="75" y="58" width="100" height="5" rx="2.5" fill="rgba(155,63,98,0.18)"/>
+            <rect x="75" y="72" width="85" height="5" rx="2.5" fill="rgba(155,63,98,0.12)"/>
+            <rect x="75" y="86" width="95" height="5" rx="2.5" fill="rgba(155,63,98,0.12)"/>
+            <rect x="75" y="100" width="70" height="5" rx="2.5" fill="rgba(155,63,98,0.12)"/>
+            <rect x="75" y="114" width="90" height="5" rx="2.5" fill="rgba(155,63,98,0.12)"/>
+            <rect x="75" y="128" width="60" height="5" rx="2.5" fill="rgba(155,63,98,0.08)"/>
+            <!-- shield overlay -->
+            <path d="M290 20 L340 38 L340 88 C340 116 316 136 290 148 C264 136 240 116 240 88 L240 38 Z" fill="rgba(247,228,236,0.8)" stroke="rgba(155,63,98,0.45)" stroke-width="2"/>
+            <path d="M270 84 L282 98 L310 70" stroke="rgba(155,63,98,0.75)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- agent nodes -->
+            <circle cx="440" cy="50" r="18" fill="rgba(247,228,236,0.8)" stroke="rgba(155,63,98,0.4)" stroke-width="1.5"/>
+            <circle cx="530" cy="86" r="18" fill="rgba(247,228,236,0.8)" stroke="rgba(155,63,98,0.4)" stroke-width="1.5"/>
+            <circle cx="440" cy="130" r="18" fill="rgba(247,228,236,0.8)" stroke="rgba(155,63,98,0.4)" stroke-width="1.5"/>
+            <line x1="458" y1="58" x2="514" y2="78" stroke="rgba(155,63,98,0.32)" stroke-width="1.5"/>
+            <line x1="514" y1="94" x2="458" y2="122" stroke="rgba(155,63,98,0.32)" stroke-width="1.5"/>
+            <!-- agent labels via small rects -->
+            <rect x="428" y="45" width="24" height="4" rx="2" fill="rgba(155,63,98,0.35)"/>
+            <rect x="518" y="81" width="24" height="4" rx="2" fill="rgba(155,63,98,0.35)"/>
+            <rect x="428" y="125" width="24" height="4" rx="2" fill="rgba(155,63,98,0.35)"/>
+            <!-- rag label -->
+            <rect x="580" y="55" width="80" height="62" rx="8" fill="rgba(247,228,236,0.6)" stroke="rgba(155,63,98,0.2)" stroke-width="1.2"/>
+            <rect x="592" y="70" width="56" height="4" rx="2" fill="rgba(155,63,98,0.22)"/>
+            <rect x="592" y="82" width="44" height="4" rx="2" fill="rgba(155,63,98,0.16)"/>
+            <rect x="592" y="94" width="50" height="4" rx="2" fill="rgba(155,63,98,0.16)"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="card-num">Project — 03</div>
       <div class="project-name">EU AI Act Compliance Assistant</div>
-      <div class="project-subtitle">RAG-Powered Multi-Agent Regulatory Briefing System</div>
-      <p class="project-desc">A production-grade compliance assistant that answers EU AI Act questions using a three-agent LangGraph pipeline — research, analysis, and writing agents collaborating to produce structured regulatory briefings grounded in source text. Built on 741 embedded chunks of the EU AI Act with ChromaDB semantic retrieval and Claude for synthesis. Demonstrates end-to-end LLM engineering: PDF ingestion, vector search, multi-agent orchestration, and FastAPI deployment.</p>
-      <ul style="margin:10px 0 14px 16px;padding:0;list-style:disc;">
-        <li style="font-size:13.5px;color:var(--muted);margin-bottom:6px;line-height:1.6;"><strong style="color:var(--text);">Retrieval:</strong> Semantic search over 741 EU AI Act chunks using ChromaDB vector store</li>
-        <li style="font-size:13.5px;color:var(--muted);margin-bottom:6px;line-height:1.6;"><strong style="color:var(--text);">Pipeline:</strong> LangGraph multi-agent orchestration — research → analysis → writing agents in sequence</li>
-        <li style="font-size:13.5px;color:var(--muted);margin-bottom:6px;line-height:1.6;"><strong style="color:var(--text);">Output:</strong> Structured 3-section compliance briefing with specific article citations from source text</li>
-        <li style="font-size:13.5px;color:var(--muted);line-height:1.6;"><strong style="color:var(--text);">Deployment:</strong> FastAPI backend with clean web interface</li>
-      </ul>
-      <div class="stats-row">
-        <div class="stat">
-          <span class="stat-num">741</span>
-          <span class="stat-label">EU AI Act chunks indexed</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num">3</span>
-          <span class="stat-label">Specialized agents</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num">RAG</span>
-          <span class="stat-label">Retrieval Augmented Generation</span>
-        </div>
-      </div>
+      <p class="project-short">Three-agent LangGraph system producing structured regulatory briefings grounded in EU AI Act source text, using ChromaDB RAG over 741 embedded chunks with Claude synthesis.</p>
       <div class="tags">
-        <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">LangGraph</span><span class="tag">ChromaDB</span><span class="tag">LangChain</span><span class="tag">Anthropic Claude</span><span class="tag">Sentence Transformers</span><span class="tag">Responsible AI</span>
+        <span class="tag">LangGraph</span><span class="tag">ChromaDB</span><span class="tag">Claude API</span><span class="tag">FastAPI</span><span class="tag">RAG</span>
       </div>
-      <div class="project-links">
-        <a href="https://github.com/diyaboop/compliance-assistant" target="_blank" rel="noopener" class="link-btn primary">
-          <svg class="icon" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-          GitHub
-        </a>
+      <button class="expand-toggle" aria-expanded="false">
+        <span class="toggle-label">View Details</span>
+        <span class="chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="expand-details" aria-hidden="true">
+        <div class="expand-inner">
+          <div class="project-subtitle">RAG-Powered Multi-Agent Regulatory Briefing System</div>
+          <p class="project-desc" style="margin-top:8px;">A production-grade compliance assistant that answers EU AI Act questions using a three-agent LangGraph pipeline — research, analysis, and writing agents collaborating to produce structured regulatory briefings grounded in source text.</p>
+          <ul style="margin:10px 0 14px 16px;padding:0;list-style:disc;">
+            <li style="font-size:13.5px;color:var(--muted);margin-bottom:6px;line-height:1.6;"><strong style="color:var(--text);">Retrieval:</strong> Semantic search over 741 EU AI Act chunks using ChromaDB vector store</li>
+            <li style="font-size:13.5px;color:var(--muted);margin-bottom:6px;line-height:1.6;"><strong style="color:var(--text);">Pipeline:</strong> LangGraph multi-agent orchestration — research → analysis → writing agents</li>
+            <li style="font-size:13.5px;color:var(--muted);margin-bottom:6px;line-height:1.6;"><strong style="color:var(--text);">Output:</strong> Structured 3-section compliance briefing with specific article citations</li>
+            <li style="font-size:13.5px;color:var(--muted);line-height:1.6;"><strong style="color:var(--text);">Deployment:</strong> FastAPI backend with clean web interface</li>
+          </ul>
+          <div class="stats-row">
+            <div class="stat"><span class="stat-num">741</span><span class="stat-label">EU AI Act chunks indexed</span></div>
+            <div class="stat"><span class="stat-num">3</span><span class="stat-label">Specialized agents</span></div>
+            <div class="stat"><span class="stat-num">RAG</span><span class="stat-label">Retrieval Augmented Generation</span></div>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/diyaboop/compliance-assistant" target="_blank" rel="noopener" class="link-btn primary"><svg class="icon" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Global AI Readiness -->
-    <div class="project-card">
-      <div class="card-spark" aria-hidden="true"><svg width="52" height="36" viewBox="0 0 52 36" fill="none"><line class="sl" x1="8" y1="26" x2="28" y2="10" stroke="rgba(155,63,98,0.5)" stroke-width="1.1"/><line class="sl" x1="28" y1="10" x2="46" y2="24" stroke="rgba(155,63,98,0.5)" stroke-width="1.1"/><circle class="sn" cx="8" cy="26" r="3.5" fill="rgba(247,217,227,0.9)" stroke="rgba(155,63,98,0.6)" stroke-width="1.2"/><circle class="sn" cx="28" cy="10" r="3.5" fill="rgba(247,217,227,0.9)" stroke="rgba(155,63,98,0.6)" stroke-width="1.2" style="transition-delay:0.08s"/><circle class="sn" cx="46" cy="24" r="3.5" fill="rgba(247,217,227,0.9)" stroke="rgba(155,63,98,0.6)" stroke-width="1.2" style="transition-delay:0.16s"/></svg></div>
+    <div class="project-card" data-tags="policy">
       <div class="card-doodle" aria-hidden="true"><svg width="38" height="38" viewBox="0 0 38 38" fill="none" stroke="rgba(155,63,98,1)" stroke-width="1.5" stroke-linecap="round"><circle cx="19" cy="19" r="15"/><path d="M4 19 Q10 12 19 19 Q28 26 34 19"/><path d="M4 19 Q10 26 19 19 Q28 12 34 19"/><line x1="19" y1="4" x2="19" y2="34"/><ellipse cx="19" cy="19" rx="8" ry="15"/></svg></div>
+
+      <!-- Card illustration -->
+      <div class="card-img">
+        <div class="card-img-inner">
+          <svg viewBox="0 0 700 172" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+            <rect width="700" height="172" fill="rgba(251,240,244,0.95)"/>
+            <!-- globe -->
+            <circle cx="180" cy="86" r="70" fill="rgba(247,228,236,0.55)" stroke="rgba(155,63,98,0.2)" stroke-width="1.5"/>
+            <ellipse cx="180" cy="86" rx="38" ry="70" fill="none" stroke="rgba(155,63,98,0.18)" stroke-width="1.2"/>
+            <line x1="180" y1="16" x2="180" y2="156" stroke="rgba(155,63,98,0.18)" stroke-width="1.2"/>
+            <path d="M112 60 Q145 48 180 60 Q215 72 248 60" fill="none" stroke="rgba(155,63,98,0.15)" stroke-width="1"/>
+            <path d="M110 86 Q145 74 180 86 Q215 98 250 86" fill="none" stroke="rgba(155,63,98,0.15)" stroke-width="1"/>
+            <path d="M112 112 Q145 100 180 112 Q215 124 248 112" fill="none" stroke="rgba(155,63,98,0.15)" stroke-width="1"/>
+            <!-- country dots scatter -->
+            <circle cx="350" cy="45" r="6" fill="rgba(155,63,98,0.6)"/>
+            <circle cx="385" cy="68" r="5" fill="rgba(155,63,98,0.4)"/>
+            <circle cx="410" cy="52" r="4" fill="rgba(155,63,98,0.5)"/>
+            <circle cx="440" cy="80" r="7" fill="rgba(155,63,98,0.35)"/>
+            <circle cx="375" cy="100" r="5" fill="rgba(155,63,98,0.45)"/>
+            <circle cx="460" cy="58" r="4.5" fill="rgba(155,63,98,0.3)"/>
+            <circle cx="500" cy="90" r="6" fill="rgba(155,63,98,0.5)"/>
+            <circle cx="480" cy="120" r="4" fill="rgba(155,63,98,0.35)"/>
+            <circle cx="420" cy="115" r="5.5" fill="rgba(155,63,98,0.4)"/>
+            <circle cx="540" cy="65" r="4" fill="rgba(155,63,98,0.28)"/>
+            <circle cx="555" cy="105" r="5" fill="rgba(155,63,98,0.38)"/>
+            <circle cx="600" cy="80" r="6" fill="rgba(155,63,98,0.45)"/>
+            <circle cx="630" cy="50" r="4" fill="rgba(155,63,98,0.28)"/>
+            <circle cx="650" cy="110" r="5" fill="rgba(155,63,98,0.32)"/>
+            <!-- connecting lines -->
+            <line x1="350" y1="45" x2="385" y2="68" stroke="rgba(155,63,98,0.2)" stroke-width="1.2"/>
+            <line x1="385" y1="68" x2="375" y2="100" stroke="rgba(155,63,98,0.18)" stroke-width="1"/>
+            <line x1="440" y1="80" x2="500" y2="90" stroke="rgba(155,63,98,0.2)" stroke-width="1.2"/>
+            <line x1="500" y1="90" x2="555" y2="105" stroke="rgba(155,63,98,0.18)" stroke-width="1"/>
+            <line x1="460" y1="58" x2="540" y2="65" stroke="rgba(155,63,98,0.16)" stroke-width="1"/>
+            <line x1="600" y1="80" x2="630" y2="50" stroke="rgba(155,63,98,0.16)" stroke-width="1"/>
+            <!-- 47 badge -->
+            <rect x="600" y="120" width="70" height="34" rx="8" fill="rgba(155,63,98,0.1)" stroke="rgba(155,63,98,0.3)" stroke-width="1.2"/>
+            <rect x="612" y="130" width="20" height="4" rx="2" fill="rgba(155,63,98,0.5)"/>
+            <rect x="636" y="130" width="22" height="4" rx="2" fill="rgba(155,63,98,0.3)"/>
+            <rect x="612" y="140" width="46" height="3" rx="1.5" fill="rgba(155,63,98,0.2)"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="card-num">Project — 04</div>
       <div class="project-name">Global AI Readiness Pipeline</div>
-      <div class="project-subtitle">Stanford HAI 2026 Analysis across 47 Countries</div>
-      <p class="project-desc">End-to-end data pipeline analyzing AI readiness across 47 countries and 16 subregions using Stanford HAI 2026 survey data merged with REST Countries API. Key finding: <strong>Northern/Western Europe scores 20%+ below the global south</strong> on responsible AI governance metrics — challenging the narrative of perceived leadership in AI ethics.</p>
-      <div class="stats-row">
-        <div class="stat">
-          <span class="stat-num">47</span>
-          <span class="stat-label">Countries analyzed</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num">16</span>
-          <span class="stat-label">Subregions</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num">3</span>
-          <span class="stat-label">Stanford HAI metrics</span>
-        </div>
-      </div>
+      <p class="project-short">Data pipeline analyzing AI readiness across 47 countries using Stanford HAI 2026 data. Key finding: Northern Europe scores 20%+ lower on governance metrics than the global south.</p>
       <div class="tags">
-        <span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">REST API</span><span class="tag">SQLite</span><span class="tag">Matplotlib</span><span class="tag">NumPy</span>
+        <span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">REST API</span><span class="tag">SQLite</span><span class="tag">Data Pipeline</span>
       </div>
-      <div class="project-links">
-        <a href="https://github.com/diyaboop/ai-readiness-pipeline" target="_blank" rel="noopener" class="link-btn primary">
-          <svg class="icon" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-          GitHub
-        </a>
-        <a href="https://datastudio.google.com/reporting/f0d76254-e10d-48b6-adb4-0da3abf06afb" target="_blank" rel="noopener" class="link-btn">
-          <svg class="icon" viewBox="0 0 16 16"><path d="M0 2.5A1.5 1.5 0 0 1 1.5 1h11A1.5 1.5 0 0 1 14 2.5v10.528c0 .3-.05.654-.238.972h.738a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 1 1 0v9a1.5 1.5 0 0 1-1.5 1.5H1.497A1.497 1.497 0 0 1 0 13.5v-11zm12 10.972V2.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v11c0 .278.223.5.497.5H12.5a.5.5 0 0 0 .5-.5v-.028z"/></svg>
-          View Dashboard
-        </a>
+      <button class="expand-toggle" aria-expanded="false">
+        <span class="toggle-label">View Details</span>
+        <span class="chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="expand-details" aria-hidden="true">
+        <div class="expand-inner">
+          <div class="project-subtitle">Stanford HAI 2026 Analysis across 47 Countries</div>
+          <p class="project-desc" style="margin-top:8px;">End-to-end data pipeline analyzing AI readiness across 47 countries and 16 subregions using Stanford HAI 2026 survey data merged with REST Countries API. Key finding: <strong>Northern/Western Europe scores 20%+ below the global south</strong> on responsible AI governance metrics — challenging the narrative of perceived leadership in AI ethics.</p>
+          <div class="stats-row">
+            <div class="stat"><span class="stat-num">47</span><span class="stat-label">Countries analyzed</span></div>
+            <div class="stat"><span class="stat-num">16</span><span class="stat-label">Subregions</span></div>
+            <div class="stat"><span class="stat-num">3</span><span class="stat-label">Stanford HAI metrics</span></div>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/diyaboop/ai-readiness-pipeline" target="_blank" rel="noopener" class="link-btn primary"><svg class="icon" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a>
+            <a href="https://datastudio.google.com/reporting/f0d76254-e10d-48b6-adb4-0da3abf06afb" target="_blank" rel="noopener" class="link-btn"><svg class="icon" viewBox="0 0 16 16"><path d="M0 2.5A1.5 1.5 0 0 1 1.5 1h11A1.5 1.5 0 0 1 14 2.5v10.528c0 .3-.05.654-.238.972h.738a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 1 1 0v9a1.5 1.5 0 0 1-1.5 1.5H1.497A1.497 1.497 0 0 1 0 13.5v-11zm12 10.972V2.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v11c0 .278.223.5.497.5H12.5a.5.5 0 0 0 .5-.5v-.028z"/></svg>View Dashboard</a>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Food Bank Dashboard -->
-    <div class="project-card">
-      <div class="card-spark" aria-hidden="true"><svg width="52" height="36" viewBox="0 0 52 36" fill="none"><line class="sl" x1="8" y1="26" x2="28" y2="10" stroke="rgba(155,63,98,0.5)" stroke-width="1.1"/><line class="sl" x1="28" y1="10" x2="46" y2="24" stroke="rgba(155,63,98,0.5)" stroke-width="1.1"/><circle class="sn" cx="8" cy="26" r="3.5" fill="rgba(247,217,227,0.9)" stroke="rgba(155,63,98,0.6)" stroke-width="1.2"/><circle class="sn" cx="28" cy="10" r="3.5" fill="rgba(247,217,227,0.9)" stroke="rgba(155,63,98,0.6)" stroke-width="1.2" style="transition-delay:0.08s"/><circle class="sn" cx="46" cy="24" r="3.5" fill="rgba(247,217,227,0.9)" stroke="rgba(155,63,98,0.6)" stroke-width="1.2" style="transition-delay:0.16s"/></svg></div>
+    <div class="project-card" data-tags="llm">
       <div class="card-doodle" aria-hidden="true"><svg width="34" height="38" viewBox="0 0 34 38" fill="none" stroke="rgba(155,63,98,1)" stroke-width="1.5" stroke-linecap="round"><path d="M17 35 C17 35 3 24 3 13 C3 7 9 3 17 8 C25 3 31 7 31 13 C31 24 17 35 17 35Z"/><line x1="17" y1="35" x2="17" y2="17" stroke-opacity="0.6"/></svg></div>
+
+      <!-- Card illustration -->
+      <div class="card-img">
+        <div class="card-img-inner">
+          <svg viewBox="0 0 700 172" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+            <rect width="700" height="172" fill="rgba(251,240,244,0.95)"/>
+            <!-- NC map silhouette approximation -->
+            <path d="M55 70 L90 55 L130 58 L175 52 L220 58 L255 62 L280 55 L310 65 L330 72 L340 85 L320 95 L295 90 L270 98 L240 102 L200 98 L160 105 L120 100 L90 108 L65 95 Z"
+              fill="rgba(247,228,236,0.7)" stroke="rgba(155,63,98,0.3)" stroke-width="1.5" stroke-linejoin="round"/>
+            <!-- county pins -->
+            <circle cx="115" cy="75" r="5" fill="rgba(155,63,98,0.65)"/>
+            <circle cx="160" cy="70" r="4" fill="rgba(155,63,98,0.45)"/>
+            <circle cx="210" cy="75" r="5.5" fill="rgba(155,63,98,0.6)"/>
+            <circle cx="255" cy="80" r="4" fill="rgba(155,63,98,0.4)"/>
+            <circle cx="190" cy="90" r="4.5" fill="rgba(155,63,98,0.5)"/>
+            <circle cx="140" cy="88" r="4" fill="rgba(155,63,98,0.38)"/>
+            <circle cx="290" cy="82" r="3.5" fill="rgba(155,63,98,0.35)"/>
+            <!-- chat bubble / NL query -->
+            <rect x="370" y="30" width="270" height="55" rx="12" fill="rgba(247,228,236,0.75)" stroke="rgba(155,63,98,0.3)" stroke-width="1.5"/>
+            <path d="M395 85 L385 100 L410 85" fill="rgba(247,228,236,0.75)" stroke="rgba(155,63,98,0.3)" stroke-width="1.5" stroke-linejoin="round"/>
+            <rect x="390" y="45" width="140" height="5" rx="2.5" fill="rgba(155,63,98,0.3)"/>
+            <rect x="390" y="58" width="110" height="5" rx="2.5" fill="rgba(155,63,98,0.2)"/>
+            <rect x="390" y="71" width="125" height="5" rx="2.5" fill="rgba(155,63,98,0.2)"/>
+            <!-- response bubble -->
+            <rect x="380" y="108" width="280" height="46" rx="10" fill="rgba(155,63,98,0.1)" stroke="rgba(155,63,98,0.22)" stroke-width="1.2"/>
+            <rect x="398" y="120" width="160" height="4" rx="2" fill="rgba(155,63,98,0.25)"/>
+            <rect x="398" y="132" width="120" height="4" rx="2" fill="rgba(155,63,98,0.18)"/>
+            <rect x="398" y="144" width="140" height="4" rx="2" fill="rgba(155,63,98,0.18)"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="card-num">Project — 05</div>
       <div class="project-name">Food Bank Partnership Dashboard</div>
-      <div class="project-subtitle">Claude-Powered Operations Tool for Food Bank of Central &amp; Eastern NC</div>
-      <p class="project-desc">Internal operations dashboard enabling food bank staff to query partnership and volunteer data in plain English using Claude. Built after witnessing firsthand how partnership data lived across disconnected spreadsheets at Duke's Office of Community Affairs — replacing hours of manual lookup with instant natural language queries across 34 counties.</p>
-      <div class="stats-row">
-        <div class="stat">
-          <span class="stat-num">607K+</span>
-          <span class="stat-label">Food insecure residents</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num">34</span>
-          <span class="stat-label">Counties covered</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num">NL</span>
-          <span class="stat-label">Claude-powered queries</span>
-        </div>
-      </div>
+      <p class="project-short">Natural language operations dashboard letting food bank staff query partnership data via Claude. Replaced hours of manual spreadsheet lookup with instant queries across 34 counties.</p>
       <div class="tags">
-        <span class="tag">Python</span><span class="tag">Flask</span><span class="tag">Anthropic API</span><span class="tag">HTML/JS</span><span class="tag">Responsible AI</span>
+        <span class="tag">Python</span><span class="tag">Flask</span><span class="tag">Anthropic API</span><span class="tag">NLP</span>
       </div>
-      <div class="project-links">
-        <a href="https://github.com/diyaboop/food-bank-dashboard" target="_blank" rel="noopener" class="link-btn primary">
-          <svg class="icon" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-          GitHub
-        </a>
+      <button class="expand-toggle" aria-expanded="false">
+        <span class="toggle-label">View Details</span>
+        <span class="chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="expand-details" aria-hidden="true">
+        <div class="expand-inner">
+          <div class="project-subtitle">Claude-Powered Operations Tool for Food Bank of Central &amp; Eastern NC</div>
+          <p class="project-desc" style="margin-top:8px;">Internal operations dashboard enabling food bank staff to query partnership and volunteer data in plain English using Claude. Built after witnessing firsthand how partnership data lived across disconnected spreadsheets at Duke's Office of Community Affairs — replacing hours of manual lookup with instant natural language queries across 34 counties.</p>
+          <div class="stats-row">
+            <div class="stat"><span class="stat-num">607K+</span><span class="stat-label">Food insecure residents</span></div>
+            <div class="stat"><span class="stat-num">34</span><span class="stat-label">Counties covered</span></div>
+            <div class="stat"><span class="stat-num">NL</span><span class="stat-label">Claude-powered queries</span></div>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/diyaboop/food-bank-dashboard" target="_blank" rel="noopener" class="link-btn primary"><svg class="icon" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Titanic Bias Audit -->
-    <div class="project-card">
-      <div class="card-spark" aria-hidden="true"><svg width="52" height="36" viewBox="0 0 52 36" fill="none"><line class="sl" x1="8" y1="26" x2="28" y2="10" stroke="rgba(155,63,98,0.5)" stroke-width="1.1"/><line class="sl" x1="28" y1="10" x2="46" y2="24" stroke="rgba(155,63,98,0.5)" stroke-width="1.1"/><circle class="sn" cx="8" cy="26" r="3.5" fill="rgba(247,217,227,0.9)" stroke="rgba(155,63,98,0.6)" stroke-width="1.2"/><circle class="sn" cx="28" cy="10" r="3.5" fill="rgba(247,217,227,0.9)" stroke="rgba(155,63,98,0.6)" stroke-width="1.2" style="transition-delay:0.08s"/><circle class="sn" cx="46" cy="24" r="3.5" fill="rgba(247,217,227,0.9)" stroke="rgba(155,63,98,0.6)" stroke-width="1.2" style="transition-delay:0.16s"/></svg></div>
+    <div class="project-card" data-tags="responsible-ai">
       <div class="card-doodle" aria-hidden="true"><svg width="42" height="26" viewBox="0 0 42 26" fill="none" stroke="rgba(155,63,98,1)" stroke-width="1.5" stroke-linecap="round"><path d="M2 9 Q8 2 15 9 Q22 16 29 9 Q36 2 40 9"/><path d="M2 19 Q8 12 15 19 Q22 26 29 19 Q36 12 40 19"/></svg></div>
+
+      <!-- Card illustration -->
+      <div class="card-img">
+        <div class="card-img-inner">
+          <svg viewBox="0 0 700 172" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+            <rect width="700" height="172" fill="rgba(251,240,244,0.95)"/>
+            <!-- waves -->
+            <path d="M0 120 Q40 108 80 120 Q120 132 160 120 Q200 108 240 120 Q280 132 320 120 Q360 108 400 120 Q440 132 480 120 Q520 108 560 120 Q600 132 640 120 Q680 108 700 120 L700 172 L0 172 Z" fill="rgba(155,63,98,0.08)"/>
+            <path d="M0 136 Q40 124 80 136 Q120 148 160 136 Q200 124 240 136 Q280 148 320 136 Q360 124 400 136 Q440 148 480 136 Q520 124 560 136 Q600 148 700 136 L700 172 L0 172 Z" fill="rgba(155,63,98,0.05)"/>
+            <!-- bar chart — survival by group -->
+            <rect x="60" y="48" width="60" height="58" rx="5" fill="rgba(155,63,98,0.65)"/>
+            <rect x="140" y="82" width="60" height="24" rx="5" fill="rgba(155,63,98,0.25)"/>
+            <rect x="220" y="62" width="60" height="44" rx="5" fill="rgba(155,63,98,0.45)"/>
+            <rect x="300" y="90" width="60" height="16" rx="5" fill="rgba(155,63,98,0.18)"/>
+            <!-- axis -->
+            <line x1="48" y1="110" x2="375" y2="110" stroke="rgba(155,63,98,0.22)" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- bracket + 2x indicator -->
+            <line x1="90" y1="38" x2="170" y2="38" stroke="rgba(155,63,98,0.45)" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="90" y1="38" x2="90" y2="48" stroke="rgba(155,63,98,0.35)" stroke-width="1.2"/>
+            <line x1="170" y1="38" x2="170" y2="82" stroke="rgba(155,63,98,0.35)" stroke-width="1.2"/>
+            <!-- 2× via shapes -->
+            <rect x="118" y="22" width="28" height="10" rx="5" fill="rgba(155,63,98,0.18)" stroke="rgba(155,63,98,0.45)" stroke-width="1"/>
+            <rect x="122" y="26" width="8" height="2" rx="1" fill="rgba(155,63,98,0.7)"/>
+            <rect x="133" y="26" width="9" height="2" rx="1" fill="rgba(155,63,98,0.7)"/>
+            <!-- SQL nodes -->
+            <circle cx="490" cy="50" r="20" fill="rgba(247,228,236,0.7)" stroke="rgba(155,63,98,0.32)" stroke-width="1.5"/>
+            <circle cx="560" cy="86" r="20" fill="rgba(247,228,236,0.7)" stroke="rgba(155,63,98,0.32)" stroke-width="1.5"/>
+            <circle cx="620" cy="45" r="16" fill="rgba(247,228,236,0.7)" stroke="rgba(155,63,98,0.28)" stroke-width="1.3"/>
+            <line x1="508" y1="58" x2="542" y2="78" stroke="rgba(155,63,98,0.28)" stroke-width="1.2"/>
+            <line x1="578" y1="72" x2="608" y2="54" stroke="rgba(155,63,98,0.24)" stroke-width="1.1"/>
+            <rect x="480" y="45" width="20" height="3" rx="1.5" fill="rgba(155,63,98,0.4)"/>
+            <rect x="550" y="81" width="20" height="3" rx="1.5" fill="rgba(155,63,98,0.4)"/>
+            <rect x="610" y="40" width="16" height="3" rx="1.5" fill="rgba(155,63,98,0.35)"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="card-num">Project — 06</div>
       <div class="project-name">Titanic Bias Audit</div>
-      <div class="project-subtitle">Statistical Disparity Analysis across Gender and Passenger Class</div>
-      <p class="project-desc">SQL and Python pipeline surfacing survival disparity across gender and passenger class using the Titanic dataset. First-class females survived at <strong>2x the rate of third-class males</strong> — a clear demonstration of intersectional bias embedded in historical decision systems, and a replicable template for auditing modern ML classifiers.</p>
-      <div class="stats-row">
-        <div class="stat">
-          <span class="stat-num">891</span>
-          <span class="stat-label">Passengers analyzed</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num">2×</span>
-          <span class="stat-label">Survival disparity</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num">↗</span>
-          <span class="stat-label">Intersectional finding</span>
-        </div>
-      </div>
+      <p class="project-short">SQL and Python pipeline surfacing survival disparity across gender and passenger class. First-class females survived at 2× the rate of third-class males — a replicable bias audit template.</p>
       <div class="tags">
-        <span class="tag">Python</span><span class="tag">SQL</span><span class="tag">Pandas</span><span class="tag">SQLite</span><span class="tag">Matplotlib</span>
+        <span class="tag">Python</span><span class="tag">SQL</span><span class="tag">Pandas</span><span class="tag">Responsible AI</span>
       </div>
-      <div class="project-links">
-        <a href="https://github.com/diyaboop/titanic-bias-audit" target="_blank" rel="noopener" class="link-btn primary">
-          <svg class="icon" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-          GitHub
-        </a>
+      <button class="expand-toggle" aria-expanded="false">
+        <span class="toggle-label">View Details</span>
+        <span class="chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="expand-details" aria-hidden="true">
+        <div class="expand-inner">
+          <div class="project-subtitle">Statistical Disparity Analysis across Gender and Passenger Class</div>
+          <p class="project-desc" style="margin-top:8px;">SQL and Python pipeline surfacing survival disparity across gender and passenger class using the Titanic dataset. First-class females survived at <strong>2x the rate of third-class males</strong> — a clear demonstration of intersectional bias embedded in historical decision systems, and a replicable template for auditing modern ML classifiers.</p>
+          <div class="stats-row">
+            <div class="stat"><span class="stat-num">891</span><span class="stat-label">Passengers analyzed</span></div>
+            <div class="stat"><span class="stat-num">2×</span><span class="stat-label">Survival disparity</span></div>
+            <div class="stat"><span class="stat-num">↗</span><span class="stat-label">Intersectional finding</span></div>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/diyaboop/titanic-bias-audit" target="_blank" rel="noopener" class="link-btn primary"><svg class="icon" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a>
+          </div>
+        </div>
       </div>
     </div>
 
   </div>
+
+  <!-- (old cards removed) -->
 
   <div style="margin-top:28px;text-align:right;">
     <a href="https://github.com/diyaboop" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:13.5px;font-weight:600;text-decoration:none;transition:color 0.15s;" onmouseover="this.style.color='var(--orange)'" onmouseout="this.style.color='var(--muted)'">
@@ -1965,6 +2256,67 @@
       let icon = icons.check;
       for (const [re, ic] of map) { if (re.test(text)) { icon = ic; break; } }
       el.innerHTML = icon + text;
+    });
+  })();
+
+  /* CUSTOM CURSOR */
+  (function() {
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+    const dot = document.getElementById('cursor');
+    const ring = document.getElementById('cursor-ring');
+    if (!dot || !ring) return;
+    let mx = -200, my = -200, rx = -200, ry = -200;
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.left = mx + 'px';
+      dot.style.top = my + 'px';
+    });
+    (function loop() {
+      rx += (mx - rx) * 0.14;
+      ry += (my - ry) * 0.14;
+      ring.style.left = rx + 'px';
+      ring.style.top = ry + 'px';
+      requestAnimationFrame(loop);
+    })();
+    document.addEventListener('mouseleave', () => { dot.style.opacity = '0'; ring.style.opacity = '0'; });
+    document.addEventListener('mouseenter', () => { dot.style.opacity = ''; ring.style.opacity = ''; });
+    const hoverSels = 'a, button, .project-card, .tag, .filter-chip, .link-btn, .expand-toggle, .nav-link, .btn';
+    document.querySelectorAll(hoverSels).forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
+    document.body.classList.add('has-custom-cursor');
+  })();
+
+  /* FILTER CHIPS */
+  (function() {
+    const chips = document.querySelectorAll('.filter-chip');
+    const cards = document.querySelectorAll('.project-card');
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => { c.classList.remove('active'); c.setAttribute('aria-pressed', 'false'); });
+        chip.classList.add('active');
+        chip.setAttribute('aria-pressed', 'true');
+        const filter = chip.dataset.filter;
+        cards.forEach(card => {
+          const tags = card.dataset.tags || '';
+          card.classList.toggle('filtered-out', filter !== 'all' && !tags.includes(filter));
+        });
+      });
+    });
+  })();
+
+  /* EXPAND / COLLAPSE */
+  (function() {
+    document.querySelectorAll('.expand-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const details = btn.nextElementSibling;
+        const open = details.classList.toggle('open');
+        btn.classList.toggle('open', open);
+        btn.setAttribute('aria-expanded', String(open));
+        details.setAttribute('aria-hidden', String(!open));
+        btn.querySelector('.toggle-label').textContent = open ? 'Hide Details' : 'View Details';
+      });
     });
   })();
 </script>
