@@ -1382,84 +1382,150 @@
     });
   });
 
-  // CANVAS NEURAL NETWORK
-  (function() {
+  // CANVAS NEURAL NETWORK — self-contained module
+  (function NeuralBg() {
     const canvas = document.getElementById('neural-bg');
     const ctx = canvas.getContext('2d');
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) return;
 
-    const NODE_COUNT = 42;
-    const CONNECT_DIST = 160;
-    const NODE_COLOR = 'rgba(155,63,98,';
-    const EDGE_COLOR = 'rgba(155,63,98,';
+    // Static fallback for reduced-motion: faint fixed dots only
+    if (reduced) {
+      function staticDots() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < 30; i++) {
+          ctx.beginPath();
+          ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, 1.5, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(155,63,98,0.12)';
+          ctx.fill();
+        }
+      }
+      staticDots();
+      window.addEventListener('resize', staticDots);
+      return;
+    }
+
+    const NODE_COUNT = 48;
+    const CONNECT_DIST = 170;
+    const CURSOR_ATTRACT_DIST = 120;
+    const CURSOR_FORCE = 0.012;
+    const BASE_SPEED = 0.28;
 
     let nodes = [];
-    let raf;
+    let mouse = { x: -9999, y: -9999 };
+
+    // Track mouse — throttled to avoid layout thrash
+    let lastMove = 0;
+    window.addEventListener('mousemove', e => {
+      const now = performance.now();
+      if (now - lastMove < 16) return;
+      lastMove = now;
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+    window.addEventListener('mouseleave', () => { mouse.x = -9999; mouse.y = -9999; });
 
     function resize() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     }
 
-    function init() {
-      nodes = [];
-      for (let i = 0; i < NODE_COUNT; i++) {
-        nodes.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.35,
-          vy: (Math.random() - 0.5) * 0.35,
-          r: 1.5 + Math.random() * 1.5
-        });
-      }
+    function mkNode() {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = BASE_SPEED * (0.5 + Math.random());
+      return {
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        // sine-wave wobble for organic drift
+        wobble: Math.random() * Math.PI * 2,
+        wobbleSpeed: 0.008 + Math.random() * 0.006,
+        r: 1.4 + Math.random() * 1.8,
+        // each edge gets its own opacity that fades in/out
+      };
     }
 
-    function draw() {
+    function init() {
+      nodes = Array.from({ length: NODE_COUNT }, mkNode);
+    }
+
+    function draw(t) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // edges
+      // Update positions
+      nodes.forEach(n => {
+        // organic wobble applied perpendicular to velocity
+        n.wobble += n.wobbleSpeed;
+        const perp = n.wobble;
+        n.x += n.vx + Math.cos(perp) * 0.18;
+        n.y += n.vy + Math.sin(perp) * 0.18;
+
+        // cursor soft attraction
+        const cdx = mouse.x - n.x;
+        const cdy = mouse.y - n.y;
+        const cdist = Math.sqrt(cdx * cdx + cdy * cdy);
+        if (cdist < CURSOR_ATTRACT_DIST && cdist > 1) {
+          n.vx += (cdx / cdist) * CURSOR_FORCE;
+          n.vy += (cdy / cdist) * CURSOR_FORCE;
+        }
+
+        // speed cap so cursor doesn't fling nodes
+        const spd = Math.sqrt(n.vx * n.vx + n.vy * n.vy);
+        if (spd > BASE_SPEED * 2.5) {
+          n.vx = (n.vx / spd) * BASE_SPEED * 2.5;
+          n.vy = (n.vy / spd) * BASE_SPEED * 2.5;
+        }
+
+        // soft boundary bounce
+        if (n.x < 0) { n.x = 0; n.vx = Math.abs(n.vx); }
+        if (n.x > canvas.width) { n.x = canvas.width; n.vx = -Math.abs(n.vx); }
+        if (n.y < 0) { n.y = 0; n.vy = Math.abs(n.vy); }
+        if (n.y > canvas.height) { n.y = canvas.height; n.vy = -Math.abs(n.vy); }
+      });
+
+      // Edges — alpha fades smoothly with distance (synaptic firing effect)
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const dx = nodes[i].x - nodes[j].x;
           const dy = nodes[i].y - nodes[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < CONNECT_DIST) {
-            const alpha = (1 - dist / CONNECT_DIST) * 0.12;
+          const dist2 = dx * dx + dy * dy;
+          if (dist2 < CONNECT_DIST * CONNECT_DIST) {
+            const dist = Math.sqrt(dist2);
+            // Ease the alpha: sharper drop near max range
+            const t = 1 - dist / CONNECT_DIST;
+            const alpha = t * t * 0.16;
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.strokeStyle = EDGE_COLOR + alpha + ')';
-            ctx.lineWidth = 0.8;
+            ctx.strokeStyle = `rgba(155,63,98,${alpha.toFixed(3)})`;
+            ctx.lineWidth = 0.75;
             ctx.stroke();
           }
         }
       }
 
-      // nodes
+      // Nodes
       nodes.forEach(n => {
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fillStyle = NODE_COLOR + '0.22)';
+        ctx.fillStyle = 'rgba(155,63,98,0.20)';
         ctx.fill();
       });
+
+      requestAnimationFrame(draw);
     }
 
-    function tick() {
-      nodes.forEach(n => {
-        n.x += n.vx;
-        n.y += n.vy;
-        if (n.x < 0 || n.x > canvas.width) n.vx *= -1;
-        if (n.y < 0 || n.y > canvas.height) n.vy *= -1;
-      });
-      draw();
-      raf = requestAnimationFrame(tick);
-    }
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => { resize(); init(); }, 120);
+    });
 
-    window.addEventListener('resize', () => { resize(); init(); });
     resize();
     init();
-    tick();
+    requestAnimationFrame(draw);
   })();
 
   // SCROLL FADE-UP
