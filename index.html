@@ -11,15 +11,15 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0d1117;
-      --card: #161b22;
-      --border: #21262d;
-      --text: #e6edf3;
-      --muted: #8b949e;
-      --orange: #D85A30;
-      --green: #1D9E75;
-      --purple: #534AB7;
-      --purple-light: #7c73d1;
+      --bg: #FDFAF7;
+      --card: #FFFFFF;
+      --border: #E8E2DC;
+      --text: #2A2724;
+      --muted: #7A7370;
+      --orange: #9B3F62;
+      --green: #1D7D5E;
+      --purple: #5E4BA8;
+      --purple-light: #7B6CC4;
     }
 
     html { scroll-behavior: smooth; }
@@ -38,7 +38,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(13, 17, 23, 0.85);
+      background: rgba(253, 250, 247, 0.92);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
     }
@@ -152,8 +152,8 @@
       color: var(--muted);
       max-width: 600px;
       margin-top: 20px;
-      margin-bottom: 36px;
-      line-height: 1.5;
+      margin-bottom: 10px;
+      line-height: 1.4;
     }
 
     .hero-tagline em {
@@ -170,8 +170,8 @@
     }
 
     .hero-badge {
-      background: rgba(216,90,48,0.1);
-      border: 1px solid rgba(216,90,48,0.25);
+      background: rgba(155,63,98,0.08);
+      border: 1px solid rgba(155,63,98,0.22);
       color: var(--orange);
       border-radius: 20px;
       padding: 4px 12px;
@@ -187,8 +187,8 @@
       font-size: 12px;
       font-weight: 600;
       color: var(--green);
-      background: rgba(29,158,117,0.1);
-      border: 1px solid rgba(29,158,117,0.25);
+      background: rgba(29,125,94,0.08);
+      border: 1px solid rgba(29,125,94,0.22);
       border-radius: 20px;
       padding: 3px 10px;
       margin-left: 12px;
@@ -338,7 +338,7 @@
     }
 
     .project-card:hover {
-      border-color: #30363d;
+      border-color: #D9D0CA;
       transform: translateY(-2px);
     }
 
@@ -361,7 +361,7 @@
 
     .project-desc {
       font-size: 14px;
-      color: #adbac7;
+      color: var(--muted);
       line-height: 1.65;
       margin-bottom: 20px;
     }
@@ -402,9 +402,9 @@
     }
 
     .tag {
-      background: rgba(83, 74, 183, 0.15);
-      color: var(--purple-light);
-      border: 1px solid rgba(83, 74, 183, 0.3);
+      background: rgba(94, 75, 168, 0.08);
+      color: var(--purple);
+      border: 1px solid rgba(94, 75, 168, 0.25);
       border-radius: 4px;
       padding: 2px 8px;
       font-size: 11.5px;
@@ -435,16 +435,16 @@
     .link-btn:hover {
       border-color: var(--muted);
       color: var(--text);
-      background: rgba(255,255,255,0.04);
+      background: rgba(0,0,0,0.04);
     }
 
     .link-btn.primary {
-      border-color: rgba(216,90,48,0.4);
+      border-color: rgba(155,63,98,0.35);
       color: var(--orange);
     }
 
     .link-btn.primary:hover {
-      background: rgba(216,90,48,0.08);
+      background: rgba(155,63,98,0.07);
       border-color: var(--orange);
     }
 
@@ -465,7 +465,7 @@
       left: 0;
       right: 0;
       height: 2px;
-      background: linear-gradient(90deg, var(--green), rgba(29,158,117,0.1));
+      background: linear-gradient(90deg, var(--green), rgba(29,125,94,0.08));
     }
 
     .building-title {
@@ -490,9 +490,9 @@
     }
 
     .curriculum-pill {
-      background: rgba(29, 158, 117, 0.12);
+      background: rgba(29, 125, 94, 0.08);
       color: var(--green);
-      border: 1px solid rgba(29, 158, 117, 0.25);
+      border: 1px solid rgba(29, 125, 94, 0.22);
       border-radius: 4px;
       padding: 3px 9px;
       font-size: 12px;
@@ -617,7 +617,7 @@
     }
 
     .skill-pill {
-      background: rgba(255,255,255,0.05);
+      background: rgba(0,0,0,0.04);
       border: 1px solid var(--border);
       border-radius: 4px;
       padding: 3px 8px;
@@ -774,7 +774,8 @@
   <div class="hero-eyebrow">Available for full-time roles &nbsp;·&nbsp; Durham, NC</div>
   <h1>Shrijani <span class="hero-title-muted">(Diya)</span> Manna <span class="avail-dot"><span class="avail-dot-circle"></span>Open to opportunities</span></h1>
   <p style="font-size:clamp(14px,2vw,17px);color:var(--muted);font-weight:500;margin-top:6px;letter-spacing:0.01em;">AI/ML &nbsp;·&nbsp; Responsible AI &nbsp;·&nbsp; Product &amp; GTM Strategy &nbsp;·&nbsp; Management Consulting</p>
-  <p class="hero-tagline"><em>Building AI systems that are technically rigorous and ethically accountable — grounded in fintech, product strategy, and startup experience.</em></p>
+  <p class="hero-tagline"><em>Understanding minds — both silicon and human.</em></p>
+  <p style="font-size:clamp(14px,2vw,16px);color:var(--muted);max-width:620px;margin-top:12px;margin-bottom:36px;line-height:1.7;">My work sits at the intersection of ML systems and the people they affect. I design and audit AI pipelines with the same care a behavioral scientist brings to studying decision-making: looking for where the system breaks, where it biases, and who bears the cost. Focused on responsible AI, product strategy, and GTM.</p>
   <div class="hero-badges">
     <span class="hero-badge">Fintech</span>
     <span class="hero-badge">Startups</span>
@@ -873,9 +874,9 @@
       <div class="project-subtitle">What Aggregate Accuracy Hides</div>
       <p class="project-desc">End-to-end responsible AI audit pipeline applied to a CIFAR-10 image classifier — surfacing systematic class bias, robustness failures under real-world conditions, and confidence calibration issues that aggregate accuracy metrics hide. Three audit modules: bias audit, robustness audit, and calibration audit.</p>
       <ul style="margin:10px 0 14px 16px;padding:0;list-style:disc;">
-        <li style="font-size:13.5px;color:#c9d1d9;margin-bottom:6px;line-height:1.6;"><strong style="color:var(--text);">Bias:</strong> 32.8pp accuracy gap between automobile (91.4%) and cat (58.6%) — Z=16.9, p&lt;0.001</li>
-        <li style="font-size:13.5px;color:#c9d1d9;margin-bottom:6px;line-height:1.6;"><strong style="color:var(--text);">Robustness:</strong> 15° rotation drops accuracy from 81% to 69.5% — model is not rotation-invariant</li>
-        <li style="font-size:13.5px;color:#c9d1d9;line-height:1.6;"><strong style="color:var(--text);">Calibration:</strong> 54% of predictions express &gt;90% confidence — 162 wrong predictions made with near-certain confidence</li>
+        <li style="font-size:13.5px;color:var(--muted);margin-bottom:6px;line-height:1.6;"><strong style="color:var(--text);">Bias:</strong> 32.8pp accuracy gap between automobile (91.4%) and cat (58.6%) — Z=16.9, p&lt;0.001</li>
+        <li style="font-size:13.5px;color:var(--muted);margin-bottom:6px;line-height:1.6;"><strong style="color:var(--text);">Robustness:</strong> 15° rotation drops accuracy from 81% to 69.5% — model is not rotation-invariant</li>
+        <li style="font-size:13.5px;color:var(--muted);line-height:1.6;"><strong style="color:var(--text);">Calibration:</strong> 54% of predictions express &gt;90% confidence — 162 wrong predictions made with near-certain confidence</li>
       </ul>
       <div class="stats-row">
         <div class="stat">
@@ -920,10 +921,10 @@
       <div class="project-subtitle">RAG-Powered Multi-Agent Regulatory Briefing System</div>
       <p class="project-desc">A production-grade compliance assistant that answers EU AI Act questions using a three-agent LangGraph pipeline — research, analysis, and writing agents collaborating to produce structured regulatory briefings grounded in source text. Built on 741 embedded chunks of the EU AI Act with ChromaDB semantic retrieval and Claude for synthesis. Demonstrates end-to-end LLM engineering: PDF ingestion, vector search, multi-agent orchestration, and FastAPI deployment.</p>
       <ul style="margin:10px 0 14px 16px;padding:0;list-style:disc;">
-        <li style="font-size:13.5px;color:#c9d1d9;margin-bottom:6px;line-height:1.6;"><strong style="color:var(--text);">Retrieval:</strong> Semantic search over 741 EU AI Act chunks using ChromaDB vector store</li>
-        <li style="font-size:13.5px;color:#c9d1d9;margin-bottom:6px;line-height:1.6;"><strong style="color:var(--text);">Pipeline:</strong> LangGraph multi-agent orchestration — research → analysis → writing agents in sequence</li>
-        <li style="font-size:13.5px;color:#c9d1d9;margin-bottom:6px;line-height:1.6;"><strong style="color:var(--text);">Output:</strong> Structured 3-section compliance briefing with specific article citations from source text</li>
-        <li style="font-size:13.5px;color:#c9d1d9;line-height:1.6;"><strong style="color:var(--text);">Deployment:</strong> FastAPI backend with clean web interface</li>
+        <li style="font-size:13.5px;color:var(--muted);margin-bottom:6px;line-height:1.6;"><strong style="color:var(--text);">Retrieval:</strong> Semantic search over 741 EU AI Act chunks using ChromaDB vector store</li>
+        <li style="font-size:13.5px;color:var(--muted);margin-bottom:6px;line-height:1.6;"><strong style="color:var(--text);">Pipeline:</strong> LangGraph multi-agent orchestration — research → analysis → writing agents in sequence</li>
+        <li style="font-size:13.5px;color:var(--muted);margin-bottom:6px;line-height:1.6;"><strong style="color:var(--text);">Output:</strong> Structured 3-section compliance briefing with specific article citations from source text</li>
+        <li style="font-size:13.5px;color:var(--muted);line-height:1.6;"><strong style="color:var(--text);">Deployment:</strong> FastAPI backend with clean web interface</li>
       </ul>
       <div class="stats-row">
         <div class="stat">
