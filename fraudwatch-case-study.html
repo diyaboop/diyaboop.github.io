@@ -8,9 +8,15 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #0d1117; --card: #161b22; --border: #21262d;
-      --text: #e6edf3; --muted: #8b949e;
-      --orange: #D85A30; --green: #1D9E75; --purple: #534AB7; --purple-light: #7c73d1;
+      --bg: #FDFAF7;
+      --card: #FFFFFF;
+      --border: #E8E2DC;
+      --text: #2A2724;
+      --muted: #7A7370;
+      --orange: #9B3F62;
+      --green: #1D7D5E;
+      --purple: #5E4BA8;
+      --purple-light: #7B6CC4;
     }
     body {
       background: var(--bg); color: var(--text);
@@ -21,7 +27,7 @@
     }
     @media print {
       body { background: #fff; color: #111; max-width: 100%; padding: 20px 32px; }
-      :root { --bg:#fff; --card:#f6f8fa; --border:#e1e4e8; --text:#111; --muted:#555; }
+      :root { --bg:#FDFAF7; --card:#FFFFFF; --border:#E8E2DC; --text:#2A2724; --muted:#7A7370; }
       .no-print { display: none; }
       section { page-break-inside: avoid; }
     }
@@ -39,14 +45,14 @@
     .meta-label { font-size: 10.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 2px; }
     .meta-value { font-size: 13.5px; font-weight: 600; color: var(--text); }
     .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 48px; }
-    .tag { background: rgba(83,74,183,0.15); color: var(--purple-light); border: 1px solid rgba(83,74,183,0.3); border-radius: 4px; padding: 3px 9px; font-size: 11.5px; font-weight: 500; }
+    .tag { background: rgba(94,75,168,0.08); color: var(--purple); border: 1px solid rgba(94,75,168,0.25); border-radius: 20px; padding: 2px 9px; font-size: 11.5px; font-weight: 500; display: inline-block; }
     section { margin-bottom: 52px; }
     h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
     h3 { font-size: 13px; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; margin-top: 24px; }
-    p { color: #adbac7; margin-bottom: 14px; }
+    p { color: var(--muted); margin-bottom: 14px; }
     p:last-child { margin-bottom: 0; }
     strong { color: var(--text); font-weight: 600; }
-    ul { padding-left: 18px; color: #adbac7; margin-bottom: 14px; }
+    ul { padding-left: 18px; color: var(--muted); margin-bottom: 14px; }
     ul li { margin-bottom: 6px; }
     ul li::marker { color: var(--orange); }
 
@@ -56,8 +62,8 @@
     .stat-label { font-size: 10.5px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
 
     .bias-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 13px; }
-    .bias-table th { background: rgba(216,90,48,0.1); color: var(--orange); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
-    .bias-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: #adbac7; }
+    .bias-table th { background: rgba(155,63,98,0.1); color: var(--orange); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+    .bias-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--muted); }
     .bias-table tr:last-child td { border-bottom: none; }
     .bias-table .flag { color: var(--orange); font-weight: 700; }
     .bias-table .seg { color: var(--text); font-weight: 600; }
@@ -75,8 +81,8 @@
     .arch-name { font-size: 11px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
     .arch-file { font-size: 10px; color: var(--muted); }
 
-    .insight-box { background: rgba(216,90,48,0.06); border: 1px solid rgba(216,90,48,0.2); border-left: 3px solid var(--orange); border-radius: 8px; padding: 16px 20px; margin: 20px 0; color: #adbac7; font-size: 13.5px; line-height: 1.6; }
-    .green-box { background: rgba(29,158,117,0.06); border: 1px solid rgba(29,158,117,0.2); border-left: 3px solid var(--green); border-radius: 8px; padding: 16px 20px; margin: 20px 0; color: #adbac7; font-size: 13.5px; line-height: 1.6; }
+    .insight-box { background: rgba(155,63,98,0.06); border: 1px solid rgba(155,63,98,0.2); border-left: 3px solid var(--orange); border-radius: 8px; padding: 16px 20px; margin: 20px 0; color: var(--muted); font-size: 13.5px; line-height: 1.6; }
+    .green-box { background: rgba(29,125,94,0.06); border: 1px solid rgba(29,125,94,0.2); border-left: 3px solid var(--green); border-radius: 8px; padding: 16px 20px; margin: 20px 0; color: var(--muted); font-size: 13.5px; line-height: 1.6; }
 
     .prd-link-bar { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin: 28px 0; }
     .prd-link-bar a { display: inline-flex; align-items: center; gap: 6px; color: var(--orange); text-decoration: none; font-size: 13.5px; font-weight: 600; }
@@ -95,8 +101,15 @@
   </style>
 </head>
 <body>
+  <nav style="position:sticky;top:0;z-index:100;background:rgba(253,250,247,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);margin-bottom:0;">
+    <div style="max-width:860px;margin:0 auto;padding:0 24px;display:flex;align-items:center;height:52px;gap:8px;">
+      <a href="index.html" style="display:inline-flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;transition:color 0.15s;" onmouseover="this.style.color='var(--orange)'" onmouseout="this.style.color='var(--muted)'">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back to Portfolio
+      </a>
+    </div>
+  </nav>
 
-  <a href="index.html#fraudwatch" class="back-link no-print">← Back to portfolio</a>
 
   <div class="eyebrow">Case Study · Responsible AI · ML Engineering</div>
   <h1>FraudWatch</h1>
@@ -128,6 +141,7 @@
   <div class="tags">
     <span class="tag">Python</span><span class="tag">Scikit-learn</span><span class="tag">Pandas</span>
     <span class="tag">SciPy</span><span class="tag">FastAPI</span><span class="tag">SQLite</span>
+    <span class="tag">SHAP</span><span class="tag">LIME</span>
     <span class="tag">Docker</span><span class="tag">Responsible AI</span><span class="tag">Bias Auditing</span><span class="tag">Model Monitoring</span>
   </div>
 
@@ -151,7 +165,7 @@
   <!-- SOLUTION -->
   <section>
     <h2>Solution</h2>
-    <p>FraudWatch is an end-to-end ML pipeline that trains a fraud classifier, audits it for demographic bias using z-tests for statistical significance, and monitors performance drift weekly — all queryable through a live FastAPI layer and stored in SQLite for full audit traceability.</p>
+    <p>FraudWatch is an end-to-end ML pipeline that trains a fraud classifier, audits it for demographic bias using z-tests for statistical significance, monitors performance drift weekly, scores individual transactions in real time, and explains each prediction using LIME — all queryable through a live FastAPI layer and stored in SQLite for full audit traceability.</p>
 
     <div class="stats-grid">
       <div class="stat-card">
@@ -190,6 +204,11 @@
         <div class="arch-file">monitor.py</div>
       </div>
       <div class="arch-card">
+        <div class="arch-icon">🧠</div>
+        <div class="arch-name">Explainability</div>
+        <div class="arch-file">explainability.py · SHAP · LIME</div>
+      </div>
+      <div class="arch-card">
         <div class="arch-icon">⚡</div>
         <div class="arch-name">API Layer</div>
         <div class="arch-file">api.py · FastAPI</div>
@@ -201,7 +220,7 @@
       </div>
     </div>
 
-    <p>Raw transaction CSVs merge on TransactionID → threshold filter → 30-feature selection → categorical encoding → 80/20 stratified split → Random Forest training → segment-level FPR calculation → z-test → SQLite storage → visualization → report generation. Full pipeline reproducible with one command.</p>
+    <p>Raw transaction CSVs merge on TransactionID → threshold filter → 30-feature selection → categorical encoding → 80/20 stratified split → Random Forest training → segment-level FPR calculation → z-test → SQLite storage → SHAP/LIME explainability → visualization → report generation. Full pipeline reproducible with one command.</p>
   </section>
 
   <!-- BIAS AUDIT FINDINGS -->
@@ -259,6 +278,21 @@
     <div class="insight-box">
       <strong>Credit card users are 65% more likely to be wrongly blocked than debit card users</strong> (Z=66.6, p&lt;0.001). This isn't a rounding error — it's a statistically robust finding that represents a regulatory liability under ECOA and a direct source of customer harm. 45,375 false positives in a single test window, each representing a wrongly blocked transaction.
     </div>
+  </section>
+
+  <!-- EXPLAINABILITY -->
+  <section>
+    <h2>Explainability: SHAP & LIME</h2>
+    <p>Bias findings become actionable when you can explain <em>why</em> the model makes a specific decision — not just that a disparity exists. FraudWatch ships two complementary explainability layers: global feature importance via SHAP and per-prediction explanations via LIME.</p>
+
+    <h3>SHAP — Global Feature Importance</h3>
+    <p>SHAP (SHapley Additive exPlanations) computes each feature's contribution to the model's output across 1,000 sampled transactions. The beeswarm summary plot surfaces which signals drive fraud predictions globally.</p>
+    <div class="insight-box">
+      <strong>Time-delta features (D1–D3) are the strongest fraud signals globally</strong> — unusually short or missing time gaps between transactions strongly predict fraud. <strong>card6 (card type) ranks as the 5th most important feature globally</strong> per SHAP, directly corroborating the bias audit finding that card type drives disproportionate false positive rates. The global model and the fairness audit tell the same story.
+    </div>
+
+    <h3>LIME — Per-Prediction Explanations</h3>
+    <p>LIME (Local Interpretable Model-agnostic Explanations) explains individual transactions — showing which features pushed the model toward or away from a fraud prediction for that specific case. Accessible via the <code style="color:var(--purple-light);background:rgba(94,75,168,0.1);padding:1px 5px;border-radius:3px;">/explain</code> endpoint, it gives risk analysts and compliance teams a human-readable rationale for any score the model produces.</p>
   </section>
 
   <!-- REGULATORY CONTEXT -->

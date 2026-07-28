@@ -8,9 +8,15 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #0d1117; --card: #161b22; --border: #21262d;
-      --text: #e6edf3; --muted: #8b949e;
-      --orange: #D85A30; --green: #1D9E75; --purple: #534AB7; --purple-light: #7c73d1;
+      --bg: #FDFAF7;
+      --card: #FFFFFF;
+      --border: #E8E2DC;
+      --text: #2A2724;
+      --muted: #7A7370;
+      --orange: #9B3F62;
+      --green: #1D7D5E;
+      --purple: #5E4BA8;
+      --purple-light: #7B6CC4;
     }
     body {
       background: var(--bg); color: var(--text);
@@ -21,7 +27,7 @@
     }
     @media print {
       body { background: #fff; color: #111; max-width: 100%; padding: 20px 32px; }
-      :root { --bg:#fff; --card:#f6f8fa; --border:#e1e4e8; --text:#111; --muted:#555; }
+      :root { --bg:#FDFAF7; --card:#FFFFFF; --border:#E8E2DC; --text:#2A2724; --muted:#7A7370; }
       .no-print { display: none; }
       section { page-break-inside: avoid; }
     }
@@ -47,20 +53,20 @@
     h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
     h3 { font-size: 13.5px; font-weight: 700; color: var(--text); margin-bottom: 8px; margin-top: 20px; }
     h4 { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; margin-top: 16px; }
-    p { color: #adbac7; margin-bottom: 12px; }
+    p { color: var(--muted); margin-bottom: 12px; }
     p:last-child { margin-bottom: 0; }
     strong { color: var(--text); font-weight: 600; }
-    ul { padding-left: 18px; color: #adbac7; margin-bottom: 12px; }
+    ul { padding-left: 18px; color: var(--muted); margin-bottom: 12px; }
     ul li { margin-bottom: 5px; }
     ul li::marker { color: var(--orange); }
 
     .goals-table, .req-table, .risk-table, .api-table, .ac-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 12.5px; }
     .goals-table th, .req-table th, .risk-table th, .api-table th, .ac-table th {
-      background: rgba(216,90,48,0.08); color: var(--orange); font-size: 10.5px; font-weight: 700;
+      background: rgba(155,63,98,0.08); color: var(--orange); font-size: 10.5px; font-weight: 700;
       text-transform: uppercase; letter-spacing: 0.05em; padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--border);
     }
     .goals-table td, .req-table td, .risk-table td, .api-table td, .ac-table td {
-      padding: 9px 12px; border-bottom: 1px solid var(--border); color: #adbac7; vertical-align: top;
+      padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--muted); vertical-align: top;
     }
     .goals-table tr:last-child td, .req-table tr:last-child td, .risk-table tr:last-child td,
     .api-table tr:last-child td, .ac-table tr:last-child td { border-bottom: none; }
@@ -79,19 +85,19 @@
     .persona-desc { font-size: 12px; color: var(--muted); line-height: 1.55; }
 
     .arch-row { display: grid; grid-template-columns: 140px 140px 1fr 1fr; gap: 1px; background: var(--border); border-radius: 8px; overflow: hidden; margin: 4px 0; font-size: 12px; }
-    .arch-row > div { background: var(--card); padding: 10px 12px; color: #adbac7; }
+    .arch-row > div { background: var(--card); padding: 10px 12px; color: var(--muted); }
     .arch-row > div:first-child { color: var(--text); font-weight: 600; }
     .arch-row > div:nth-child(2) { color: var(--purple-light); font-size: 11.5px; font-family: monospace; }
-    .arch-header > div { background: rgba(216,90,48,0.08) !important; color: var(--orange) !important; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .arch-header > div { background: rgba(155,63,98,0.08) !important; color: var(--orange) !important; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
 
     .epic-block { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; margin: 12px 0; }
     .epic-label { font-size: 10.5px; font-weight: 700; color: var(--purple-light); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
     .epic-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
-    .story-list { list-style: none; padding: 0; margin: 0; color: #adbac7; font-size: 12.5px; }
+    .story-list { list-style: none; padding: 0; margin: 0; color: var(--muted); font-size: 12.5px; }
     .story-list li { margin-bottom: 8px; padding-left: 14px; position: relative; line-height: 1.55; }
     .story-list li::before { content: '↳'; position: absolute; left: 0; color: var(--orange); font-size: 10px; top: 1px; }
 
-    .insight-box { background: rgba(216,90,48,0.06); border: 1px solid rgba(216,90,48,0.2); border-left: 3px solid var(--orange); border-radius: 8px; padding: 14px 18px; margin: 16px 0; color: #adbac7; font-size: 13px; line-height: 1.6; }
+    .insight-box { background: rgba(155,63,98,0.06); border: 1px solid rgba(155,63,98,0.2); border-left: 3px solid var(--orange); border-radius: 8px; padding: 14px 18px; margin: 16px 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
 
     .scope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
     .scope-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
@@ -112,8 +118,15 @@
   </style>
 </head>
 <body>
+  <nav style="position:sticky;top:0;z-index:100;background:rgba(253,250,247,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);margin-bottom:0;">
+    <div style="max-width:860px;margin:0 auto;padding:0 24px;display:flex;align-items:center;height:52px;gap:8px;">
+      <a href="index.html" style="display:inline-flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;transition:color 0.15s;" onmouseover="this.style.color='var(--orange)'" onmouseout="this.style.color='var(--muted)'">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back to Portfolio
+      </a>
+    </div>
+  </nav>
 
-  <a href="index.html#projects" class="back-link no-print">← Back to portfolio</a>
 
   <div class="breadcrumb no-print">
     <a href="index.html#projects">Portfolio</a>
@@ -429,7 +442,7 @@
     <div class="scope-grid">
       <div class="scope-card">
         <div class="scope-label in-scope">✓ In Scope</div>
-        <ul style="color:#adbac7;font-size:13px;padding-left:16px;">
+        <ul style="color:var(--muted);font-size:13px;padding-left:16px;">
           <li>CNN training on CIFAR-10</li>
           <li>Per-class accuracy bias audit with Z-test</li>
           <li>Three-perturbation robustness audit</li>

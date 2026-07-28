@@ -8,9 +8,15 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #0d1117; --card: #161b22; --border: #21262d;
-      --text: #e6edf3; --muted: #8b949e;
-      --orange: #D85A30; --green: #1D9E75; --purple: #534AB7; --purple-light: #7c73d1;
+      --bg: #FDFAF7;
+      --card: #FFFFFF;
+      --border: #E8E2DC;
+      --text: #2A2724;
+      --muted: #7A7370;
+      --orange: #9B3F62;
+      --green: #1D7D5E;
+      --purple: #5E4BA8;
+      --purple-light: #7B6CC4;
     }
     body {
       background: var(--bg); color: var(--text);
@@ -21,7 +27,7 @@
     }
     @media print {
       body { background: #fff; color: #111; max-width: 100%; padding: 20px 32px; }
-      :root { --bg:#fff; --card:#f6f8fa; --border:#e1e4e8; --text:#111; --muted:#555; }
+      :root { --bg:#FDFAF7; --card:#FFFFFF; --border:#E8E2DC; --text:#2A2724; --muted:#7A7370; }
       .no-print { display: none; }
       section { page-break-inside: avoid; }
     }
@@ -35,14 +41,14 @@
     .meta-label { font-size: 10.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 2px; }
     .meta-value { font-size: 13.5px; font-weight: 600; color: var(--text); }
     .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 48px; }
-    .tag { background: rgba(83,74,183,0.15); color: var(--purple-light); border: 1px solid rgba(83,74,183,0.3); border-radius: 4px; padding: 3px 9px; font-size: 11.5px; font-weight: 500; }
+    .tag { background: rgba(94,75,168,0.08); color: var(--purple); border: 1px solid rgba(94,75,168,0.25); border-radius: 20px; padding: 2px 9px; font-size: 11.5px; font-weight: 500; display: inline-block; }
     section { margin-bottom: 52px; }
     h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
     h3 { font-size: 13px; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; margin-top: 24px; }
-    p { color: #adbac7; margin-bottom: 14px; }
+    p { color: var(--muted); margin-bottom: 14px; }
     p:last-child { margin-bottom: 0; }
     strong { color: var(--text); font-weight: 600; }
-    ul { padding-left: 18px; color: #adbac7; margin-bottom: 14px; }
+    ul { padding-left: 18px; color: var(--muted); margin-bottom: 14px; }
     ul li { margin-bottom: 6px; }
     ul li::marker { color: var(--orange); }
 
@@ -52,8 +58,8 @@
     .stat-label { font-size: 10.5px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
 
     .findings-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 13px; }
-    .findings-table th { background: rgba(216,90,48,0.1); color: var(--orange); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
-    .findings-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: #adbac7; }
+    .findings-table th { background: rgba(155,63,98,0.1); color: var(--orange); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+    .findings-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--muted); }
     .findings-table tr:last-child td { border-bottom: none; }
     .flag { color: var(--orange); font-weight: 700; }
     .seg { color: var(--text); font-weight: 600; }
@@ -66,11 +72,11 @@
     .arch-icon { font-size: 22px; margin-bottom: 6px; }
     .arch-name { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
     .arch-file { font-size: 11px; color: var(--muted); }
-    .arch-desc { font-size: 11px; color: #adbac7; margin-top: 6px; line-height: 1.5; }
+    .arch-desc { font-size: 11px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
 
-    .insight-box { background: rgba(216,90,48,0.06); border: 1px solid rgba(216,90,48,0.2); border-left: 3px solid var(--orange); border-radius: 8px; padding: 16px 20px; margin: 20px 0; color: #adbac7; font-size: 13.5px; line-height: 1.6; }
-    .green-box { background: rgba(29,158,117,0.06); border: 1px solid rgba(29,158,117,0.2); border-left: 3px solid var(--green); border-radius: 8px; padding: 16px 20px; margin: 20px 0; color: #adbac7; font-size: 13.5px; line-height: 1.6; }
-    .purple-box { background: rgba(83,74,183,0.06); border: 1px solid rgba(83,74,183,0.2); border-left: 3px solid var(--purple-light); border-radius: 8px; padding: 16px 20px; margin: 20px 0; color: #adbac7; font-size: 13.5px; line-height: 1.6; }
+    .insight-box { background: rgba(155,63,98,0.06); border: 1px solid rgba(155,63,98,0.2); border-left: 3px solid var(--orange); border-radius: 8px; padding: 16px 20px; margin: 20px 0; color: var(--muted); font-size: 13.5px; line-height: 1.6; }
+    .green-box { background: rgba(29,125,94,0.06); border: 1px solid rgba(29,125,94,0.2); border-left: 3px solid var(--green); border-radius: 8px; padding: 16px 20px; margin: 20px 0; color: var(--muted); font-size: 13.5px; line-height: 1.6; }
+    .purple-box { background: rgba(94,75,168,0.06); border: 1px solid rgba(94,75,168,0.2); border-left: 3px solid var(--purple-light); border-radius: 8px; padding: 16px 20px; margin: 20px 0; color: var(--muted); font-size: 13.5px; line-height: 1.6; }
 
     .module-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 20px 0; }
     .module-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
@@ -98,8 +104,15 @@
   </style>
 </head>
 <body>
+  <nav style="position:sticky;top:0;z-index:100;background:rgba(253,250,247,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);margin-bottom:0;">
+    <div style="max-width:860px;margin:0 auto;padding:0 24px;display:flex;align-items:center;height:52px;gap:8px;">
+      <a href="index.html" style="display:inline-flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;transition:color 0.15s;" onmouseover="this.style.color='var(--orange)'" onmouseout="this.style.color='var(--muted)'">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back to Portfolio
+      </a>
+    </div>
+  </nav>
 
-  <a href="index.html#projects" class="back-link no-print">← Back to portfolio</a>
 
   <div class="eyebrow">Case Study · Responsible AI · Computer Vision</div>
   <h1>CIFAR-10 Robustness &amp; Fairness Audit</h1>

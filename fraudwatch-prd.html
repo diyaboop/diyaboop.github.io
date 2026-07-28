@@ -8,9 +8,15 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #0d1117; --card: #161b22; --border: #21262d;
-      --text: #e6edf3; --muted: #8b949e;
-      --orange: #D85A30; --green: #1D9E75; --purple: #534AB7; --purple-light: #7c73d1;
+      --bg: #FDFAF7;
+      --card: #FFFFFF;
+      --border: #E8E2DC;
+      --text: #2A2724;
+      --muted: #7A7370;
+      --orange: #9B3F62;
+      --green: #1D7D5E;
+      --purple: #5E4BA8;
+      --purple-light: #7B6CC4;
     }
     body {
       background: var(--bg); color: var(--text);
@@ -21,7 +27,7 @@
     }
     @media print {
       body { background: #fff; color: #111; max-width: 100%; padding: 20px 32px; }
-      :root { --bg:#fff; --card:#f6f8fa; --border:#e1e4e8; --text:#111; --muted:#555; }
+      :root { --bg:#FDFAF7; --card:#FFFFFF; --border:#E8E2DC; --text:#2A2724; --muted:#7A7370; }
       .no-print { display: none; }
       section { page-break-inside: avoid; }
     }
@@ -47,20 +53,20 @@
     h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
     h3 { font-size: 13.5px; font-weight: 700; color: var(--text); margin-bottom: 8px; margin-top: 20px; }
     h4 { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; margin-top: 16px; }
-    p { color: #adbac7; margin-bottom: 12px; }
+    p { color: var(--muted); margin-bottom: 12px; }
     p:last-child { margin-bottom: 0; }
     strong { color: var(--text); font-weight: 600; }
-    ul { padding-left: 18px; color: #adbac7; margin-bottom: 12px; }
+    ul { padding-left: 18px; color: var(--muted); margin-bottom: 12px; }
     ul li { margin-bottom: 5px; }
     ul li::marker { color: var(--orange); }
 
     .goals-table, .req-table, .risk-table, .reg-table, .api-table, .ac-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 12.5px; }
     .goals-table th, .req-table th, .risk-table th, .reg-table th, .api-table th, .ac-table th {
-      background: rgba(216,90,48,0.08); color: var(--orange); font-size: 10.5px; font-weight: 700;
+      background: rgba(155,63,98,0.08); color: var(--orange); font-size: 10.5px; font-weight: 700;
       text-transform: uppercase; letter-spacing: 0.05em; padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--border);
     }
     .goals-table td, .req-table td, .risk-table td, .reg-table td, .api-table td, .ac-table td {
-      padding: 9px 12px; border-bottom: 1px solid var(--border); color: #adbac7; vertical-align: top;
+      padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--muted); vertical-align: top;
     }
     .goals-table tr:last-child td, .req-table tr:last-child td, .risk-table tr:last-child td,
     .reg-table tr:last-child td, .api-table tr:last-child td, .ac-table tr:last-child td { border-bottom: none; }
@@ -79,26 +85,26 @@
     .persona-desc { font-size: 12px; color: var(--muted); line-height: 1.55; }
 
     .arch-row { display: grid; grid-template-columns: 140px 140px 1fr 1fr; gap: 1px; background: var(--border); border-radius: 8px; overflow: hidden; margin: 4px 0; font-size: 12px; }
-    .arch-row > div { background: var(--card); padding: 10px 12px; color: #adbac7; }
+    .arch-row > div { background: var(--card); padding: 10px 12px; color: var(--muted); }
     .arch-row > div:first-child { color: var(--text); font-weight: 600; }
     .arch-row > div:nth-child(2) { color: var(--purple-light); font-size: 11.5px; font-family: monospace; }
-    .arch-header > div { background: rgba(216,90,48,0.08) !important; color: var(--orange) !important; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .arch-header > div { background: rgba(155,63,98,0.08) !important; color: var(--orange) !important; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
 
     .epic-block { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; margin: 12px 0; }
     .epic-label { font-size: 10.5px; font-weight: 700; color: var(--purple-light); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
     .epic-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
-    .story-list { list-style: none; padding: 0; margin: 0; color: #adbac7; font-size: 12.5px; }
+    .story-list { list-style: none; padding: 0; margin: 0; color: var(--muted); font-size: 12.5px; }
     .story-list li { margin-bottom: 8px; padding-left: 14px; position: relative; line-height: 1.55; }
     .story-list li::before { content: '↳'; position: absolute; left: 0; color: var(--orange); font-size: 10px; top: 1px; }
 
-    .insight-box { background: rgba(216,90,48,0.06); border: 1px solid rgba(216,90,48,0.2); border-left: 3px solid var(--orange); border-radius: 8px; padding: 14px 18px; margin: 16px 0; color: #adbac7; font-size: 13px; line-height: 1.6; }
+    .insight-box { background: rgba(155,63,98,0.06); border: 1px solid rgba(155,63,98,0.2); border-left: 3px solid var(--orange); border-radius: 8px; padding: 14px 18px; margin: 16px 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
 
     .scope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
     .scope-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
     .scope-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
     .in-scope { color: var(--green); }
     .out-scope { color: var(--muted); }
-    .scope-list { list-style: none; padding: 0; font-size: 12.5px; color: #adbac7; }
+    .scope-list { list-style: none; padding: 0; font-size: 12.5px; color: var(--muted); }
     .scope-list li { margin-bottom: 5px; padding-left: 14px; position: relative; }
     .scope-list li::before { content: '✓'; position: absolute; left: 0; font-size: 11px; }
     .scope-list.out li::before { content: '✗'; color: var(--muted); }
@@ -120,8 +126,15 @@
   </style>
 </head>
 <body>
+  <nav style="position:sticky;top:0;z-index:100;background:rgba(253,250,247,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);margin-bottom:0;">
+    <div style="max-width:860px;margin:0 auto;padding:0 24px;display:flex;align-items:center;height:52px;gap:8px;">
+      <a href="index.html" style="display:inline-flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;transition:color 0.15s;" onmouseover="this.style.color='var(--orange)'" onmouseout="this.style.color='var(--muted)'">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back to Portfolio
+      </a>
+    </div>
+  </nav>
 
-  <a href="index.html#fraudwatch" class="back-link no-print">← Back to portfolio</a>
 
   <div class="breadcrumb no-print">
     <a href="index.html#fraudwatch">Portfolio</a>
@@ -257,8 +270,10 @@
         <tr><td>FR-10</td><td><span class="should">SHOULD</span></td><td>Expose audit results via REST API endpoints</td></tr>
         <tr><td>FR-11</td><td><span class="should">SHOULD</span></td><td>Containerize full pipeline with Docker</td></tr>
         <tr><td>FR-12</td><td><span class="could">COULD</span></td><td>Interactive dashboard for real-time monitoring</td></tr>
-        <tr><td>FR-13</td><td><span class="wont">WON'T</span></td><td>Real-time transaction scoring in this version</td></tr>
-        <tr><td>FR-14</td><td><span class="wont">WON'T</span></td><td>Multi-model comparison in this version</td></tr>
+        <tr><td>FR-13</td><td><span class="must">MUST</span></td><td>Score individual transactions in real time via REST API and return fraud probability with risk level</td></tr>
+        <tr><td>FR-14</td><td><span class="must">MUST</span></td><td>Generate per-prediction LIME explanation showing which features drove the decision for a specific transaction</td></tr>
+        <tr><td>FR-15</td><td><span class="must">MUST</span></td><td>Generate global SHAP feature importance summary across sampled transactions</td></tr>
+        <tr><td>FR-16</td><td><span class="wont">WON'T</span></td><td>Multi-model comparison in this version</td></tr>
       </tbody>
     </table>
   </section>
@@ -269,7 +284,7 @@
     <h2>Non-Functional Requirements</h2>
     <ul>
       <li><strong>Performance</strong> — Full pipeline (train + audit + monitor) completes in under 15 minutes on standard hardware</li>
-      <li><strong>Reproducibility</strong> — All results reproducible with fixed <code style="color:var(--purple-light);background:rgba(83,74,183,0.1);padding:1px 5px;border-radius:3px;">random_state=42</code> — same input always produces same output</li>
+      <li><strong>Reproducibility</strong> — All results reproducible with fixed <code style="color:var(--purple-light);background:rgba(94,75,168,0.1);padding:1px 5px;border-radius:3px;">random_state=42</code> — same input always produces same output</li>
       <li><strong>Auditability</strong> — All audit results stored with timestamps in SQLite — full history retained indefinitely</li>
       <li><strong>Portability</strong> — Entire pipeline containerized with Docker — runs identically on any machine</li>
       <li><strong>Configurability</strong> — Alert thresholds (recall floor, FPR ceiling, disparity multiplier) configurable via CLI args</li>
@@ -289,8 +304,9 @@
       <div class="arch-row"><div>Training</div><div>train.py</div><div>Load, merge, clean, encode, train RF, evaluate</div><div>fraud_model.pkl · features.pkl</div></div>
       <div class="arch-row"><div>Bias Audit</div><div>audit.py</div><div>Load model, calculate segment FPR, z-test, visualize</div><div>audit_results.csv · disparity_chart.png</div></div>
       <div class="arch-row"><div>Drift Monitor</div><div>monitor.py</div><div>Weekly batch metrics, alert thresholds, drift detection</div><div>weekly_metrics in SQLite · drift_chart.png</div></div>
-      <div class="arch-row"><div>API Layer</div><div>api.py</div><div>FastAPI endpoints: /metrics /audit /monitor /predict</div><div>JSON responses</div></div>
-      <div class="arch-row"><div>Dashboard</div><div>dashboard/</div><div>React frontend consuming API endpoints</div><div>Interactive UI</div></div>
+      <div class="arch-row"><div>Explainability</div><div>explainability.py</div><div>SHAP TreeExplainer (global importance) + LIME (per-prediction)</div><div>shap_summary.png · shap_waterfall.png · lime_explanation.png</div></div>
+      <div class="arch-row"><div>API Layer</div><div>api.py</div><div>FastAPI endpoints: /metrics /audit /monitor /predict /explain /shap-summary /shap-waterfall</div><div>JSON responses</div></div>
+      <div class="arch-row"><div>Dashboard</div><div>static/index.html</div><div>Chart.js frontend served by FastAPI — live at fraud-watch.onrender.com</div><div>Interactive UI</div></div>
       <div class="arch-row"><div>Database</div><div>fraudwatch.db</div><div>SQLite — audit_results, weekly_metrics, bias_summary</div><div>Query-ready audit trail</div></div>
     </div>
 
@@ -306,7 +322,10 @@
         <tr><td><code style="color:var(--purple-light)">/metrics</code></td><td>GET</td><td>Overall model performance — precision, recall, FPR</td><td>JSON</td></tr>
         <tr><td><code style="color:var(--purple-light)">/audit</code></td><td>GET</td><td>Bias audit results by segment</td><td>JSON + PNG</td></tr>
         <tr><td><code style="color:var(--purple-light)">/monitor</code></td><td>GET</td><td>Weekly performance metrics and drift alerts</td><td>JSON + PNG</td></tr>
-        <tr><td><code style="color:var(--purple-light)">/predict</code></td><td>POST</td><td>Score a single transaction for fraud probability</td><td>JSON {fraud_proba, prediction}</td></tr>
+        <tr><td><code style="color:var(--purple-light)">/predict</code></td><td>POST</td><td>Score a single transaction for fraud probability</td><td>JSON {fraud_proba, prediction, risk_level}</td></tr>
+        <tr><td><code style="color:var(--purple-light)">/explain</code></td><td>POST</td><td>LIME explanation for a single transaction — feature-level drivers of the prediction</td><td>JSON + PNG</td></tr>
+        <tr><td><code style="color:var(--purple-light)">/shap-summary</code></td><td>GET</td><td>SHAP beeswarm summary — global feature importance across 1,000 transactions</td><td>PNG (base64)</td></tr>
+        <tr><td><code style="color:var(--purple-light)">/shap-waterfall</code></td><td>GET</td><td>SHAP waterfall plot for a representative transaction</td><td>PNG (base64)</td></tr>
         <tr><td><code style="color:var(--purple-light)">/health</code></td><td>GET</td><td>API health check</td><td>JSON {status: ok}</td></tr>
       </tbody>
     </table>
@@ -367,13 +386,15 @@
           <li>SQLite audit trail with full history</li>
           <li>CSV and PNG compliance exports</li>
           <li>FastAPI layer for query access</li>
+          <li>Real-time transaction scoring with risk level</li>
+          <li>LIME per-prediction explainability</li>
+          <li>SHAP global feature importance</li>
           <li>Docker containerization</li>
         </ul>
       </div>
       <div class="scope-card">
         <div class="scope-label out-scope">Out of Scope (v1)</div>
         <ul class="scope-list out">
-          <li>Real-time transaction scoring</li>
           <li>Multi-model comparison</li>
           <li>Automated retraining on drift detection</li>
           <li>Protected class analysis (race, gender, age)</li>

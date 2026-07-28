@@ -9,15 +9,15 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0d1117;
-      --card: #161b22;
-      --border: #21262d;
-      --text: #e6edf3;
-      --muted: #8b949e;
-      --orange: #D85A30;
-      --green: #1D9E75;
-      --purple: #534AB7;
-      --purple-light: #7c73d1;
+      --bg: #FDFAF7;
+      --card: #FFFFFF;
+      --border: #E8E2DC;
+      --text: #2A2724;
+      --muted: #7A7370;
+      --orange: #9B3F62;
+      --green: #1D7D5E;
+      --purple: #5E4BA8;
+      --purple-light: #7B6CC4;
     }
 
     body {
@@ -34,7 +34,7 @@
 
     @media print {
       body { background: #fff; color: #111; max-width: 100%; padding: 0; }
-      :root { --bg: #fff; --card: #f6f8fa; --border: #e1e4e8; --text: #111; --muted: #555; }
+      :root { --bg: #FDFAF7; --card: #FFFFFF; --border: #E8E2DC; --text: #2A2724; --muted: #7A7370; }
       .no-print { display: none; }
       section { page-break-inside: avoid; }
     }
@@ -98,15 +98,7 @@
     .meta-value { font-size: 13.5px; font-weight: 600; color: var(--text); }
 
     .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 48px; }
-    .tag {
-      background: rgba(83,74,183,0.15);
-      color: var(--purple-light);
-      border: 1px solid rgba(83,74,183,0.3);
-      border-radius: 4px;
-      padding: 3px 9px;
-      font-size: 11.5px;
-      font-weight: 500;
-    }
+    .tag { background: rgba(94,75,168,0.08); color: var(--purple); border: 1px solid rgba(94,75,168,0.25); border-radius: 20px; padding: 2px 9px; font-size: 11.5px; font-weight: 500; display: inline-block; }
 
     section { margin-bottom: 52px; }
 
@@ -129,11 +121,11 @@
       margin-top: 20px;
     }
 
-    p { color: #adbac7; margin-bottom: 14px; }
+    p { color: var(--muted); margin-bottom: 14px; }
     p:last-child { margin-bottom: 0; }
     strong { color: var(--text); font-weight: 600; }
 
-    ul { padding-left: 18px; color: #adbac7; margin-bottom: 14px; }
+    ul { padding-left: 18px; color: var(--muted); margin-bottom: 14px; }
     ul li { margin-bottom: 6px; }
     ul li::marker { color: var(--orange); }
 
@@ -192,9 +184,9 @@
 
     .solution-tag {
       display: inline-block;
-      background: rgba(29,158,117,0.1);
+      background: rgba(29,125,94,0.1);
       color: var(--green);
-      border: 1px solid rgba(29,158,117,0.25);
+      border: 1px solid rgba(29,125,94,0.25);
       border-radius: 4px;
       padding: 2px 8px;
       font-size: 11px;
@@ -209,13 +201,13 @@
     }
 
     .insight-box {
-      background: rgba(216,90,48,0.06);
-      border: 1px solid rgba(216,90,48,0.2);
+      background: rgba(155,63,98,0.06);
+      border: 1px solid rgba(155,63,98,0.2);
       border-left: 3px solid var(--orange);
       border-radius: 8px;
       padding: 16px 20px;
       margin: 20px 0;
-      color: #adbac7;
+      color: var(--muted);
       font-size: 13.5px;
       line-height: 1.6;
     }
@@ -309,10 +301,15 @@
   </style>
 </head>
 <body>
+  <nav style="position:sticky;top:0;z-index:100;background:rgba(253,250,247,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);margin-bottom:0;">
+    <div style="max-width:860px;margin:0 auto;padding:0 24px;display:flex;align-items:center;height:52px;gap:8px;">
+      <a href="index.html" style="display:inline-flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;transition:color 0.15s;" onmouseover="this.style.color='var(--orange)'" onmouseout="this.style.color='var(--muted)'">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back to Portfolio
+      </a>
+    </div>
+  </nav>
 
-  <a href="index.html#sparc" class="back-link no-print">
-    ← Back to portfolio
-  </a>
 
   <div class="eyebrow">Case Study · Design Thinking & Innovation</div>
   <h1>Sparc</h1>
